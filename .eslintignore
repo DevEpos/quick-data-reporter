@@ -1,0 +1,7 @@
+coverage
+node_modules/
+dist/
+doc/
+reports/
+changes_preview.js
+lib/

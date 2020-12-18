@@ -1,0 +1,113 @@
+specVersion: "2.0"
+metadata:
+    name: quick-data-reporting-tool
+type: application
+resources:
+    configuration:
+        propertiesFileSourceEncoding: UTF-8
+builder:
+    resources:
+        excludes:
+            - "/test/**"
+            - "/localService/**"
+            - "**/.*" # exclude any config files
+            - "**/index_mock.html"
+    bundles:
+        - bundleDefinition:
+              name: devepos/qdrt/Component-preload.js
+              defaultFileTypes:
+                  - ".js"
+                  - ".json"
+                  - ".xml"
+                  - ".html"
+                  - ".library"
+              sections:
+                  - mode: raw
+                    filters:
+                        - devepos/qdrt/lib/**
+                  - mode: preload
+                    filters:
+                        - devepos/qdrt/manifest.json
+                        - devepos/qdrt/Component.js
+                        - devepos/qdrt/controller/**
+                        - devepos/qdrt/model/**
+                        - devepos/qdrt/i18n/**
+                        - devepos/qdrt/view/**
+                        - devepos/qdrt/model/**
+                    resolve: false
+                    sort: true
+                    # declareModules: false
+          bundleOptions:
+              optimize: true
+              usePredefineCalls: true
+    customTasks:
+        - name: ui5-task-babel
+          afterTask: replaceVersion
+          configuration:
+              debug: true
+        - name: task-sass
+          afterTask: replaceVersion
+          configuration:
+              debug: true
+        - name: ui5-task-nwabap-deployer
+          afterTask: generateCachebusterInfo
+          configuration:
+              resources:
+                  pattern:
+                      - "**/*.*"
+                      - "!**/*.scss"
+              ui5:
+                  language: EN
+                  package: $TMP
+                  bspContainer: ZDEVEPOS_QDRT
+                  bspContainerText: Quick Data Reporting Tool
+                  calculateApplicationIndex: true
+
+server:
+    customMiddleware:
+        - name: ui5-middleware-route-proxy
+          beforeMiddleware: compression
+          configuration:
+              "/sap/zqdrt/rest":
+                  target: HTTP_PROXY_TARGET
+                  auth:
+                      user: HTTP_PROXY_AUTH_USER
+                      pass: HTTP_PROXY_AUTH_PASS
+                      client: 001
+        - name: ui5-middleware-servestatic
+          afterMiddleware: compression
+          mountPath: /resources
+          configuration:
+              rootPath: ${env.SAPUI5_RESOURCES}
+        - name: ui5-middleware-livereload
+          afterMiddleware: compression
+          configuration:
+              debug: true
+              ext: "xml,json,properties"
+              port: 35729
+              path: "webapp"
+        - name: ui5-middleware-babel
+          afterMiddleware: compression
+          configuration:
+              debug: true,
+              wrap: false
+        - name: middleware-sass
+          afterMiddleware: compression
+          configuration:
+              debug: true
+---
+specVersion: "1.0"
+kind: extension
+type: task
+metadata:
+    name: task-sass
+task:
+    path: lib/tasks/sassCompile.js
+---
+specVersion: "1.0"
+kind: extension
+type: server-middleware
+metadata:
+    name: middleware-sass
+middleware:
+    path: lib/middleware/sassCompile.js

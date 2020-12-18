@@ -1,0 +1,25 @@
+specVersion: "1.0"
+metadata:
+    name: quick-data-reporting-tool
+type: application
+resources:
+    configuration:
+        paths:
+            webapp: dist
+server:
+    customMiddleware:
+        # proxy to ui5 resources
+        - name: ui5-middleware-servestatic
+          afterMiddleware: compression
+          mountPath: /resources
+          configuration:
+              rootPath: ${env.SAPUI5_RESOURCES}
+        - name: ui5-middleware-route-proxy
+          beforeMiddleware: compression
+          configuration:
+              "/sap/zqdrt/rest":
+                  target: HTTP_PROXY_TARGET
+                  auth:
+                      user: HTTP_PROXY_AUTH_USER
+                      pass: HTTP_PROXY_AUTH_PASS
+                      client: 001

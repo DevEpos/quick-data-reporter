@@ -1,0 +1,8 @@
+{
+	"globals": {
+		"sinon": true
+	},
+	"env": {
+		"qunit": true
+	}
+}

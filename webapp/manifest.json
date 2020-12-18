@@ -1,0 +1,69 @@
+{
+    "sap.app": {
+        "id": "devepos.qdrt",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "dataSources": {},
+        "ach": "",
+        "title": "{{title}}",
+        "description": "{{appDescription}}",
+        "applicationVersion": {
+            "version": "1.0"
+        }
+    },
+    "sap.ui5": {
+        "dependencies": {
+            "minUI5Version": "1.60.18",
+            "libs": {
+                "sap.ui.core": {},
+                "sap.m": {},
+                "sap.ui.comp": {}
+            }
+        },
+        "contentDensities": { "compact": true, "cozy": true },
+        "rootView": {
+            "viewName": "devepos.qdrt.view.App",
+            "type": "XML",
+            "id": "idAppControl"
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "uri": "i18n/i18n.properties"
+            },
+            "@i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "uri": "i18n/i18n.properties"
+            }
+        },
+        "resources": {
+            "css": [{ "uri": "css/main.css" }]
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "viewType": "XML",
+                "viewPath": "devepos.qdrt.view",
+                "controlId": "idAppControl",
+                "controlAggregation": "pages",
+                "transition": "slide",
+                "bypassed": {
+                    "target": ["launchpad"]
+                }
+            },
+            "routes": [
+                {
+                    "pattern": "",
+                    "name": "home",
+                    "target": "main"
+                }
+            ],
+            "targets": {
+                "main": {
+                    "viewName": "MainPage",
+                    "viewLevel": 0
+                }
+            }
+        }
+    }
+}

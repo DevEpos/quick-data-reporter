@@ -1,0 +1,106 @@
+<mvc:View
+    controllerName="devepos.qdrt.controller.MainPage"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:c="sap.ui.core"
+    xmlns:v="sap.ui.comp.variants"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:layout="sap.ui.layout"
+    height="100%"
+>
+    <f:DynamicPage class="mainpage" toggleHeaderOnTitleClick="true">
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title text="{i18n>title}" />
+                </f:heading>
+                <f:content>
+                </f:content>
+                <f:actions>
+                    <Button
+                        text="{i18n>mainToolBar_closeOpenAnalyses}"
+                        icon="sap-icon://decline"
+                        type="Transparent"
+                        press="onCloseAllEntities"
+                    />
+                    <Button tooltip="{i18n>mainToolbar_settings}" icon="sap-icon://action-settings" type="Transparent" />
+                </f:actions>
+            </f:DynamicPageTitle>
+        </f:title>
+        <f:content>
+            <IconTabBar
+                id="analysisTabBar"
+                showOverflowSelectList="true"
+                expandable="false"
+                select="onEntitySelect"
+                headerMode="Inline"
+                tabDensityMode="Compact"
+                stretchContentHeight="true"
+            >
+            <content>
+            <Text text="{= 'The data of the entity ' + ${viewModel>/currentEntity/name} + ' will be shown here :)'}" />
+            </content>
+                <items>
+                    <IconTabFilter
+                        design="Horizontal"
+                        icon="sap-icon://search"
+                        key="searchTab"
+                        text="{i18n>analysisTabs_searchTab_title}"
+                        count="{viewModel>/foundEntities/length}"
+                    >
+                        <Table
+                            id="foundEntitiesTable"
+                            width="100%"
+                            mode="MultiSelect"
+                            items="{viewModel>/foundEntities}"
+                            sticky="ColumnHeaders,HeaderToolbar"
+                        >
+                            <headerToolbar>
+                                <Toolbar>
+                                    <Title text="{i18n>searchTab_table_title}" level="H2" />
+                                    <ToolbarSpacer />
+                                    <Select>
+                                        <items>
+                                            <c:Item key="all" text="All" />
+                                            <c:Item key="favorites" text="Favorites" />
+                                        </items>
+                                    </Select>
+                                    <SearchField
+                                        class="mainpage__search"
+                                        search="onSearchForEntities"
+                                        placeholder="{i18n>searchTab_table_filterPrompt}"
+                                    />
+                                </Toolbar>
+                            </headerToolbar>
+                            <columns>
+                                <Column width="2rem">
+                                    <Text text="{i18n>searchTab_table_col_type}" />
+                                </Column>
+                                <Column width="12rem">
+                                    <Text text="{i18n>searchTab_table_col_name}" />
+                                </Column>
+                                <Column width="12rem">
+                                    <Text text="{i18n>searchTab_table_col_description}" />
+                                </Column>
+                                <Column width="12rem">
+                                    <Text text="{i18n>searchTab_table_col_package}" />
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem type="Active" press="onOpenEntity">
+                                    <cells>
+                                        <c:Icon src="{viewModel>typeIcon}" tooltip="{viewModel>typeTooltip}" />
+                                        <Text text="{viewModel>name}" />
+                                        <Text text="{viewModel>description}" />
+                                        <Text text="{viewModel>packageName}" />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </IconTabFilter>
+                    <IconTabSeparator />
+                </items>
+            </IconTabBar>
+        </f:content>
+    </f:DynamicPage>
+</mvc:View>

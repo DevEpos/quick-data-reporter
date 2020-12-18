@@ -1,0 +1,22 @@
+.mainpage {
+    .sapFDynamicPageContent,
+    .sapFDynamicPageContentFitContainer {
+        padding: 0 !important;
+    }
+
+    @media (min-width: 650px) {
+        .mainpage__search {
+            min-width: 250px;
+            max-width: 350px;
+        }
+    }
+
+    .columns {
+        min-height: 200px;
+        & > .sapMFlexItem {
+            width: 0;
+            margin: 0 5px 0 0;
+            padding: 0 4px;
+        }
+    }
+}

@@ -1,0 +1,54 @@
+{
+    "name": "quick-data-reporter",
+    "version": "0.0.1",
+    "description": "Quick Data Reporter",
+    "private": true,
+    "author": {
+        "email": "stocki87@gmail.com",
+        "name": "stockbal"
+    },
+    "scripts": {
+        "upgrade-packages": "ncu -u",
+        "start": "ui5 serve --config ui5-dist.yaml --port 1081 --open \"index.html?sap-language=EN&sap-client=001\"",
+        "start:dist": "npm-run-all build start",
+        "build": "ui5 build --include-task=generateManifestBundle generateCachebusterInfo --exclude-task=ui5-task-nwabap-deployer --clean-dest",
+        "dev": "ui5 serve --port 1081 --open \"index.html?sap-language=EN&sap-client=001\"",
+        "dev:mock": "ui5 serve --config ui5-mock.yaml --port 1081 --open \"index_mock.html?sap-language=EN&sap-client=001\"",
+        "deploy": "ui5 build --include-task=generateManifestBundle generateCachebusterInfo --clean-dest"
+    },
+    "browserslist": [
+        "chrome 80",
+        "firefox 60"
+    ],
+    "devDependencies": {
+        "@babel/preset-env": "^7.12.1",
+        "@prettier/plugin-xml": "^0.12.0",
+        "@sapui5/ts-types": "^1.82.0",
+        "@ui5/fs": "^2.0.5",
+        "babel-eslint": "^10.1.0",
+        "dotenv": "^8.2.0",
+        "eslint": "7.12.1",
+        "mkdirp": "~1.0.4",
+        "node-sass": "^5.0.0",
+        "npm-check-updates": "^9.2.4",
+        "npm-run-all": "^4.1.5",
+        "prettier": "^2.2.1",
+        "regenerator-runtime": "^0.13.7",
+        "ui5-middleware-babel": "2.0.0",
+        "ui5-middleware-livereload": "^0.4.3",
+        "ui5-middleware-route-proxy": "1.0.8",
+        "ui5-middleware-servestatic": "^0.3.3",
+        "ui5-task-babel": "2.1.0",
+        "ui5-task-nwabap-deployer": "^1.0.15"
+    },
+    "ui5": {
+        "dependencies": [
+            "ui5-middleware-livereload",
+            "ui5-middleware-route-proxy",
+            "ui5-middleware-servestatic",
+            "ui5-middleware-babel",
+            "ui5-task-babel",
+            "ui5-task-nwabap-deployer"
+        ]
+    }
+}

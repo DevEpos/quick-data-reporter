@@ -1,0 +1,46 @@
+specVersion: "2.0"
+metadata:
+    name: quick-data-reporting-tool
+type: application
+resources:
+    configuration:
+        propertiesFileSourceEncoding: UTF-8
+server:
+    customMiddleware:
+        - name: ui5-middleware-servestatic
+          afterMiddleware: compression
+          mountPath: /resources
+          configuration:
+              rootPath: ${env.SAPUI5_RESOURCES}
+        - name: ui5-middleware-livereload
+          afterMiddleware: compression
+          configuration:
+              debug: true
+              ext: "xml,json,properties"
+              port: 35729
+              path: "webapp"
+        - name: ui5-middleware-babel
+          afterMiddleware: compression
+          configuration:
+              debug: true,
+              wrap: false
+        - name: middleware-sass
+          afterMiddleware: compression
+          configuration:
+              debug: true
+---
+specVersion: "1.0"
+kind: extension
+type: task
+metadata:
+    name: task-sass
+task:
+    path: lib/tasks/sassCompile.js
+---
+specVersion: "1.0"
+kind: extension
+type: server-middleware
+metadata:
+    name: middleware-sass
+middleware:
+    path: lib/middleware/sassCompile.js
