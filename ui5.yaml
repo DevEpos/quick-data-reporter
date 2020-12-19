@@ -1,7 +1,17 @@
 specVersion: "2.0"
 metadata:
-    name: quick-data-reporting-tool
+    name: quick-data-reporter
 type: application
+framework:
+    name: SAPUI5
+    version: "1.76.0"
+    libraries:
+        - name: sap.m
+        - name: sap.ui.core
+        - name: sap.ui.layout
+        - name: sap.ui.comp
+        - name: sap.f
+        - name: themelib_sap_belize
 resources:
     configuration:
         propertiesFileSourceEncoding: UTF-8
@@ -73,12 +83,6 @@ server:
                   auth:
                       user: HTTP_PROXY_AUTH_USER
                       pass: HTTP_PROXY_AUTH_PASS
-                      client: 001
-        - name: ui5-middleware-servestatic
-          afterMiddleware: compression
-          mountPath: /resources
-          configuration:
-              rootPath: ${env.SAPUI5_RESOURCES}
         - name: ui5-middleware-livereload
           afterMiddleware: compression
           configuration:

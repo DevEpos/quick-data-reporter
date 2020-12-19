@@ -9,11 +9,11 @@
     },
     "scripts": {
         "upgrade-packages": "ncu -u",
-        "start": "ui5 serve --config ui5-dist.yaml --port 1081 --open \"index.html?sap-language=EN&sap-client=001\"",
+        "start": "ui5 serve --config ui5-dist.yaml --port 1081 --open \"index.html\"",
         "start:dist": "npm-run-all build start",
         "build": "ui5 build --include-task=generateManifestBundle generateCachebusterInfo --exclude-task=ui5-task-nwabap-deployer --clean-dest",
-        "dev": "ui5 serve --port 1081 --open \"index.html?sap-language=EN&sap-client=001\"",
-        "dev:mock": "ui5 serve --config ui5-mock.yaml --port 1081 --open \"index_mock.html?sap-language=EN&sap-client=001\"",
+        "dev": "ui5 serve --port 1081 --open \"index.html\"",
+        "dev:mock": "ui5 serve --config ui5-mock.yaml --port 1081 --open \"index_mock.html\"",
         "deploy": "ui5 build --include-task=generateManifestBundle generateCachebusterInfo --clean-dest"
     },
     "browserslist": [
