@@ -139,9 +139,12 @@ sap.ui.define(
                 const filterTable = this.getView().byId("foundEntitiesTable");
 
                 filterTable.setBusy(true);
-                const response = await AjaxUtil.fetch({
-                    url: `/sap/zqdrt/rest/entities/vh?$top=50&filter=${filterValue}&sap-client=${SystemUtil.getCurrentClient()}`
-                });
+                const response = await AjaxUtil.fetch(
+                    {
+                        url: `/sap/zqdrt/rest/entities/vh?$top=50&filter=${filterValue}`
+                    },
+                    true
+                );
                 filterTable.setBusy(false);
 
                 if (response.status === 200) {

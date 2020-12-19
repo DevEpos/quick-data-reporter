@@ -1,12 +1,6 @@
 sap.ui.define(
-    [
-        "sap/ui/core/util/MockServer",
-        "sap/base/Log",
-        "sap/base/util/UriParameters",
-        "sap/ui/util/XMLHelper",
-        "devepos/qdrt/util/ajaxUtil"
-    ],
-    (MockServer, Log, UriParameters, XMLHelper, AjaxUtil) => {
+    ["sap/ui/core/util/MockServer", "sap/base/Log", "sap/base/util/UriParameters", "devepos/qdrt/util/ajaxUtil"],
+    (MockServer, Log, UriParameters, AjaxUtil) => {
         let mockServer;
         const _sAppModulePath = "devepos/qdrt/";
         const _sJsonFilesModulePath = _sAppModulePath + "localService/mockdata/";
@@ -21,7 +15,6 @@ sap.ui.define(
              */
             init() {
                 const uriParameters = new UriParameters(window.location.href);
-                // ensure there is a trailing slash
                 const mockServerUrl = "/sap/zqdrt/rest/";
 
                 mockServer = new MockServer({
@@ -40,7 +33,7 @@ sap.ui.define(
                     if (json.status === 200) {
                         xhr.respondJSON(200, {}, json.data);
                     } else {
-                        xhr.respondJSON(200, {}, []);
+                        xhr.respondJSON(json.status, {}, []);
                     }
                     return true;
                 };
