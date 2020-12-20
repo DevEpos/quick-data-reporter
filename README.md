@@ -1,6 +1,6 @@
 # quick-data-reporter
 
-UI5 App for analyzing content ABAP Database tables/Database views or CDS Views
+UI5 App for analyzing content of ABAP Database tables/Database views or CDS Views
 
 ## Installation
 ```
