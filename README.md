@@ -4,8 +4,13 @@ UI5 App for analyzing content ABAP Database tables/Database views or CDS Views
 
 ## Installation
 ```
-$ npm run i
+$ npm i
 ```
+Install UI5 tooling globally
+```
+$ npm i -g @ui5/cli
+```
+
 ## Development Server
 ### `.env` File Template
 ```env
