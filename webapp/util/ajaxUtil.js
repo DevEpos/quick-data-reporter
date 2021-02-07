@@ -1,4 +1,4 @@
-sap.ui.define(["jQuery.sap.global", "./systemUtil"], (jQuery, SystemUtil) => {
+sap.ui.define(["sap/ui/thirdparty/jquery", "./systemUtil"], (jQuery, SystemUtil) => {
     const SAP_LANGUAGE_PARAM = "sap-language";
     const SAP_CLIENT_PARAM = "sap-client";
 
