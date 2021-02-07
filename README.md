@@ -14,7 +14,7 @@ $ npm i -g @ui5/cli
 ## Development Server
 ### `.env` File Template
 ```env
-# Proxy to REST service (SICF path /sap/zqdrt/rest)
+# Proxy to REST service (SICF path /sap/zqdrtrest)
 HTTP_PROXY_AUTH_USER=<username>
 HTTP_PROXY_AUTH_PASS=<password>
 HTTP_PROXY_TARGET=<server>

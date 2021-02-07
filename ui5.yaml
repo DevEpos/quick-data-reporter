@@ -22,6 +22,7 @@ builder:
             - "/localService/**"
             - "**/.*" # exclude any config files
             - "**/index_mock.html"
+            - "**/index_dev.html"
     bundles:
         - bundleDefinition:
               name: devepos/qdrt/Component-preload.js
@@ -68,9 +69,9 @@ builder:
                       - "!**/*.scss"
               ui5:
                   language: EN
-                  package: $TMP
+                  package: $QDRT_UI5
                   bspContainer: ZDEVEPOS_QDRT
-                  bspContainerText: Quick Data Reporting Tool
+                  bspContainerText: Quick Data Reporter
                   calculateApplicationIndex: true
 
 server:
@@ -78,7 +79,7 @@ server:
         - name: ui5-middleware-route-proxy
           beforeMiddleware: compression
           configuration:
-              "/sap/zqdrt/rest":
+              "/sap/zqdrtrest":
                   target: HTTP_PROXY_TARGET
                   auth:
                       user: HTTP_PROXY_AUTH_USER

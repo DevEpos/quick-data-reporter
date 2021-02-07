@@ -21,7 +21,7 @@ server:
         - name: ui5-middleware-route-proxy
           beforeMiddleware: compression
           configuration:
-              "/sap/zqdrt/rest":
+              "/sap/zqdrtrest":
                   target: HTTP_PROXY_TARGET
                   auth:
                       user: HTTP_PROXY_AUTH_USER

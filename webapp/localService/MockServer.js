@@ -15,7 +15,7 @@ sap.ui.define(
              */
             init() {
                 const uriParameters = new UriParameters(window.location.href);
-                const mockServerUrl = "/sap/zqdrt/rest/";
+                const mockServerUrl = "/sap/zqdrtrest/";
 
                 mockServer = new MockServer({
                     rootUri: mockServerUrl

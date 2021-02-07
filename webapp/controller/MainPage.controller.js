@@ -1,6 +1,6 @@
 sap.ui.define(
     [
-        "jQuery.sap.global",
+        "sap/ui/thirdparty/jquery",
         "sap/ui/model/json/JSONModel",
         "sap/m/MessageToast",
         "sap/m/MessageBox",
@@ -141,7 +141,7 @@ sap.ui.define(
                 filterTable.setBusy(true);
                 const response = await AjaxUtil.fetch(
                     {
-                        url: `/sap/zqdrt/rest/entities/vh?$top=50&filter=${filterValue}`
+                        url: `/sap/zqdrtrest/entities/vh?$top=50&filter=${filterValue}`
                     },
                     true
                 );
