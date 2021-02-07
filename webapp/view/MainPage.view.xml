@@ -23,7 +23,11 @@
                         type="Transparent"
                         press="onCloseAllEntities"
                     />
-                    <Button tooltip="{i18n>mainToolbar_settings}" icon="sap-icon://action-settings" type="Transparent" />
+                    <Button
+                        tooltip="{i18n>mainToolbar_settings}"
+                        icon="sap-icon://action-settings"
+                        type="Transparent"
+                    />
                 </f:actions>
             </f:DynamicPageTitle>
         </f:title>
@@ -73,16 +77,16 @@
                                 </Toolbar>
                             </headerToolbar>
                             <columns>
-                                <Column width="2rem">
+                                <Column width="4rem">
                                     <Text text="{i18n>searchTab_table_col_type}" />
                                 </Column>
-                                <Column width="12rem">
+                                <Column>
                                     <Text text="{i18n>searchTab_table_col_name}" />
                                 </Column>
-                                <Column width="12rem">
+                                <Column>
                                     <Text text="{i18n>searchTab_table_col_description}" />
                                 </Column>
-                                <Column width="12rem">
+                                <Column>
                                     <Text text="{i18n>searchTab_table_col_package}" />
                                 </Column>
                             </columns>
