@@ -8,22 +8,24 @@
         "name": "stockbal"
     },
     "scripts": {
+        "format": "prettier webapp --write",
         "upgrade-packages": "ncu -u",
         "start": "ui5 serve --config ui5-dist.yaml --port 1081 --open \"index.html\"",
         "start:dist": "npm-run-all build start",
         "build": "ui5 build --include-task=generateManifestBundle generateCachebusterInfo --exclude-task=ui5-task-nwabap-deployer --clean-dest",
-        "dev": "ui5 serve --port 1081 --open \"index.html\"",
+        "dev": "ui5 serve --port 1081 --open \"index_dev.html\"",
         "dev:mock": "ui5 serve --config ui5-mock.yaml --port 1081 --open \"index_mock.html\"",
         "deploy": "ui5 build --include-task=generateManifestBundle generateCachebusterInfo --clean-dest"
     },
     "browserslist": [
-        "chrome 80",
-        "firefox 60"
+        "> 1%",
+        "last 2 versions",
+        "not dead",
+        "not ie 11"
     ],
     "devDependencies": {
         "@babel/preset-env": "^7.12.1",
         "@prettier/plugin-xml": "^0.12.0",
-        "@sapui5/ts-types": "^1.82.0",
         "@ui5/fs": "^2.0.5",
         "babel-eslint": "^10.1.0",
         "dotenv": "^8.2.0",
@@ -33,7 +35,6 @@
         "npm-check-updates": "^9.2.4",
         "npm-run-all": "^4.1.5",
         "prettier": "^2.2.1",
-        "regenerator-runtime": "^0.13.7",
         "ui5-middleware-babel": "2.0.0",
         "ui5-middleware-livereload": "^0.4.3",
         "ui5-middleware-route-proxy": "1.0.8",
