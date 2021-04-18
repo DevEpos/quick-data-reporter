@@ -41,7 +41,7 @@
         "ui5-middleware-livereload": "^0.4.3",
         "ui5-middleware-route-proxy": "1.0.8",
         "ui5-middleware-servestatic": "^0.3.3",
-        "ui5-task-babel": "2.1.0",
+        "ui5-task-transpile": "0.3.0",
         "ui5-task-nwabap-deployer": "^1.0.15"
     },
     "ui5": {
@@ -49,8 +49,7 @@
             "ui5-middleware-livereload",
             "ui5-middleware-route-proxy",
             "ui5-middleware-servestatic",
-            "ui5-middleware-babel",
-            "ui5-task-babel",
+            "ui5-task-transpile",
             "ui5-task-nwabap-deployer"
         ]
     }

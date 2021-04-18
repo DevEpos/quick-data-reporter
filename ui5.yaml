@@ -52,10 +52,12 @@ builder:
               optimize: true
               usePredefineCalls: true
     customTasks:
-        - name: ui5-task-babel
+        - name: ui5-task-transpile
           afterTask: replaceVersion
           configuration:
               debug: true
+              babelConfig:
+                sourceMaps: inline
         - name: task-sass
           afterTask: replaceVersion
           configuration:
