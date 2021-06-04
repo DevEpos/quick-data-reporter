@@ -1,56 +1,62 @@
 {
-    "name": "quick-data-reporter",
-    "version": "0.0.1",
-    "description": "Quick Data Reporter",
-    "private": true,
-    "author": {
-        "email": "stocki87@gmail.com",
-        "name": "stockbal"
-    },
-    "scripts": {
-        "format": "prettier webapp --write",
-        "upgrade-packages": "ncu -u",
-        "start": "ui5 serve --config ui5-dist.yaml --port 1081 --open \"index.html\"",
-        "start:dist": "npm-run-all build start",
-        "build": "ui5 build --include-task=generateManifestBundle generateCachebusterInfo --exclude-task=ui5-task-nwabap-deployer --clean-dest",
-        "dev": "ui5 serve --port 1081 --open \"index_dev.html\"",
-        "dev:mock": "ui5 serve --config ui5-mock.yaml --port 1081 --open \"index_mock.html\"",
-        "deploy": "ui5 build --include-task=generateManifestBundle generateCachebusterInfo --clean-dest"
-    },
-    "browserslist": [
-        "> 1%",
-        "last 2 versions",
-        "not dead",
-        "not ie 11"
-    ],
-    "devDependencies": {
-        "@babel/preset-env": "^7.12.1",
-        "@babel/plugin-proposal-class-properties": "7.13.0",
-        "babel-preset-transform-ui5": "7.0.3",
-        "@prettier/plugin-xml": "^0.12.0",
-        "@ui5/fs": "^2.0.5",
-        "babel-eslint": "^10.1.0",
-        "dotenv": "^8.2.0",
-        "eslint": "7.12.1",
-        "mkdirp": "~1.0.4",
-        "node-sass": "^5.0.0",
-        "npm-check-updates": "^9.2.4",
-        "npm-run-all": "^4.1.5",
-        "prettier": "^2.2.1",
-        "ui5-middleware-babel": "2.0.0",
-        "ui5-middleware-livereload": "^0.4.3",
-        "ui5-middleware-route-proxy": "1.0.8",
-        "ui5-middleware-servestatic": "^0.3.3",
-        "ui5-task-transpile": "0.3.0",
-        "ui5-task-nwabap-deployer": "^1.0.15"
-    },
-    "ui5": {
-        "dependencies": [
-            "ui5-middleware-livereload",
-            "ui5-middleware-route-proxy",
-            "ui5-middleware-servestatic",
-            "ui5-task-transpile",
-            "ui5-task-nwabap-deployer"
-        ]
-    }
+  "name": "quick-data-reporter",
+  "version": "0.1.0",
+  "description": "Quick Data Reporter",
+  "private": true,
+  "author": {
+    "email": "stocki87@gmail.com",
+    "name": "stockbal"
+  },
+  "scripts": {
+    "lint": "eslint dev",
+    "build:js": "babel dev --out-dir webapp  --source-maps true --extensions \".js\" --copy-files",
+    "compile:less": "less-watch-compiler dev/css webapp/css main.less --run-once",
+    "watch:js": "babel dev --out-dir webapp --source-maps inline --extensions \".js\" --copy-files --watch",
+    "watch:less": "less-watch-compiler dev/css webapp/css main.less",
+    "deploy:ui5": "ui5 build --include-task=generateManifestBundle generateCachebusterInfo --clean-dest",
+    "build:ui5": "ui5 build --include-task=generateManifestBundle generateCachebusterInfo buildThemes --exclude-task=ui5-task-nwabap-deployer --clean-dest",
+    "start:ui5": "ui5 serve --port 1081 --open \"index.html?sap-language=EN\"",
+    "start:ui5_mock": "ui5 serve --config ui5-mock.yaml --port 1081 --open \"index_mock.html?sap-language=EN\"",
+    "build": "npm-run-all clean build:js compile:less build:ui5",
+    "clean": "rimraf webapp dist",
+    "deploy": "npm-run-all clean build:js deploy:ui5",
+    "start": "npm-run-all clean build:js --parallel watch:js watch:less start:ui5",
+    "start:mock": "npm-run-all clean build:js --parallel watch:js watch:less start:ui5_mock"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "devDependencies": {
+    "@babel/cli": "^7.13.16",
+    "@babel/core": "^7.14.2",
+    "@babel/eslint-parser": "^7.14.2",
+    "@babel/preset-env": "^7.14.2",
+    "@openui5/ts-types": "^1.60.5",
+    "babel": "^6.23.0",
+    "babel-preset-transform-ui5": "^7.0.3",
+    "dotenv": "^9.0.2",
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "less-watch-compiler": "^1.15.2",
+    "npm-run-all": "^4.1.5",
+    "parseurl": "1.3.3",
+    "prettier": "^2.3.0",
+    "rimraf": "^3.0.2",
+    "ui5-middleware-livereload": "^0.5.4",
+    "ui5-middleware-route-proxy": "1.0.9",
+    "ui5-middleware-servestatic": "^0.3.4",
+    "ui5-task-nwabap-deployer": "1.0.15"
+  },
+  "ui5": {
+    "dependencies": [
+      "ui5-middleware-livereload",
+      "ui5-middleware-route-proxy",
+      "ui5-middleware-servestatic",
+      "ui5-task-nwabap-deployer"
+    ]
+  }
 }

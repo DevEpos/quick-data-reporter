@@ -62,6 +62,7 @@ typings/
 dist/
 doc/
 reports/
+webapp/
 
 # ignore settings of IDE's
 .idea
@@ -69,6 +70,8 @@ reports/
 .project
 
 *.zip
+
+package-lock.json
 
 # section for Web IDE
 UIAdaptation_index.html

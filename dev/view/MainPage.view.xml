@@ -1,14 +1,13 @@
-<mvc:View
-    controllerName="devepos.qdrt.controller.MainPage"
+<mvc:View controllerName="devepos.qdrt.controller.MainPage"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:c="sap.ui.core"
     xmlns:v="sap.ui.comp.variants"
     xmlns="sap.m"
     xmlns:f="sap.f"
     xmlns:layout="sap.ui.layout"
-    height="100%"
->
-    <f:DynamicPage class="mainpage" toggleHeaderOnTitleClick="true">
+    height="100%">
+    <f:DynamicPage class="mainpage"
+        toggleHeaderOnTitleClick="true">
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
@@ -17,37 +16,35 @@
                 <f:content>
                 </f:content>
                 <f:actions>
-                    <Button
-                        tooltip="{i18n>mainToolbar_settings}"
+                    <Button tooltip="{i18n>mainToolbar_settings}"
                         icon="sap-icon://action-settings"
-                        type="Transparent"
-                    />
+                        type="Transparent" />
                 </f:actions>
             </f:DynamicPageTitle>
         </f:title>
         <f:content>
-           <Table
-                id="foundEntitiesTable"
+            <Table id="foundEntitiesTable"
                 width="100%"
                 mode="MultiSelect"
                 items="{viewModel>/foundEntities}"
-                sticky="ColumnHeaders,HeaderToolbar"
-            >
+                sticky="ColumnHeaders,HeaderToolbar">
                 <headerToolbar>
-                    <Toolbar>
-                        <Title text="{i18n>searchTab_table_title}" level="H2" />
+                    <Toolbar >
+                        <Title text="{i18n>searchTab_table_title}"
+                            level="H2" />
                         <ToolbarSpacer />
                         <Select>
                             <items>
-                                <c:Item key="all" text="All" />
-                                <c:Item key="favorites" text="Favorites" />
+                                <c:Item key="all"
+                                    text="All" />
+                                <c:Item key="favorites"
+                                    text="Favorites" />
                             </items>
                         </Select>
-                        <SearchField
-                            class="mainpage__search"
+                        <SearchField class="mainpage__search"
+                            width="20em"
                             search="onSearchForEntities"
-                            placeholder="{i18n>searchTab_table_filterPrompt}"
-                        />
+                            placeholder="{i18n>searchTab_table_filterPrompt}" />
                     </Toolbar>
                 </headerToolbar>
                 <columns>
@@ -65,9 +62,11 @@
                     </Column>
                 </columns>
                 <items>
-                    <ColumnListItem type="Active" press="onOpenEntity">
+                    <ColumnListItem type="Active"
+                        press="onOpenEntity">
                         <cells>
-                            <c:Icon src="{viewModel>typeIcon}" tooltip="{viewModel>typeTooltip}" />
+                            <c:Icon src="{viewModel>typeIcon}"
+                                tooltip="{viewModel>typeTooltip}" />
                             <Text text="{viewModel>name}" />
                             <Text text="{viewModel>description}" />
                             <Text text="{viewModel>packageName}" />

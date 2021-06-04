@@ -8,7 +8,7 @@
         "title": "{{title}}",
         "description": "{{appDescription}}",
         "applicationVersion": {
-            "version": "1.0"
+            "version": "${version}"
         }
     },
     "sap.ui5": {

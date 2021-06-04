@@ -9,7 +9,7 @@
             type="text/javascript"
             id="sap-ui-bootstrap"
             src="/resources/sap-ui-core.js"
-            data-sap-ui-theme="sap_belize"
+            data-sap-ui-theme="sap_fiori_3"
             data-sap-ui-libs="sap.m"
             data-sap-ui-compatVersion="edge"
             data-sap-ui-resourceroots='{"devepos.qdrt": "./"}'
@@ -20,7 +20,7 @@
                 sap.ui.require(
                     ["sap/m/Shell", "sap/ui/core/ComponentContainer", "devepos/qdrt/localService/MockServer"],
                     function (Shell, ComponentContainer, MockServer) {
-                        MockServer.init(jQuery.sap.getUriParameters());
+                        MockServer.init();
                         new Shell({
                             app: new ComponentContainer({
                                 height: "100%",
