@@ -2,16 +2,17 @@
     "tabWidth": 4,
     "printWidth": 120,
     "semi": true,
-    "singleQuote": false,
-    "endOfLine": "lf",
     "trailingComma": "none",
     "arrowParens": "avoid",
+    "singleQuote": false,
+    "endOfLine": "lf",
     "overrides": [
         {
-            "files": ["package.json", "ui5*.yaml"],
+            "files": ["package.json", "ui5*.yaml", ".eslint*"],
             "options": {
                 "tabWidth": 2
             }
         }
     ]
-}
+  }
+  
