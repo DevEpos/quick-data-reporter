@@ -13,7 +13,7 @@
     },
     "sap.ui5": {
         "dependencies": {
-            "minUI5Version": "1.60.18",
+            "minUI5Version": "1.71.28",
             "libs": {
                 "sap.ui.core": {},
                 "sap.m": {},
@@ -46,22 +46,28 @@
                 "viewPath": "devepos.qdrt.view",
                 "controlId": "idAppControl",
                 "controlAggregation": "pages",
-                "transition": "slide",
-                "bypassed": {
-                    "target": ["launchpad"]
-                }
+                "transition": "slide"
             },
             "routes": [
                 {
                     "pattern": "",
-                    "name": "home",
+                    "name": "main",
                     "target": "main"
+                },
+                {
+                    "pattern": "entities/{type}/{entity}",
+                    "name": "entity",
+                    "target": "entity"
                 }
             ],
             "targets": {
                 "main": {
                     "viewName": "MainPage",
                     "viewLevel": 0
+                },
+                "entity": {
+                    "viewName": "Entity",
+                    "viewLevel": 1
                 }
             }
         }

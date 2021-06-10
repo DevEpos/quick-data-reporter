@@ -1,0 +1,45 @@
+<mvc:View controllerName="devepos.qdrt.controller.Entity"
+    xmlns:l="sap.ui.layout"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m"
+    height="100%">
+
+
+
+    <f:DynamicPage fitContent="true"
+        class="sapUiNoContentPadding">
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <m:Title text="Entity {vm>/entity/name}"></m:Title>
+                </f:heading>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <f:content>
+            <l:ResponsiveSplitter defaultPane="default"
+                class="sapUiContentPadding">
+                <l:PaneContainer>
+                    <l:SplitPane requiredParentWidth="400"
+                        id="default">
+                        <m:Panel height="100%">
+                            <m:layoutData>
+                                <l:SplitterLayoutData size="80%" />
+                            </m:layoutData>
+                            <m:Table headerText="Data for {vm>/entity/name}">
+                            </m:Table>
+                        </m:Panel>
+                    </l:SplitPane>
+                    <l:PaneContainer orientation="Vertical">
+                        <l:SplitPane requiredParentWidth="700">
+                            <m:Panel headerText="Filters">
+                            </m:Panel>
+                        </l:SplitPane>
+                    </l:PaneContainer>
+                </l:PaneContainer>
+            </l:ResponsiveSplitter>
+        </f:content>
+    </f:DynamicPage>
+</mvc:View>

@@ -1,6 +1,6 @@
 import JSONModel from "sap/ui/model/json/JSONModel";
 import BaseController from "./BaseController";
-import AjaxUtil from "../util/ajaxUtil";
+import AjaxUtil from "../model/dataAccess/util/ajaxUtil";
 
 const VIEW_MODEL = "viewModel";
 const ANALYSIS_FILTER_PREFIX = "ANL:";
@@ -12,6 +12,7 @@ const ANALYSIS_FILTER_PREFIX = "ANL:";
  */
 export default class MainPageController extends BaseController {
     onInit() {
+        BaseController.prototype.onInit.call(this);
         this._openEntityMap = new Map();
         this._viewModel = new JSONModel({ currentEntity: { name: "" } });
         this.setModel(this._viewModel, VIEW_MODEL);
@@ -25,8 +26,18 @@ export default class MainPageController extends BaseController {
         });
     }
 
-    onEntitySelect(event) {
-        const entityKey = event.getParameter("key");
+    /**
+     * Event handler for click on database entity
+     * @param {Object} event event object
+     */
+    onOpenEntity(event) {
+        const selectedEntity = this._viewModel.getObject(event.getSource().getBindingContextPath());
+        if (selectedEntity) {
+            this.router.navTo("entity", {
+                type: encodeURIComponent(selectedEntity.type),
+                entity: encodeURIComponent(selectedEntity.name)
+            });
+        }
     }
 
     async onSearchForEntities(event) {

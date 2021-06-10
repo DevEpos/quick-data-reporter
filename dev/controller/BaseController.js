@@ -2,9 +2,14 @@ import Controller from "sap/ui/core/mvc/Controller";
 import History from "sap/ui/core/routing/History";
 
 /**
+ * Base controller for all view controllers
+ * @alias devepos.qdrt.controller.BaseController
  * @namespace devepos.qdrt.controller
  */
 export default class BaseController extends Controller {
+    onInit() {
+        this.router = this.getRouter();
+    }
     getRouter() {
         return this.getOwnerComponent().getRouter();
     }
@@ -46,12 +51,12 @@ export default class BaseController extends Controller {
      * @public
      */
     onNavBack() {
-        const sPreviousHash = History.getInstance().getPreviousHash();
+        const previousHash = History.getInstance().getPreviousHash();
 
-        if (sPreviousHash !== undefined) {
+        if (previousHash !== undefined) {
             history.go(-1);
         } else {
-            this.getRouter().navTo("main", {}, true);
+            this.router.navTo("main", {}, true);
         }
     }
 }
