@@ -13,7 +13,7 @@ export default class EntityController extends BaseController {
      */
     onInit() {
         BaseController.prototype.onInit.call(this);
-        this._viewModel = models.createViewModel({ entity: {}, sideFilterVisible: true });
+        this._viewModel = models.createViewModel({ entity: {}, sideContentVisible: true });
         this.getView().setModel(this._viewModel, "vm");
         this.router.getRoute("entity").attachPatternMatched(this._onEntityMatched, this);
     }
