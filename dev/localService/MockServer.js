@@ -1,7 +1,7 @@
 import MockServer from "sap/ui/core/util/MockServer";
 import Log from "sap/base/Log";
 import UriParameters from "sap/base/util/UriParameters";
-import AjaxUtil from "devepos/qdrt/util/ajaxUtil";
+import AjaxUtil from "../model/dataAccess/util/ajaxUtil";
 
 let mockServer;
 const _sAppModulePath = "devepos/qdrt/";
