@@ -1,45 +1,43 @@
 <mvc:View controllerName="devepos.qdrt.controller.Entity"
+    xmlns:app="devepos.qdrt.control"
     xmlns:l="sap.ui.layout"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:f="sap.f"
     xmlns:core="sap.ui.core"
-    xmlns:m="sap.m"
+    xmlns="sap.m"
     height="100%">
-
-
 
     <f:DynamicPage fitContent="true"
         class="sapUiNoContentPadding">
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <m:Title text="Entity {vm>/entity/name}"></m:Title>
+                    <Title text="Entity {vm>/entity/name}"></Title>
                 </f:heading>
+                <f:actions>
+                    <ToggleButton icon="sap-icon://filter"
+                        pressed="{vm>/sideFilterVisible}"
+                        type="Transparent" />
+                </f:actions>
             </f:DynamicPageTitle>
         </f:title>
 
         <f:content>
-            <l:ResponsiveSplitter defaultPane="default"
-                class="sapUiContentPadding">
-                <l:PaneContainer>
-                    <l:SplitPane requiredParentWidth="400"
-                        id="default">
-                        <m:Panel height="100%">
-                            <m:layoutData>
-                                <l:SplitterLayoutData size="80%" />
-                            </m:layoutData>
-                            <m:Table headerText="Data for {vm>/entity/name}">
-                            </m:Table>
-                        </m:Panel>
-                    </l:SplitPane>
-                    <l:PaneContainer orientation="Vertical">
-                        <l:SplitPane requiredParentWidth="700">
-                            <m:Panel headerText="Filters">
-                            </m:Panel>
-                        </l:SplitPane>
-                    </l:PaneContainer>
-                </l:PaneContainer>
-            </l:ResponsiveSplitter>
+            <app:SideFilterView sideFilterVisible="{vm>/sideFilterVisible}">
+                <app:content>
+                    <Panel height="100%">
+                        <layoutData>
+                            <l:SplitterLayoutData size="80%" />
+                        </layoutData>
+                        <Table headerText="Data for {vm>/entity/name}">
+                        </Table>
+                    </Panel>
+                </app:content>
+                <app:sideFilter>
+                    <Panel headerText="Filters">
+                    </Panel>
+                </app:sideFilter>
+            </app:SideFilterView>
         </f:content>
     </f:DynamicPage>
 </mvc:View>
