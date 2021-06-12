@@ -31,7 +31,7 @@ export default {
 
         const getJson = (xhr, jsonFileName) => {
             const localUri = sap.ui.require.toUrl(_sJsonFilesModulePath + jsonFileName + ".json");
-            const json = AjaxUtil.fetchSync({ url: localUri });
+            const json = AjaxUtil.sendSync(localUri);
             if (json.status === 200) {
                 xhr.respondJSON(200, {}, json.data);
             } else {
