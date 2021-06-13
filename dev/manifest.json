@@ -55,7 +55,7 @@
                     "target": "main"
                 },
                 {
-                    "pattern": "entities/{type}/{entity}",
+                    "pattern": "entities/{type}/{name}",
                     "name": "entity",
                     "target": "entity"
                 }

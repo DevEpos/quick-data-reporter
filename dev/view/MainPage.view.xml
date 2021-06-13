@@ -25,7 +25,6 @@
         <f:content>
             <Table id="foundEntitiesTable"
                 width="100%"
-                mode="MultiSelect"
                 items="{viewModel>/foundEntities}"
                 sticky="ColumnHeaders,HeaderToolbar">
                 <headerToolbar>

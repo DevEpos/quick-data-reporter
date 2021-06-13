@@ -1,9 +1,8 @@
 import JSONModel from "sap/ui/model/json/JSONModel";
 import BaseController from "./BaseController";
-import AjaxUtil from "../model/dataAccess/util/ajaxUtil";
+import EntitySearchService from "../model/dataAccess/rest/EntitySearchService";
 
 const VIEW_MODEL = "viewModel";
-const ANALYSIS_FILTER_PREFIX = "ANL:";
 
 /**
  * Main Page controller
@@ -13,6 +12,7 @@ const ANALYSIS_FILTER_PREFIX = "ANL:";
 export default class MainPageController extends BaseController {
     onInit() {
         BaseController.prototype.onInit.call(this);
+        this._searchService = new EntitySearchService();
         this._openEntityMap = new Map();
         this._viewModel = new JSONModel({ currentEntity: { name: "" } });
         this.setModel(this._viewModel, VIEW_MODEL);
@@ -35,7 +35,7 @@ export default class MainPageController extends BaseController {
         if (selectedEntity) {
             this.router.navTo("entity", {
                 type: encodeURIComponent(selectedEntity.type),
-                entity: encodeURIComponent(selectedEntity.name)
+                name: encodeURIComponent(selectedEntity.name)
             });
         }
     }
@@ -49,12 +49,8 @@ export default class MainPageController extends BaseController {
         const filterTable = this.getView().byId("foundEntitiesTable");
 
         filterTable.setBusy(true);
-        const response = await AjaxUtil.fetch(
-            {
-                url: `/sap/zqdrtrest/entities/vh?$top=50&filter=${filterValue}`
-            },
-            true
-        );
+
+        const response = await this._searchService.searchDbEntities(filterValue);
         filterTable.setBusy(false);
 
         if (response.status === 200) {

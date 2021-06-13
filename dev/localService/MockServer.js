@@ -41,10 +41,24 @@ export default {
         };
         mockServer.setRequests([
             {
+                method: "HEAD",
+                path: /.*/,
+                response: xhr => {
+                    xhr.respond(200, { "X-CSRF-Token": "Dummy" });
+                }
+            },
+            {
                 method: "GET",
                 path: /entities\/vh.*/,
                 response: xhr => {
                     return getJson(xhr, "dbentities");
+                }
+            },
+            {
+                method: "POST",
+                path: /entities\/(.*)\/(.*)\/dataPreview.*/,
+                response: xhr => {
+                    return getJson(xhr, "datapreview");
                 }
             }
         ]);

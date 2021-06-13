@@ -35,8 +35,6 @@ export default {
     /**
      * Promisfied AJAX call
      * @param {string} url request url
-     * @param {boolean} addSapQueryParams if <code>true</code> the sap query parameters
-     *      'language' and 'client' will be added to the request url
      * @param {Object} parameters parameters for the request
      * @param {Object} parameters.headers optional http headers
      * @param {Object} parameters.data payload for the request
@@ -45,12 +43,13 @@ export default {
      * @param {string} parameters.password password for basic authentication
      * @param {string} parameters.method request method (e.g. GET/POST/PUT)
      * @param {string} parameters.CSRFToken CSRF token for POST/PUT/DELETE
+     * @param {boolean} addSapQueryParams if <code>true</code> the sap query parameters
+     *      'language' and 'client' will be added to the request url
      * @returns {Promise<Object>} promise to ajax request
      * @public
      */
     send(
         url,
-        addSapQueryParams = true,
         {
             headers = {},
             method = "GET",
@@ -59,7 +58,8 @@ export default {
             CSRFToken = "",
             username = "",
             password = ""
-        } = {}
+        } = {},
+        addSapQueryParams = true
     ) {
         if (addSapQueryParams) {
             url = addSapQueryParamsToUrl(url);
@@ -86,8 +86,6 @@ export default {
     /**
      * Fetches Data synchronously
      * @param {string} url url for the request
-     * @param {boolean} addSapQueryParams if <code>true</code> the sap query parameters
-     *      'language' and 'client' will be added to the request url
      * @param {Object} parameters Parameters
      * @param {String} parameters.method Request method
      * @param {String} parameters.url URL string for request
@@ -95,12 +93,14 @@ export default {
      * @param {String} parameters.dataType The expected result type of the response
      * @param {Object} parameters.headers Optional map with request headers (key/value pairs)
      * @param {string} parameters.CSRFToken CSRF token for POST/PUT/DELETE
+     * @param {boolean} addSapQueryParams if <code>true</code> the sap query parameters
+     *      'language' and 'client' will be added to the request url
      * @returns {Object} the result of synchronous request
      */
     sendSync(
         url,
-        addSapQueryParams = true,
-        { method = "GET", data, dataType = "json", headers = {}, CSRFToken = "" } = {}
+        { method = "GET", data, dataType = "json", headers = {}, CSRFToken = "" } = {},
+        addSapQueryParams = true
     ) {
         let response;
         if (addSapQueryParams) {
@@ -137,7 +137,7 @@ export default {
         if (this._CSRFToken) {
             return this._CSRFToken;
         }
-        const result = await this.send("/sap/bc/zi18nchksrv/", {
+        const result = await this.send("/sap/zqdrtrest/", {
             method: "HEAD",
             headers: {
                 [this.CSRF_TOKEN_HEADER]: "Fetch",

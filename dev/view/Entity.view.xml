@@ -3,6 +3,7 @@
     xmlns:l="sap.ui.layout"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:f="sap.f"
+    xmlns:table="sap.ui.table"
     xmlns:core="sap.ui.core"
     xmlns="sap.m"
     height="100%">
@@ -27,8 +28,17 @@
                 sideContentPosition="End">
                 <app:content>
                     <Panel height="100%">
-                        <Table headerText="Data for {vm>/entity/name}">
-                        </Table>
+                        <table:Table id="dataPreviewTable"
+                            columns="{
+                                path: 'vm>/data/columnMetadata',
+                                factory: '.columnsFactory'
+                            }"
+                            rows="{vm>/data/rows}"
+                            visibleRowCountMode="Auto">
+                            <table:title>
+                                <Title text="Data for {vm>/entity/name}"></Title>
+                            </table:title>
+                        </table:Table>
                     </Panel>
                 </app:content>
                 <app:sideContent>
@@ -42,6 +52,10 @@
                             expandable="true">
                         </Panel>
                         <Panel headerText="Columns"
+                            width="100%"
+                            expandable="true">
+                        </Panel>
+                        <Panel headerText="Grouping"
                             width="100%"
                             expandable="true">
                         </Panel>
