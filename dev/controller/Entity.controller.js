@@ -90,6 +90,18 @@ export default class EntityController extends BaseController {
                         }
                     }
                 });
+                break;
+            case "Time":
+                template = new Text({
+                    text: {
+                        type: "sap.ui.model.type.Time",
+                        formatOptions: {
+                            relative: true,
+                            relativeScale: "auto"
+                        }
+                    }
+                });
+                break;
             case "Decimal":
                 hAlign = "End";
             default:
