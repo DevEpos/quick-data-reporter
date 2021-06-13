@@ -16,9 +16,11 @@ export default class EntityController extends BaseController {
      */
     onInit() {
         BaseController.prototype.onInit.call(this);
-        this._viewModel = models.createViewModel({
-            entity: {},
+        this._uiModel = models.createViewModel({
             sideContentVisible: true,
+        });
+        this._dataModel = models.createViewModel({
+            entity: {},
             data: {
                 rows: [],
                 columnMetadata: []
@@ -26,23 +28,24 @@ export default class EntityController extends BaseController {
         });
         this._dataPreviewTable = this.getView().byId("dataPreviewTable");
         this._previewService = new DataPreviewService();
-        this.getView().setModel(this._viewModel, "vm");
+        this.getView().setModel(this._dataModel);
+        this.getView().setModel(this._uiModel, "ui");
         this.router.getRoute("entity").attachPatternMatched(this._onEntityMatched, this);
     }
 
     async _onEntityMatched(event) {
         const args = event.getParameter("arguments");
-        this._viewModel.setProperty("/entity", {
+        this._dataModel.setProperty("/entity", {
             type: decodeURIComponent(args.type),
             name: decodeURIComponent(args.name)
         });
-        const entity = this._viewModel.getData().entity;
+        const entity = this._dataModel.getData().entity;
         this._dataPreviewTable.setBusy(true);
         try {
             const response = await this._previewService.getEntityData(entity.type, entity.name);
             if (response?.status === 200) {
-                this._viewModel.setProperty("/data/columnMetadata", response?.data?.columnMetadata);
-                this._viewModel.setProperty("/data/rows", response?.data?.data);
+                this._dataModel.setProperty("/data/columnMetadata", response?.data?.columnMetadata);
+                this._dataModel.setProperty("/data/rows", response?.data?.data);
             }
         } catch (reqError) {}
         this._dataPreviewTable.setBusy(false);
@@ -62,7 +65,7 @@ export default class EntityController extends BaseController {
             width = "15rem";
         }
 
-        let template = `vm>${columnName}`;
+        let template = columnName;
         let hAlign = "Begin";
         switch (dataType) {
             case "Date":

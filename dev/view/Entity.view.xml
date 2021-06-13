@@ -13,52 +13,71 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <Title text="Entity {vm>/entity/name}"></Title>
+                    <Title text="Entity {/entity/name}"></Title>
                 </f:heading>
                 <f:actions>
                     <ToggleButton icon="sap-icon://customize"
-                        pressed="{vm>/sideContentVisible}"
+                        pressed="{ui>/sideContentVisible}"
                         type="Transparent" />
                 </f:actions>
             </f:DynamicPageTitle>
         </f:title>
 
         <f:content>
-            <app:ToggleableSideContent sideContentVisible="{vm>/sideContentVisible}"
+            <app:ToggleableSideContent sideContentVisible="{ui>/sideContentVisible}"
                 sideContentPosition="End">
                 <app:content>
                     <Panel height="100%">
                         <table:Table id="dataPreviewTable"
                             columns="{
-                                path: 'vm>/data/columnMetadata',
+                                path: '/data/columnMetadata',
                                 factory: '.columnsFactory'
                             }"
-                            rows="{vm>/data/rows}"
+                            rows="{/data/rows}"
                             visibleRowCountMode="Auto">
                             <table:title>
-                                <Title text="Data for {vm>/entity/name}"></Title>
+                                <Title text="Data for {/entity/name}"></Title>
                             </table:title>
                         </table:Table>
                     </Panel>
                 </app:content>
                 <app:sideContent>
                     <l:VerticalLayout width="100%">
-                        <Panel headerText="Parameters"
-                            width="100%"
-                            expandable="true">
-                        </Panel>
-                        <Panel headerText="Filters"
-                            width="100%"
-                            expandable="true">
-                        </Panel>
-                        <Panel headerText="Columns"
-                            width="100%"
-                            expandable="true">
-                        </Panel>
-                        <Panel headerText="Grouping"
-                            width="100%"
-                            expandable="true">
-                        </Panel>
+                        <Toolbar >
+                            <ToolbarSpacer />
+                            <Button icon="sap-icon://back-to-top"
+                                type="Transparent" />
+                            <Button icon="sap-icon://collapse-all"
+                                type="Transparent" />
+                        </Toolbar>
+                        <ScrollContainer vertical="true"
+                            height="500px">
+                            <Panel headerText="Parameters"
+                                width="100%"
+                                expandable="true">
+                            </Panel>
+                            <Panel headerText="Filters"
+                                width="100%"
+                                expandable="true">
+                            </Panel>
+                            <Panel headerText="Columns"
+                                width="100%"
+                                expandable="true">
+                                <List items="{/data/columnMetadata}">
+                                    <items>
+                                        <StandardListItem title="{name}"></StandardListItem>
+                                    </items>
+                                </List>
+                            </Panel>
+                            <Panel headerText="Sorting"
+                                width="100%"
+                                expandable="true">
+                            </Panel>
+                            <Panel headerText="Grouping"
+                                width="100%"
+                                expandable="true">
+                            </Panel>
+                        </ScrollContainer>
                     </l:VerticalLayout>
                 </app:sideContent>
             </app:ToggleableSideContent>
