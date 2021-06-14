@@ -30,14 +30,24 @@
                     <Panel height="100%">
                         <table:Table id="dataPreviewTable"
                             columns="{
-                                path: '/data/columnMetadata',
+                                path: '/columnMetadata',
                                 factory: '.columnsFactory'
                             }"
-                            rows="{/data/rows}"
+                            rows="{/rows}"
                             visibleRowCountMode="Auto">
-                            <table:title>
-                                <Title text="Data for {/entity/name}"></Title>
-                            </table:title>
+                            <table:extension>
+                                <OverflowToolbar>
+                                    <Title text="Data for {/entity/name}" />
+                                    <ToolbarSpacer />
+                                    <Button type="Transparent"
+                                        press="onTableSettings"
+                                        icon="sap-icon://action-settings"></Button>
+                                    <Button text="{i18n>updateData}"
+                                        icon="sap-icon://refresh"
+                                        type="Emphasized"
+                                        press="onUpdateData" />
+                                </OverflowToolbar>
+                            </table:extension>
                         </table:Table>
                     </Panel>
                 </app:content>
@@ -47,37 +57,17 @@
                             <ToolbarSpacer />
                             <Button icon="sap-icon://back-to-top"
                                 type="Transparent" />
-                            <Button icon="sap-icon://collapse-all"
+                            <Button icon="sap-icon://delete"
                                 type="Transparent" />
                         </Toolbar>
-                        <ScrollContainer vertical="true"
-                            height="500px">
-                            <Panel headerText="Parameters"
-                                width="100%"
-                                expandable="true">
-                            </Panel>
-                            <Panel headerText="Filters"
-                                width="100%"
-                                expandable="true">
-                            </Panel>
-                            <Panel headerText="Columns"
-                                width="100%"
-                                expandable="true">
-                                <List items="{/data/columnMetadata}">
-                                    <items>
-                                        <StandardListItem title="{name}"></StandardListItem>
-                                    </items>
-                                </List>
-                            </Panel>
-                            <Panel headerText="Sorting"
-                                width="100%"
-                                expandable="true">
-                            </Panel>
-                            <Panel headerText="Grouping"
-                                width="100%"
-                                expandable="true">
-                            </Panel>
-                        </ScrollContainer>
+                        <Panel headerText="Filters"
+                            width="100%"
+                            expandable="false">
+                            <!-- TODO: Determine correct max height -->
+                            <ScrollContainer vertical="true"
+                                height="500px">
+                            </ScrollContainer>
+                        </Panel>
                     </l:VerticalLayout>
                 </app:sideContent>
             </app:ToggleableSideContent>
