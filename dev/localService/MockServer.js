@@ -60,6 +60,13 @@ export default {
                 response: xhr => {
                     return getJson(xhr, "datapreview");
                 }
+            },
+            {
+                method: "POST",
+                path: /entities\/(.*)\/(.*)\/metadata.*/,
+                response: xhr => {
+                    return getJson(xhr, "entityMetadata")
+                }
             }
         ]);
         mockServer.start();

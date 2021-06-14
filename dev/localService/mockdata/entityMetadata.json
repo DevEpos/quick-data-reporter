@@ -1,0 +1,243 @@
+{
+    "colMetadata": [
+        {
+            "name": "clsname",
+            "type": "String",
+            "length": 30,
+            "shortDescription": "Obj. Type",
+            "mediumDescription": "Type Name",
+            "longDescription": "Object Type Name"
+        },
+        {
+            "name": "version",
+            "type": "Int",
+            "length": 1,
+            "shortDescription": "V",
+            "mediumDescription": "Version",
+            "longDescription": "Version indicator (active/inactive)"
+        },
+        {
+            "name": "category",
+            "type": "Int",
+            "length": 2,
+            "shortDescription": "Category",
+            "mediumDescription": "Category",
+            "longDescription": "Class/Interface category"
+        },
+        {
+            "name": "exposure",
+            "type": "Int",
+            "length": 1,
+            "shortDescription": "Visible",
+            "mediumDescription": "Visibility",
+            "longDescription": "Visibility of a class or component"
+        },
+        {
+            "name": "state",
+            "type": "Int",
+            "length": 1,
+            "shortDescription": "Status",
+            "mediumDescription": "Status",
+            "longDescription": "Status of a class or component"
+        },
+        {
+            "name": "release",
+            "type": "Int",
+            "length": 1,
+            "shortDescription": "Release",
+            "mediumDescription": "Release",
+            "longDescription": "Release status of a class"
+        },
+        {
+            "name": "author",
+            "type": "String",
+            "length": 12,
+            "shortDescription": "Created By",
+            "mediumDescription": "Created By",
+            "longDescription": "Author"
+        },
+        {
+            "name": "createdon",
+            "type": "Date",
+            "length": 8,
+            "shortDescription": "Created On",
+            "mediumDescription": "Created On",
+            "longDescription": "Created On"
+        },
+        {
+            "name": "changedby",
+            "type": "String",
+            "length": 12,
+            "shortDescription": "Changed by",
+            "mediumDescription": "Last changed by",
+            "longDescription": "Last changed by"
+        },
+        {
+            "name": "changedon",
+            "type": "Date",
+            "length": 8,
+            "shortDescription": "Changed on",
+            "mediumDescription": "Changed on",
+            "longDescription": "Changed On"
+        },
+        {
+            "name": "chgdanyby",
+            "type": "String",
+            "length": 12,
+            "shortDescription": "Changed by",
+            "mediumDescription": "Last changed by",
+            "longDescription": "Last changed by"
+        },
+        {
+            "name": "chgdanyon",
+            "type": "Date",
+            "length": 8,
+            "shortDescription": "Changed on",
+            "mediumDescription": "Changed on",
+            "longDescription": "Changed On"
+        },
+        {
+            "name": "clsembed",
+            "type": "String",
+            "length": 1,
+            "shortDescription": "Embeddable",
+            "mediumDescription": "Embeddable",
+            "longDescription": "Indicator embeddable classes"
+        },
+        {
+            "name": "clsabstrct",
+            "type": "String",
+            "length": 1,
+            "shortDescription": "Abstract",
+            "mediumDescription": "Abstract",
+            "longDescription": "Flag for abstract class or method"
+        },
+        {
+            "name": "clsfinal",
+            "type": "String",
+            "length": 1,
+            "shortDescription": "Final",
+            "mediumDescription": "Final",
+            "longDescription": "Flag for final class/method"
+        },
+        {
+            "name": "clsccincl",
+            "type": "String",
+            "length": 1,
+            "longDescription": "Flags new include structure for local types"
+        },
+        {
+            "name": "clsdefatt",
+            "type": "String",
+            "length": 61,
+            "shortDescription": "Int. Comp.",
+            "mediumDescription": "Interface Comp.",
+            "longDescription": "Full Component Name"
+        },
+        {
+            "name": "clsdefmtd",
+            "type": "String",
+            "length": 61,
+            "shortDescription": "Int. Comp.",
+            "mediumDescription": "Interface Comp.",
+            "longDescription": "Full Component Name"
+        },
+        {
+            "name": "refclsname",
+            "type": "String",
+            "length": 30,
+            "longDescription": "DD: Name of a structured object (e.g. entity, context)"
+        },
+        { "name": "fixpt", "type": "String", "length": 1, "longDescription": "Fixed point arithmetic" },
+        {
+            "name": "varcl",
+            "type": "String",
+            "length": 1,
+            "shortDescription": "Case",
+            "mediumDescription": "Case-Sensitive",
+            "longDescription": "Case-Sensitive"
+        },
+        {
+            "name": "unicode",
+            "type": "String",
+            "length": 1,
+            "shortDescription": "Version",
+            "mediumDescription": "ABAP Version",
+            "longDescription": "ABAP Version"
+        },
+        { "name": "rstat", "type": "String", "length": 1, "longDescription": "Status" },
+        {
+            "name": "clsbcimpl",
+            "type": "String",
+            "length": 30,
+            "shortDescription": "Obj. Type",
+            "mediumDescription": "Type Name",
+            "longDescription": "Object Type Name"
+        },
+        {
+            "name": "r3release",
+            "type": "String",
+            "length": 10,
+            "shortDescription": "Release",
+            "mediumDescription": "SAP Release",
+            "longDescription": "SAP Release"
+        },
+        {
+            "name": "clsbctrans",
+            "type": "String",
+            "length": 1,
+            "shortDescription": "Transient",
+            "mediumDescription": "Transient",
+            "longDescription": "Indicator: Transient Business Class"
+        },
+        {
+            "name": "clsbccat",
+            "type": "Int",
+            "length": 2,
+            "shortDescription": "Category",
+            "mediumDescription": "Class Category",
+            "longDescription": "Category of Business Class"
+        },
+        {
+            "name": "clsaddon",
+            "type": "String",
+            "length": 30,
+            "shortDescription": "Obj. Type",
+            "mediumDescription": "Type Name",
+            "longDescription": "Object Type Name"
+        },
+        { "name": "msg_id", "type": "String", "length": 20, "longDescription": "MESSAGE-ID from PROGRAM statement" },
+        {
+            "name": "clsproxy",
+            "type": "String",
+            "length": 1,
+            "shortDescription": "Proxy",
+            "mediumDescription": "Proxy Class",
+            "longDescription": "Category of the Proxy Class"
+        },
+        {
+            "name": "clssharedmemory",
+            "type": "String",
+            "length": 1,
+            "shortDescription": "SHM",
+            "mediumDescription": "SHM-Enabled",
+            "longDescription": "Flag: Is Class Shared-Memory-Enabled?"
+        },
+        { "name": "with_unit_tests", "type": "String", "length": 1, "longDescription": "General Indicator" },
+        {
+            "name": "duration_type",
+            "type": "Int",
+            "length": 3,
+            "longDescription": "Upper limit of runtime category (\"SHORT\", \"MEDIUM\", .. )"
+        },
+        { "name": "risk_level", "type": "Int", "length": 3, "longDescription": "Upper limit of risk level" },
+        {
+            "name": "within_package",
+            "type": "String",
+            "length": 1,
+            "shortDescription": "PackgeFlag",
+            "mediumDescription": "Open for Package",
+            "longDescription": "Class Opened for Package"
+        }
+    ]
+}

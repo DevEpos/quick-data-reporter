@@ -50,12 +50,12 @@ export default class MainPageController extends BaseController {
 
         filterTable.setBusy(true);
 
-        const response = await this._searchService.searchDbEntities(filterValue);
+        const entities = await this._searchService.searchDbEntities(filterValue);
         filterTable.setBusy(false);
 
-        if (response.status === 200) {
+        if (entities) {
             const bundle = this.getResourceBundle();
-            for (const entity of response.data) {
+            for (const entity of entities) {
                 if (entity.type) {
                     switch (entity.type) {
                         case "C":
@@ -75,7 +75,7 @@ export default class MainPageController extends BaseController {
                     }
                 }
             }
-            this._viewModel.setProperty("/foundEntities", response.data);
+            this._viewModel.setProperty("/foundEntities", entities);
         } else {
             this._viewModel.setProperty("/foundEntities", []);
         }

@@ -13,6 +13,7 @@ export default class EntitySearchService {
      * @returns {Promise<Object>} Promise with response object
      */
     async searchDbEntities(filterValue) {
-        return ajaxUtil.send(`${SERVICE_URL}?$top=50&filter=${filterValue}`);
+        const response = await ajaxUtil.send(`${SERVICE_URL}?$top=50&filter=${filterValue}`);
+        return response?.data;
     }
 }

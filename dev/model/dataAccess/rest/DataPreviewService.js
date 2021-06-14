@@ -16,10 +16,14 @@ export default class DataPreviewService {
      */
     async getEntityData(type, entity) {
         const CSRFToken = await ajaxUtil.fetchCSRF();
-        return ajaxUtil.send(`${ENTITY_DP_SERVICE_URL.replace("{type}", type).replace("{name}", entity)}`, {
-            data: {},
-            method: "POST",
-            CSRFToken
-        });
+        const response = await ajaxUtil.send(
+            `${ENTITY_DP_SERVICE_URL.replace("{type}", type).replace("{name}", entity)}`,
+            {
+                data: {},
+                method: "POST",
+                CSRFToken
+            }
+        );
+        return response?.data;
     }
 }
