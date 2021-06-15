@@ -3,16 +3,17 @@
     <P13nDialog showReset="true"
         showResetEnabled="{path: '/ShowResetEnabled'}"
         ok="onOK"
+        title="{i18n>entitySettingsDialogTitle}"
         cancel="onCancel"
         reset="onReset"
         class="sapUiSizeCompact">
         <panels>
             <P13nColumnsPanel changeColumnsItems="onChangeColumnsItems"
-                items="{path: '/columnMetadata'}"
-                columnsItems="{path: '/p13n/columnsItems'}">
+                items="{/columnMetadata}"
+                columnsItems="{/p13n/columnsItems}">
                 <items>
                     <P13nItem columnKey="{name}"
-                        text="{name} ({longDescription})"/>
+                        text="{longDescription}"/>
                 </items>
                 <columnsItems>
                     <P13nColumnsItem columnKey="{columnKey}"
@@ -20,6 +21,17 @@
                         visible="{visible}"/>
                 </columnsItems>
             </P13nColumnsPanel>
+            <P13nSortPanel items="{/columnMetadata}"
+                sortItems="{/p13n/sortItems}">
+                <items>
+                    <P13nItem columnKey="{name}"
+                        text="{longDescription}"/>
+                </items>
+                <sortItems>
+                    <P13nSortItem columnKey="{columnKey}"
+                        operation="{sortDirection}"></P13nSortItem>
+                </sortItems>
+            </P13nSortPanel>
         </panels>
     </P13nDialog>
 </core:FragmentDefinition>

@@ -2,9 +2,9 @@ import BaseController from "./BaseController";
 import DataPreviewService from "../model/dataAccess/rest/DataPreviewService";
 import EntityMetadataService from "../model/dataAccess/rest/EntityMetadataService";
 import models from "../model/models";
+import EntityTableSettings from "../model/util/EntityTableSettings";
 import Column from "sap/ui/table/Column";
 import Text from "sap/m/Text";
-import Fragment from "sap/ui/core/Fragment";
 
 /**
  * Controller for a single database entity
@@ -21,13 +21,11 @@ export default class EntityController extends BaseController {
         this._uiModel = models.createViewModel({
             sideContentVisible: true
         });
+        this._entityTableSettings = new EntityTableSettings(this.getView());
         this._dataModel = models.createViewModel({
             entity: {},
             rows: [],
-            columnMetadata: [],
-            p13n: {
-                columnsItems: []
-            }
+            columnMetadata: []
         });
         this._dataPreviewTable = this.getView().byId("dataPreviewTable");
         this._previewService = new DataPreviewService();
@@ -35,8 +33,21 @@ export default class EntityController extends BaseController {
         this.getView().setModel(this._dataModel);
         this.getView().setModel(this._uiModel, "ui");
         this.router.getRoute("entity").attachPatternMatched(this._onEntityMatched, this);
+        this.router.getRoute("main").attachPatternMatched(this._onMainMatched, this);
     }
 
+    _onMainMatched(event) {
+        if (this._entityTableSettings) {
+            this._entityTableSettings.destroyDialog();
+        }
+        if (this._dataModel) {
+            this._dataModel.setProperty("/", {
+                entity: {},
+                rows: [],
+                columnsMetadata: []
+            });
+        }
+    }
     async _onEntityMatched(event) {
         const args = event.getParameter("arguments");
         const dataModelData = this._dataModel.getData();
@@ -44,43 +55,22 @@ export default class EntityController extends BaseController {
             type: decodeURIComponent(args.type),
             name: decodeURIComponent(args.name)
         };
+        this._entityTableSettings.setEntityInfo(entityInfo.type, entityInfo.name);
         this._dataModel.setProperty("/entity", entityInfo);
         this._dataPreviewTable.setBusy(true);
         try {
             const entityMetadata = await this._metadataService.getMetadata(entityInfo.type, entityInfo.name);
-            if (entityMetadata?.colMetadata) {
-                // fill p13n tables from columns
-                for (const colMeta of entityMetadata?.colMetadata) {
-                    dataModelData.p13n.columnsItems.push({
-                        columnKey: colMeta.name,
-                        visible: true
-                    });
-                }
-                dataModelData.columnMetadata = entityMetadata?.colMetadata;
-            }
+            dataModelData.columnMetadata = entityMetadata?.colMetadata || [];
+            this._entityTableSettings.setColumnMetadata(entityMetadata?.colMetadata);
         } catch (reqError) {}
         this._dataModel.updateBindings();
         this._dataPreviewTable.setBusy(false);
     }
     /**
      * Handles entity settings event
-     * @param {Object} event  event object
      */
-    async onTableSettings(event) {
-        const view = this.getView();
-
-        if (!this._personalizationDialog) {
-            this._personalizationDialog = await Fragment.load({
-                id: view.getId(),
-                name: "devepos.qdrt.fragment.PersDialog",
-                controller: this
-            });
-        }
-        view.addDependent(this._personalizationDialog);
-        this._personalizationDialog.setModel(this._dataModel);
-        // this._dataModel.setProperty("/ShowResetEnabled", this._isChangedColumnsItems());
-        // this.oDataBeforeOpen = deepExtend({}, this.oJSONModel.getData());
-        this._personalizationDialog.open();
+    async onTableSettings() {
+        this._entityTableSettings.showSettingsDialog();
     }
     /**
      * Creates columns
