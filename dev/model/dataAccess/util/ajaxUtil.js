@@ -1,5 +1,5 @@
 import $ from "jQuery.sap.global";
-import SystemUtil from "../../util/systemUtil";
+import SystemUtil from "../../../util/systemUtil";
 
 const SAP_LANGUAGE_PARAM = "sap-language";
 const SAP_CLIENT_PARAM = "sap-client";

@@ -25,7 +25,7 @@ export default class ToggleableSideContent extends Control {
         aggregations: {
             /**
              * Main content which normally should hold a table control like
-             * @see sap.m.Table
+             * {@link sap.m.Table}
              */
             content: { type: "sap.ui.core.Control", multiple: false, singularName: "content" },
             /**
@@ -35,15 +35,8 @@ export default class ToggleableSideContent extends Control {
         },
         events: {}
     };
-
-    /**
-     * Initializes the side filter view
-     */
     init() {}
-
     onAfterRendering() {}
-
     onBeforeRendering() {}
-
     exit() {}
 }

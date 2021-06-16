@@ -1,4 +1,4 @@
-import models from "../models";
+import models from "../model/models";
 import Fragment from "sap/ui/core/Fragment";
 
 /**
