@@ -2,7 +2,7 @@ import BaseController from "./BaseController";
 import DataPreviewService from "../model/dataAccess/rest/DataPreviewService";
 import EntityMetadataService from "../model/dataAccess/rest/EntityMetadataService";
 import models from "../model/models";
-import EntityTableSettings from "../model/helper/EntityTableSettings"
+import EntityTableSettings from "../helper/EntityTableSettings";
 import Column from "sap/ui/table/Column";
 import Text from "sap/m/Text";
 
