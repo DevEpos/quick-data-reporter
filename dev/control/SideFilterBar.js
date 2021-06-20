@@ -40,20 +40,19 @@ export default class SideFilterBar extends Panel {
         this.setHeaderToolbar(
             new OverflowToolbar({
                 content: [
-                    // TODO: create i18n text
-                    new Title({ text: "Filters" }),
+                    new Title({ text: "{i18n>entity_sideFilterBar_title}" }),
                     new ToolbarSpacer(),
-                    // TODO: add i18n tooltip
                     new Button({
                         icon: "sap-icon://add",
+                        tooltip: "{i18n>entity_sideFilterBar_newFilter}",
                         type: sap.m.ButtonType.Transparent,
                         press: () => {
                             this._addNewFilter();
                         }
                     }),
-                    // TODO: add i18n tooltip
                     new Button({
                         icon: "sap-icon://delete",
+                        tooltip: "{i18n>entity_sideFilterBar_deleteAllFilters}",
                         type: sap.m.ButtonType.Transparent,
                         press: () => {
                             this._filterContainer.removeAllContent();

@@ -47,6 +47,7 @@ export default class QuickFilter extends Control {
                         this._filterName,
                         new Button({
                             icon: "sap-icon://decline",
+                            tooltip: "{i18n>entity_sideFilterBar_filter_delete}",
                             type: sap.m.ButtonType.Transparent,
                             press: () => {
                                 this.destroy();

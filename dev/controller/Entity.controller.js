@@ -25,6 +25,7 @@ export default class EntityController extends BaseController {
         this._dataModel = models.createViewModel({
             entity: {},
             rows: [],
+            count: 0,
             columnMetadata: []
         });
         this._dataPreviewTable = this.getView().byId("dataPreviewTable");
@@ -62,7 +63,9 @@ export default class EntityController extends BaseController {
             const entityMetadata = await this._metadataService.getMetadata(entityInfo.type, entityInfo.name);
             dataModelData.columnMetadata = entityMetadata?.colMetadata || [];
             this._entityTableSettings.setColumnMetadata(entityMetadata?.colMetadata);
-        } catch (reqError) {}
+        } catch (reqError) {
+            // TODO: handle error
+        }
         this._dataModel.updateBindings();
         this._dataPreviewTable.setBusy(false);
     }
@@ -71,6 +74,23 @@ export default class EntityController extends BaseController {
      */
     async onTableSettings() {
         this._entityTableSettings.showSettingsDialog();
+    }
+    /**
+     * Event handler to trigger data update
+     */
+    async onUpdateData() {
+        this._dataPreviewTable.setBusy(true);
+        const { entity: entityInfo } = this._dataModel.getData();
+        try {
+            const selectionData = await this._previewService.getEntityData(entityInfo.type, entityInfo.name);
+            if (selectionData) {
+                this._dataModel.setProperty("/rows", selectionData);
+                this._dataModel.setProperty("/count", selectionData?.length ? selectionData.length : 0);
+            }
+        } catch (reqError) {
+            // TODO: handle error
+        }
+        this._dataPreviewTable.setBusy(false);
     }
     /**
      * Creates columns

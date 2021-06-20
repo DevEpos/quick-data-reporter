@@ -3,6 +3,7 @@
     xmlns:l="sap.ui.layout"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:f="sap.f"
+    xmlns:variants="sap.ui.comp.variants"
     xmlns:table="sap.ui.table"
     xmlns:core="sap.ui.core"
     xmlns="sap.m"
@@ -35,14 +36,27 @@
                             }"
                             rows="{/rows}"
                             visibleRowCountMode="Auto">
+                            <table:tooltip></table:tooltip>
                             <table:extension>
                                 <OverflowToolbar>
-                                    <Title text="Data for {/entity/name}" />
+                                    <Title text="{i18n>entity_table_title} ({/count})"
+                                        titleStyle="H4"/>
+                                    <ToolbarSeparator />
+                                    <variants:VariantManagement useFavorites="true"
+                                        showSetAsDefault="true"
+                                        showExecuteOnSelection="true"/>
                                     <ToolbarSpacer />
+                                    <Label text="{i18n>entity_table_tb_maxRows}"
+                                        labelFor="maxRowsInput"/>
+                                    <Input value="500"
+                                        id="maxRowsInput"
+                                        width="5rem">
+                                    </Input>
+                                    <ToolbarSeparator />
                                     <Button type="Transparent"
                                         press="onTableSettings"
                                         icon="sap-icon://action-settings"></Button>
-                                    <Button text="{i18n>updateData}"
+                                    <Button text="{i18n>entity_table_tb_refresh}"
                                         icon="sap-icon://refresh"
                                         type="Emphasized"
                                         press="onUpdateData" />
