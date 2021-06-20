@@ -3,7 +3,8 @@
         "type": "C",
         "name": "I_Acmusr02",
         "description": "View of user-table: USR02, used by ACM",
-        "packageName": "SACM_COMMON"
+        "packageName": "SACM_COMMON",
+        "isFavorite": true
     },
     {
         "type": "C",
@@ -21,13 +22,15 @@
         "type": "C",
         "name": "I_Aivs_Ai_Report_Type",
         "description": "report types",
-        "packageName": "SADL_GW_DT_REPORTING"
+        "packageName": "SADL_GW_DT_REPORTING",
+        "isFavorite": true
     },
     {
         "type": "C",
         "name": "I_Aivs_Ai_Usage",
         "description": "interface view for cds usage",
-        "packageName": "SADL_GW_DT_REPORTING"
+        "packageName": "SADL_GW_DT_REPORTING",
+        "isFavorite": true
     },
     {
         "type": "C",
