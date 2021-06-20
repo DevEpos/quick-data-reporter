@@ -25,11 +25,11 @@
         <f:content>
             <Table id="foundEntitiesTable"
                 width="100%"
-                items="{viewModel>/foundEntities}"
+                items="{/foundEntities}"
                 sticky="ColumnHeaders,HeaderToolbar">
                 <headerToolbar>
                     <Toolbar >
-                        <Title text="{i18n>searchTab_table_title}"
+                        <Title text="{i18n>dbEntities_table_title}"
                             level="H2" />
                         <ToolbarSpacer />
                         <Select>
@@ -43,32 +43,40 @@
                         <SearchField class="mainpage__search"
                             width="20em"
                             search="onSearchForEntities"
-                            placeholder="{i18n>searchTab_table_filterPrompt}" />
+                            placeholder="{i18n>dbEntities_table_filterPrompt}" />
                     </Toolbar>
                 </headerToolbar>
                 <columns>
                     <Column width="4rem">
-                        <Text text="{i18n>searchTab_table_col_type}" />
+                        <Text text="{i18n>dbEntities_table_col_type}" />
+                    </Column>
+                    <Column width="3.5rem">
+                        <Text text="{i18n>dbEntities_table_col_favorite}"
+                            tooltip="{i18n>dbEntities_table_col_ttip_favorite}"/>
                     </Column>
                     <Column>
-                        <Text text="{i18n>searchTab_table_col_name}" />
+                        <Text text="{i18n>dbEntities_table_col_name}" />
                     </Column>
                     <Column>
-                        <Text text="{i18n>searchTab_table_col_description}" />
+                        <Text text="{i18n>dbEntities_table_col_description}" />
                     </Column>
                     <Column>
-                        <Text text="{i18n>searchTab_table_col_package}" />
+                        <Text text="{i18n>dbEntities_table_col_package}" />
                     </Column>
                 </columns>
                 <items>
                     <ColumnListItem type="Active"
                         press="onOpenEntity">
                         <cells>
-                            <c:Icon src="{viewModel>typeIcon}"
-                                tooltip="{viewModel>typeTooltip}" />
-                            <Text text="{viewModel>name}" />
-                            <Text text="{viewModel>description}" />
-                            <Text text="{viewModel>packageName}" />
+                            <c:Icon src="{typeIcon}"
+                                tooltip="{typeTooltip}" />
+                            <c:Icon src="{= ${isFavorite} ? 'sap-icon://favorite' : 'sap-icon://unfavorite'}"
+                                tooltip="{= ${isFavorite} ? ${i18n>dbEntities_table_act_unmarkAsFavorite} : ${i18n>dbEntities_table_act_markAsFavorite}}"
+                                class="sapUICompVarMngmtFavColor"
+                                press="onToggleFavorite"/>
+                            <Text text="{name}" />
+                            <Text text="{description}" />
+                            <Text text="{packageName}" />
                         </cells>
                     </ColumnListItem>
                 </items>

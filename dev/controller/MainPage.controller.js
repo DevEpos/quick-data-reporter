@@ -1,8 +1,6 @@
-import JSONModel from "sap/ui/model/json/JSONModel";
+import models from "../model/models";
 import BaseController from "./BaseController";
 import EntitySearchService from "../model/dataAccess/rest/EntitySearchService";
-
-const VIEW_MODEL = "viewModel";
 
 /**
  * Main Page controller
@@ -14,8 +12,10 @@ export default class MainPageController extends BaseController {
         BaseController.prototype.onInit.call(this);
         this._searchService = new EntitySearchService();
         this._openEntityMap = new Map();
-        this._viewModel = new JSONModel({ currentEntity: { name: "" } });
-        this.setModel(this._viewModel, VIEW_MODEL);
+        this._viewModel = models.createViewModel({ currentEntity: { name: "" } });
+        this.setModel(this._viewModel, "vm");
+        this._dataModel = models.createViewModel({ foundEntities: [] });
+        this.setModel(this._dataModel);
         this.onSearchForEntities({
             mParams: {
                 query: "demo*"
@@ -31,12 +31,24 @@ export default class MainPageController extends BaseController {
      * @param {Object} event event object
      */
     onOpenEntity(event) {
-        const selectedEntity = this._viewModel.getObject(event.getSource().getBindingContextPath());
+        const selectedEntity = this._dataModel.getObject(event.getSource().getBindingContextPath());
         if (selectedEntity) {
             this.router.navTo("entity", {
                 type: encodeURIComponent(selectedEntity.type),
                 name: encodeURIComponent(selectedEntity.name)
             });
+        }
+    }
+    onToggleFavorite(event) {
+        const selectedPath = event.getSource()?.getBindingContext()?.getPath();
+        const selectedEntity = this._dataModel.getObject(selectedPath);
+        if (selectedEntity) {
+            if (selectedEntity?.isFavorite) {
+                selectedEntity.isFavorite = false;
+            } else {
+                selectedEntity.isFavorite = true;
+            }
+            this._dataModel.setProperty(`${selectedPath}/isFavorite`, selectedEntity.isFavorite);
         }
     }
 
@@ -75,9 +87,7 @@ export default class MainPageController extends BaseController {
                     }
                 }
             }
-            this._viewModel.setProperty("/foundEntities", entities);
-        } else {
-            this._viewModel.setProperty("/foundEntities", []);
         }
+        this._dataModel.setProperty("/foundEntities", entities?.length > 0 ? entities : 0);
     }
 }
