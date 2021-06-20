@@ -34,7 +34,6 @@
     "@babel/core": "^7.14.2",
     "@babel/eslint-parser": "^7.14.2",
     "@babel/preset-env": "^7.14.2",
-    "@openui5/ts-types": "^1.60.5",
     "babel": "^6.23.0",
     "babel-preset-transform-ui5": "^7.0.3",
     "dotenv": "^9.0.2",

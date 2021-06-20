@@ -16,7 +16,7 @@
                     <Title text="Entity {/entity/name}"></Title>
                 </f:heading>
                 <f:actions>
-                    <ToggleButton icon="sap-icon://customize"
+                    <ToggleButton icon="sap-icon://filter"
                         pressed="{ui>/sideContentVisible}"
                         type="Transparent" />
                 </f:actions>
@@ -52,23 +52,7 @@
                     </Panel>
                 </app:content>
                 <app:sideContent>
-                    <l:VerticalLayout width="100%">
-                        <Toolbar >
-                            <ToolbarSpacer />
-                            <Button icon="sap-icon://back-to-top"
-                                type="Transparent" />
-                            <Button icon="sap-icon://delete"
-                                type="Transparent" />
-                        </Toolbar>
-                        <Panel headerText="Filters"
-                            width="100%"
-                            expandable="false">
-                            <!-- TODO: Determine correct max height -->
-                            <ScrollContainer vertical="true"
-                                height="500px">
-                            </ScrollContainer>
-                        </Panel>
-                    </l:VerticalLayout>
+                    <app:SideFilterBar />
                 </app:sideContent>
             </app:ToggleableSideContent>
         </f:content>
