@@ -13,9 +13,9 @@ export default class MainPageController extends BaseController {
         this._searchService = new EntitySearchService();
         this._openEntityMap = new Map();
         this._viewModel = models.createViewModel({ currentEntity: { name: "" } });
-        this.setModel(this._viewModel, "vm");
+        this.getView().setModel(this._viewModel, "ui");
         this._dataModel = models.createViewModel({ foundEntities: [] });
-        this.setModel(this._dataModel);
+        this.getView().setModel(this._dataModel);
         this.onSearchForEntities({
             mParams: {
                 query: "demo*"

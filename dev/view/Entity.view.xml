@@ -36,7 +36,6 @@
                             }"
                             rows="{/rows}"
                             visibleRowCountMode="Auto">
-                            <table:tooltip></table:tooltip>
                             <table:extension>
                                 <OverflowToolbar>
                                     <Title text="{i18n>entity_table_title} ({/count})"
