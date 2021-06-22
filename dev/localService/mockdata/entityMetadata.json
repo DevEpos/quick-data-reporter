@@ -10,7 +10,7 @@
         },
         {
             "name": "version",
-            "type": "Int",
+            "type": "String",
             "length": 1,
             "shortDescription": "V",
             "mediumDescription": "Version",
@@ -18,7 +18,7 @@
         },
         {
             "name": "category",
-            "type": "Int",
+            "type": "String",
             "length": 2,
             "shortDescription": "Category",
             "mediumDescription": "Category",
@@ -26,7 +26,7 @@
         },
         {
             "name": "exposure",
-            "type": "Int",
+            "type": "String",
             "length": 1,
             "shortDescription": "Visible",
             "mediumDescription": "Visibility",
@@ -34,7 +34,7 @@
         },
         {
             "name": "state",
-            "type": "Int",
+            "type": "String",
             "length": 1,
             "shortDescription": "Status",
             "mediumDescription": "Status",
@@ -42,7 +42,7 @@
         },
         {
             "name": "release",
-            "type": "Int",
+            "type": "String",
             "length": 1,
             "shortDescription": "Release",
             "mediumDescription": "Release",
@@ -192,7 +192,7 @@
         },
         {
             "name": "clsbccat",
-            "type": "Int",
+            "type": "String",
             "length": 2,
             "shortDescription": "Category",
             "mediumDescription": "Class Category",
@@ -226,11 +226,18 @@
         { "name": "with_unit_tests", "type": "String", "length": 1, "longDescription": "General Indicator" },
         {
             "name": "duration_type",
-            "type": "Int",
+            "type": "Byte",
+            "isNumeric": true,
             "length": 3,
             "longDescription": "Upper limit of runtime category (\"SHORT\", \"MEDIUM\", .. )"
         },
-        { "name": "risk_level", "type": "Int", "length": 3, "longDescription": "Upper limit of risk level" },
+        {
+            "name": "risk_level",
+            "type": "Byte",
+            "isNumeric": true,
+            "length": 3,
+            "longDescription": "Upper limit of risk level"
+        },
         {
             "name": "within_package",
             "type": "String",
