@@ -38,7 +38,7 @@
                             visibleRowCountMode="Auto">
                             <table:extension>
                                 <OverflowToolbar>
-                                    <Title text="{i18n>entity_table_title} ({/count})"
+                                    <Title text="{i18n>entity_table_title} ({/rows/length})"
                                         titleStyle="H4"/>
                                     <ToolbarSeparator />
                                     <variants:VariantManagement useFavorites="true"

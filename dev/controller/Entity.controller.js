@@ -25,7 +25,6 @@ export default class EntityController extends BaseController {
         this._dataModel = models.createViewModel({
             entity: {},
             rows: [],
-            count: 0,
             columnMetadata: []
         });
         this._dataPreviewTable = this.getView().byId("dataPreviewTable");
