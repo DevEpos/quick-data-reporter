@@ -1,4 +1,5 @@
 import models from "../model/models";
+import deepExtend from "sap/base/util/deepExtend";
 import Fragment from "sap/ui/core/Fragment";
 
 /**
@@ -27,11 +28,14 @@ export default class EntityTableSettings {
     }
     destroyDialog() {
         if (this._settingsDialog) {
+            this._view?.removeDependent(this._settingsDialog);
             this._settingsDialog.destroy();
             this._settingsDialog = null;
+            this._columnsPanel = null;
+            this._groupPanel = null;
+            this._sortPanel = null;
         }
     }
-
     /**
      * Sets the column metadata for the current entity
      * @param {Object} columnMetadata column metadata for the entity
@@ -67,9 +71,12 @@ export default class EntityTableSettings {
             });
             this._view.addDependent(this._settingsDialog);
             this._settingsDialog.setModel(this._model);
+            this._columnsPanel = this._view.byId("columnsPanel");
+            this._sortPanel = this._view.byId("sortPanel");
+            this._groupPanel = this._view.byId("groupPanel");
         }
-        // TODO: Store state of model
-        // this.oDataBeforeOpen = deepExtend({}, this.oJSONModel.getData());
+        // TODO: save current state of model
+        // this.dataBeforeOpen = deepExtend({}, this._model.getData());
         this._settingsDialog.open();
     }
 
@@ -84,10 +91,20 @@ export default class EntityTableSettings {
     }
 
     onCancel(event) {
+        // TODO: reset model to state before open dialog
         this._settingsDialog.close();
     }
-    onReset(event) {}
+    onReset(event) {
+        // TODO: restore initial table settings
+    }
     onOK(event) {
         this._settingsDialog.close();
+    }
+    /**
+     * Handler for when group items are added, updated or removed 
+     * @param {Object} event event payload
+     */
+    onGroupItemUpdate(event) {
+        // TODO: adjust available sort/columns and current sort/columns
     }
 }

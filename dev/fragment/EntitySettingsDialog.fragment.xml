@@ -3,12 +3,13 @@
     <P13nDialog showReset="true"
         showResetEnabled="{path: '/ShowResetEnabled'}"
         ok="onOK"
-        title="{i18n>entitySettingsDialogTitle}"
+        title="{i18n>entity_settingsDialog_title}"
         cancel="onCancel"
         reset="onReset"
         class="sapUiSizeCompact">
         <panels>
-            <P13nColumnsPanel changeColumnsItems="onChangeColumnsItems"
+            <P13nColumnsPanel id="columnsPanel"
+                changeColumnsItems="onChangeColumnsItems"
                 items="{/columnMetadata}"
                 columnsItems="{/p13n/columnsItems}">
                 <items>
@@ -21,7 +22,8 @@
                         visible="{visible}"/>
                 </columnsItems>
             </P13nColumnsPanel>
-            <P13nSortPanel items="{/columnMetadata}"
+            <P13nSortPanel id="sortPanel"
+                items="{/columnMetadata}"
                 sortItems="{/p13n/sortItems}">
                 <items>
                     <P13nItem columnKey="{name}"
@@ -32,6 +34,20 @@
                         operation="{sortDirection}"></P13nSortItem>
                 </sortItems>
             </P13nSortPanel>
+            <P13nGroupPanel id="groupPanel"
+                groupItems="{/p13n/aggregationItems}"
+                addGroupItem="onGroupItemUpdate"
+                removeGroupItem="onGroupItemUpdate"
+                updateGroupItem="onGroupItemUpdate"
+                items="{/columnMetadata}">
+                <groupItems>
+                    <P13nGroupItem columnKey="{columnKey}"></P13nGroupItem>
+                </groupItems>
+                <items>
+                    <P13nItem columnKey="{name}"
+                        text="{longDescription}"/>
+                </items>
+            </P13nGroupPanel>
         </panels>
     </P13nDialog>
 </core:FragmentDefinition>
