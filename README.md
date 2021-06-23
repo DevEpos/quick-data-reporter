@@ -29,11 +29,11 @@ UI5_TASK_NWABAP_DEPLOYER__CLIENT=<client>
 ### Script commands
 - With real data   
   ```
-  $ npm run dev
+  $ npm start
   ```
 - With mock data  
   ```
-  $ npm run dev:mock
+  $ npm run start:mock
   ```
 
 ## Deployment
