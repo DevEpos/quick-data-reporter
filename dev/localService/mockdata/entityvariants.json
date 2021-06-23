@@ -1,0 +1,20 @@
+[
+    {
+        "name": "My Default",
+        "author": "STOCKBAL",
+        "executeOnSelection": false,
+        "favorite": true,
+        "global": false,
+        "labelReadOnly": true,
+        "readOnly": false
+    },
+    {
+        "name": "Test 123",
+        "author": "STOCKBAL",
+        "executeOnSelection": false,
+        "favorite": false,
+        "global": true,
+        "labelReadOnly": true,
+        "readOnly": true
+    }
+]
