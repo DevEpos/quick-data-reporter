@@ -106,12 +106,12 @@ export default {
         try {
             const json = this._getCachedMockdata(jsonFileName);
             if (json) {
-                xhr.respondJSON(200, {}, json);
+                xhr.respond(200, {}, JSON.stringify(json));
             } else {
-                xhr.respondJSON(204, {}, []);
+                xhr.respond(204, {}, "");
             }
         } catch (errorStatus) {
-            xhr.respondJSON(500, {}, []);
+            xhr.respond(500, {}, "");
         }
     },
 
