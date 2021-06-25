@@ -4,7 +4,7 @@
 export default {
     /**
      * Retrieves the current client for Backend calls
-     * @returns {string} the found client
+     * @returns the found client
      */
     getCurrentClient(): string {
         // @ts-ignore
@@ -21,7 +21,7 @@ export default {
 
     /**
      * Retrieves the current language for backend calls
-     * @returns {String} the current language
+     * @returns the current language
      */
     getCurrentLanguage(): string {
         return sap.ui.getCore().getConfiguration().getLanguage();

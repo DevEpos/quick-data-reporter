@@ -24,8 +24,8 @@ export default class BaseController extends Controller {
     /**
      * Convenience method for getting the view model by name in every controller of the application.
      * @public
-     * @param {string} name the model name
-     * @returns {sap.ui.model.Model} the model instance
+     * @param name the model name
+     * @returns the model instance
      */
     getModel(name: string): Model {
         return this.getView().getModel(name);
@@ -34,8 +34,8 @@ export default class BaseController extends Controller {
     /**
      * Convenience method for setting the view model in every controller of the application.
      * @public
-     * @param {sap.ui.model.Model} model the model instance
-     * @param {string} name the model name
+     * @param model the model instance
+     * @param name the model name
      */
     setModel(model: Model, name: string) {
         this.getView().setModel(model, name);

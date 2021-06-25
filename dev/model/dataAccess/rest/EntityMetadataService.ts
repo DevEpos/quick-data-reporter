@@ -1,3 +1,4 @@
+import { IEntityMetadata } from "../../ServiceModel";
 import ajaxUtil from "../util/ajaxUtil";
 
 const SERVICE_URL = "/sap/zqdrtrest/entities/{type}/{name}/metadata";
@@ -13,7 +14,7 @@ export default class EntityMetadataService {
      * @param name the name of the entity
      * @returns Promise with object from the response
      */
-    async getMetadata(type: string, name: string): Promise<any> {
+    async getMetadata(type: string, name: string): Promise<IEntityMetadata> {
         const CSRFToken = await ajaxUtil.fetchCSRF();
         const response = await ajaxUtil.send(`${SERVICE_URL.replace("{type}", type).replace("{name}", name)}`, {
             data: {},

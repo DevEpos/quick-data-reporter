@@ -6,6 +6,7 @@ import Event from "sap/ui/base/Event";
 import Table from "sap/m/Table";
 import Control from "sap/ui/core/Control";
 import StandardListItem from "sap/m/StandardListItem";
+import { EntityType } from "../model/ServiceModel";
 
 /**
  * Main Page controller
@@ -72,15 +73,15 @@ export default class MainPageController extends BaseController {
             for (const entity of entities) {
                 if (entity.type) {
                     switch (entity.type) {
-                        case "C":
+                        case EntityType.CdsView:
                             entity.typeIcon = "sap-icon://customer-view";
                             entity.typeTooltip = bundle.getText("dbEntity_type_cds");
                             break;
-                        case "T":
+                        case EntityType.Table:
                             entity.typeIcon = "sap-icon://grid";
                             entity.typeTooltip = bundle.getText("dbEntity_type_table");
                             break;
-                        case "V":
+                        case EntityType.View:
                             entity.typeIcon = "sap-icon://table-view";
                             entity.typeTooltip = bundle.getText("dbEntity_type_view");
                             break;

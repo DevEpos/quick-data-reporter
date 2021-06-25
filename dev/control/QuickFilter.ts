@@ -39,7 +39,7 @@ export default class QuickFilter extends Control {
         }
     };
 
-    _filterName: Text;
+    private _filterName: Text;
     constructor(settings: IQuickFilterSettings) {
         super(settings);
     }

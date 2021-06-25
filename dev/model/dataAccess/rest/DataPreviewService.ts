@@ -1,3 +1,4 @@
+import { IDataPreview } from "../../ServiceModel";
 import ajaxUtil from "../util/ajaxUtil";
 
 const ENTITY_DP_SERVICE_URL = "/sap/zqdrtrest/entities/{type}/{name}/dataPreview";
@@ -14,7 +15,7 @@ export default class DataPreviewService {
      * @param entity the name of the entity
      * @returns the object from the response if response was ok
      */
-    async getEntityData(type: string, entity: string): Promise<Object> {
+    async getEntityData(type: string, entity: string): Promise<IDataPreview> {
         const CSRFToken = await ajaxUtil.fetchCSRF();
         const response = await ajaxUtil.send(
             `${ENTITY_DP_SERVICE_URL.replace("{type}", type).replace("{name}", entity)}`,

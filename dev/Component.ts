@@ -24,7 +24,7 @@ export default class QdrtComponent extends UIComponent {
 
     /**
      * Returns the i18n bundle
-     * @returns {sap.base.i18n.ResourceBundle} the i18n resource bundle
+     * @returns the i18n resource bundle
      */
     getResourceBundle(): ResourceBundle {
         if (!this._bundle) {

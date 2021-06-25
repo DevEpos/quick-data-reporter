@@ -10,6 +10,8 @@ import JSONModel from "sap/ui/model/json/JSONModel";
 import Event from "sap/ui/base/Event";
 import { HorizontalAlign } from "sap/ui/core/library";
 import Context from "sap/ui/model/Context";
+import { IEntityColMetadata } from "../model/ServiceModel";
+import Control from "sap/ui/core/Control";
 
 /**
  * Controller for a single database entity
@@ -17,12 +19,12 @@ import Context from "sap/ui/model/Context";
  * @alias devepos.qdrt.controller.Entity
  */
 export default class EntityController extends BaseController {
-    _uiModel: JSONModel;
-    _entityTableSettings: EntityTableSettings;
-    _dataModel: JSONModel;
-    _dataPreviewTable: Table;
-    _previewService: DataPreviewService;
-    _metadataService: EntityMetadataService;
+    private _uiModel: JSONModel;
+    private _entityTableSettings: EntityTableSettings;
+    private _dataModel: JSONModel;
+    private _dataPreviewTable: Table;
+    private _previewService: DataPreviewService;
+    private _metadataService: EntityMetadataService;
     /**
      * Initializes entity controller
      *
@@ -47,7 +49,7 @@ export default class EntityController extends BaseController {
         this.router.getRoute("main").attachPatternMatched(this._onMainMatched, this);
     }
 
-    _onMainMatched(event: Event) {
+    private _onMainMatched(event: Event) {
         if (this._entityTableSettings) {
             this._entityTableSettings.destroyDialog();
         }
@@ -59,7 +61,7 @@ export default class EntityController extends BaseController {
             });
         }
     }
-    async _onEntityMatched(event: Event) {
+    private async _onEntityMatched(event: Event) {
         const args = event.getParameter("arguments");
         const dataModelData = this._dataModel.getData();
         const entityInfo = {
@@ -94,7 +96,7 @@ export default class EntityController extends BaseController {
         try {
             const selectionData = await this._previewService.getEntityData(entityInfo.type, entityInfo.name);
             if (selectionData) {
-                this._dataModel.setProperty("/rows", selectionData);
+                this._dataModel.setProperty("/rows", selectionData.rows);
             }
         } catch (reqError) {
             // TODO: handle error
@@ -108,12 +110,13 @@ export default class EntityController extends BaseController {
      * @returns the created column
      */
     columnsFactory(id: string, context: Context): Column {
-        const columnName = context.getProperty("name");
-        const shortDescr = context.getProperty("shortDescription");
-        const mediumDescr = context.getProperty("mediumDescription");
-        const longDescr = context.getProperty("longDescription");
-        const length = context.getProperty("length");
-        const dataType = context.getProperty("type");
+        const columnMetadataInfo = context.getObject() as IEntityColMetadata;
+        // const columnName = context.getProperty("name");
+        // const shortDescr = context.getProperty("shortDescription");
+        // const mediumDescr = context.getProperty("mediumDescription");
+        // const longDescr = context.getProperty("longDescription");
+        // const length = context.getProperty("length");
+        // const dataType = context.getProperty("type");
         let width = "5rem";
         if (length > 50) {
             width = "15rem";
@@ -121,9 +124,9 @@ export default class EntityController extends BaseController {
             width = "15rem";
         }
 
-        let template = columnName;
+        let template: string | Control = columnMetadataInfo.name;
         let hAlign = HorizontalAlign.Begin;
-        switch (dataType) {
+        switch (columnMetadataInfo.type) {
             case "Date":
                 width = "8rem";
                 template = new Text({
@@ -169,8 +172,12 @@ export default class EntityController extends BaseController {
         }
         return new Column({
             label: new Text({
-                text: shortDescr || mediumDescr || longDescr || columnName,
-                tooltip: columnName,
+                text:
+                    columnMetadataInfo.shortDescription ||
+                    columnMetadataInfo.mediumDescription ||
+                    columnMetadataInfo.longDescription ||
+                    columnMetadataInfo.name,
+                tooltip: columnMetadataInfo.name,
                 wrapping: false
             }),
             hAlign,

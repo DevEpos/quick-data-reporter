@@ -6,6 +6,7 @@ import View from "sap/ui/core/mvc/View";
 import P13nGroupPanel from "sap/m/P13nGroupPanel";
 import P13nDialog from "sap/m/P13nDialog";
 import Event from "sap/ui/base/Event";
+import { EntityType, IEntityColMetadata } from "../model/ServiceModel";
 
 /**
  * Table settings for a database entity
@@ -13,12 +14,12 @@ import Event from "sap/ui/base/Event";
  * @alias devepos.qdrt.model.util.EntityTableSettings
  */
 export default class EntityTableSettings {
-    _view: View;
-    _entityType: string;
-    _entityName: string;
-    _model: JSONModel;
-    _settingsDialog: P13nDialog;
-    _groupPanel: P13nGroupPanel;
+    private _view: View;
+    private _entityType: string;
+    private _entityName: string;
+    private _model: JSONModel;
+    private _settingsDialog: P13nDialog;
+    private _groupPanel: P13nGroupPanel;
 
     /**
      * Creates a new TableSettings
@@ -26,8 +27,6 @@ export default class EntityTableSettings {
      */
     constructor(view: View) {
         this._view = view;
-        this._entityType = "";
-        this._entityName = "";
         this._model = models.createViewModel({
             columnMetadata: [],
             p13n: {
@@ -50,14 +49,13 @@ export default class EntityTableSettings {
      * Sets the column metadata for the current entity
      * @param {Object} columnMetadata column metadata for the entity
      */
-    setColumnMetadata(columnMetadata: any) {
+    setColumnMetadata(columnMetadata: IEntityColMetadata[]) {
         const modelData = this._model.getData();
         modelData.columnMetadata = columnMetadata || [];
         modelData.p13n.columnsItems = [];
         modelData.p13n.sortItems = [];
         modelData.p13n.aggregationItems = [];
         modelData.p13n.filterItems = [];
-
         for (const column of columnMetadata) {
             modelData.p13n.columnsItems.push({
                 columnKey: column.name,
