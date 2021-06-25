@@ -9,10 +9,10 @@ const SERVICE_URL = "/sap/zqdrtrest/entities/vh";
 export default class EntitySearchService {
     /**
      * Searches for DB entities
-     * @param {string} filterValue filter value to search entities
-     * @returns {Promise<Object>} Promise with response result
+     * @param filterValue filter value to search entities
+     * @returns Promise with response result
      */
-    async searchDbEntities(filterValue) {
+    async searchDbEntities(filterValue: string): Promise<any> {
         const response = await ajaxUtil.send(`${SERVICE_URL}?$top=50&filter=${filterValue}`);
         return response?.data;
     }

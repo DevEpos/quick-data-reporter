@@ -9,11 +9,11 @@ const SERVICE_URL = "/sap/zqdrtrest/entities/{type}/{name}/variants";
 export default class VariantsService {
     /**
      * Retrieves variants for entity
-     * @param {String} type type of the entity
-     * @param {String} name the name of the entity
-     * @returns {Promise<Object>} Promise of response data
+     * @param type type of the entity
+     * @param name the name of the entity
+     * @returns Promise of response data
      */
-    async getVariants(type, name) {
+    async getVariants(type: string, name: string): Promise<Object> {
         const CSRFToken = await ajaxUtil.fetchCSRF();
         const response = await ajaxUtil.send(`${SERVICE_URL.replace("{type}", type).replace("{name}", name)}`, {
             data: {},

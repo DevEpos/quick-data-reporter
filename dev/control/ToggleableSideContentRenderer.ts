@@ -1,3 +1,7 @@
+import RenderManager from "sap/ui/core/RenderManager";
+import { SideContentPosition } from "sap/ui/layout/library";
+import ToggleableSideContent from "./ToggleableSideContent";
+
 /**
  * Renderer for the {@link devepos.qdrt.control.ToggleableSideContent} control
  */
@@ -14,7 +18,7 @@ class ToggleableSideContentRenderer {
      * @param {sap.ui.core.Control} toggleableSideContent
      *            the side Filter view
      */
-    render(rm, toggleableSideContent) {
+    render(rm: RenderManager, toggleableSideContent: ToggleableSideContent) {
         // open main control
         rm.openStart("div", toggleableSideContent);
         rm.class("deveposQdrtToggleableSideContent");
@@ -24,7 +28,7 @@ class ToggleableSideContentRenderer {
         let contentWidth = "";
         let sideContentPosition = toggleableSideContent.getSideContentPosition();
         if (!sideContentPosition) {
-            sideContentPosition = sap.ui.layout.SideContentPosition.End;
+            sideContentPosition = SideContentPosition.End;
         }
         const sideContentVisible = toggleableSideContent.getSideContentVisible();
 
@@ -40,13 +44,13 @@ class ToggleableSideContentRenderer {
 
             if (sideContentWidth.endsWith("%")) {
                 const filterWidthNumeric = sideContentWidth.match(/(\d+)%/)[1];
-                contentWidth = `${100 - filterWidthNumeric}%`;
+                contentWidth = `${100 - (filterWidthNumeric as unknown as number)}%`;
             } else {
                 contentWidth = `calc(100% - ${sideContentWidth})`;
             }
         }
 
-        if (sideContentPosition === sap.ui.layout.SideContentPosition.Begin) {
+        if (sideContentPosition === SideContentPosition.Begin) {
             this._renderSideContent(rm, toggleableSideContent, sideContentWidth, sideContentVisible);
             this._renderMain(rm, toggleableSideContent, contentWidth);
         } else {
@@ -61,7 +65,7 @@ class ToggleableSideContentRenderer {
     /**
      * Renders the main content
      */
-    _renderMain(rm, toggleableSideContent, width) {
+    _renderMain(rm: RenderManager, toggleableSideContent: ToggleableSideContent, width: string) {
         // open main content
         rm.openStart("section", toggleableSideContent.getId() + "-content");
         rm.class("deveposQdrtToggleableSideContentContent");
@@ -77,7 +81,12 @@ class ToggleableSideContentRenderer {
     /**
      * Renders the side content
      */
-    _renderSideContent(rm, toggleableSideContent, width, visible) {
+    _renderSideContent(
+        rm: RenderManager,
+        toggleableSideContent: ToggleableSideContent,
+        width: string,
+        visible: boolean
+    ) {
         if (!visible) {
             return;
         }

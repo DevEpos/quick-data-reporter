@@ -5,6 +5,11 @@ import models from "../model/models";
 import EntityTableSettings from "../helper/EntityTableSettings";
 import Column from "sap/ui/table/Column";
 import Text from "sap/m/Text";
+import Table from "sap/ui/table/Table";
+import JSONModel from "sap/ui/model/json/JSONModel";
+import Event from "sap/ui/base/Event";
+import { HorizontalAlign } from "sap/ui/core/library";
+import Context from "sap/ui/model/Context";
 
 /**
  * Controller for a single database entity
@@ -12,6 +17,12 @@ import Text from "sap/m/Text";
  * @alias devepos.qdrt.controller.Entity
  */
 export default class EntityController extends BaseController {
+    _uiModel: JSONModel;
+    _entityTableSettings: EntityTableSettings;
+    _dataModel: JSONModel;
+    _dataPreviewTable: Table;
+    _previewService: DataPreviewService;
+    _metadataService: EntityMetadataService;
     /**
      * Initializes entity controller
      *
@@ -27,7 +38,7 @@ export default class EntityController extends BaseController {
             rows: [],
             columnMetadata: []
         });
-        this._dataPreviewTable = this.getView().byId("dataPreviewTable");
+        this._dataPreviewTable = this.getView().byId("dataPreviewTable") as Table;
         this._previewService = new DataPreviewService();
         this._metadataService = new EntityMetadataService();
         this.getView().setModel(this._dataModel);
@@ -36,7 +47,7 @@ export default class EntityController extends BaseController {
         this.router.getRoute("main").attachPatternMatched(this._onMainMatched, this);
     }
 
-    _onMainMatched(event) {
+    _onMainMatched(event: Event) {
         if (this._entityTableSettings) {
             this._entityTableSettings.destroyDialog();
         }
@@ -48,7 +59,7 @@ export default class EntityController extends BaseController {
             });
         }
     }
-    async _onEntityMatched(event) {
+    async _onEntityMatched(event: Event) {
         const args = event.getParameter("arguments");
         const dataModelData = this._dataModel.getData();
         const entityInfo = {
@@ -65,7 +76,7 @@ export default class EntityController extends BaseController {
         } catch (reqError) {
             // TODO: handle error
         }
-        this._dataModel.updateBindings();
+        this._dataModel.updateBindings(false);
         this._dataPreviewTable.setBusy(false);
     }
     /**
@@ -92,11 +103,11 @@ export default class EntityController extends BaseController {
     }
     /**
      * Creates columns
-     * @param {String} id the id of the column
-     * @param {sap.ui.model.ContextBinding} context the context binding of the column
-     * @returns {sap.ui.table.Column} the created column
+     * @param id the id of the column
+     * @param context the context binding of the column
+     * @returns the created column
      */
-    columnsFactory(id, context) {
+    columnsFactory(id: string, context: Context): Column {
         const columnName = context.getProperty("name");
         const shortDescr = context.getProperty("shortDescription");
         const mediumDescr = context.getProperty("mediumDescription");
@@ -111,7 +122,7 @@ export default class EntityController extends BaseController {
         }
 
         let template = columnName;
-        let hAlign = "Begin";
+        let hAlign = HorizontalAlign.Begin;
         switch (dataType) {
             case "Date":
                 width = "8rem";
@@ -151,7 +162,7 @@ export default class EntityController extends BaseController {
                 });
                 break;
             case "Decimal":
-                hAlign = "End";
+                hAlign = HorizontalAlign.End;
                 break;
             default:
                 break;

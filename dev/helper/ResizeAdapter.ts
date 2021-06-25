@@ -1,3 +1,5 @@
+import ScrollContainer from "sap/m/ScrollContainer";
+import Control from "sap/ui/core/Control";
 import ResizeHandler from "sap/ui/core/ResizeHandler";
 
 /**
@@ -5,6 +7,14 @@ import ResizeHandler from "sap/ui/core/ResizeHandler";
  * @namespace devepos.qdrt.helper
  */
 export default class ResizeAdapter {
+    _scrollContainer: ScrollContainer;
+    _parentControl: Control;
+    _parentControlDomSuffix: string;
+    _excludedHeightsControls: Control[];
+    _liveChangeTimer: number;
+    _onAfterRenderingFirstTimeExecuted: boolean;
+    _containerResizeListener: string;
+
     /**
      * Creates new Resize adapter instance
      * @param {sap.m.ScrollContainer} scrollContainer the scroll container whoose height should be set
@@ -13,7 +23,12 @@ export default class ResizeAdapter {
      * @param {sap.m.Control[]} excludedHeightsControls optional array of control whose height should
      *      be subtracted from the scroll container height
      */
-    constructor(scrollContainer, parentControl, parentControlDomSuffix, excludedHeightsControls) {
+    constructor(
+        scrollContainer: ScrollContainer,
+        parentControl: Control,
+        parentControlDomSuffix?: string,
+        excludedHeightsControls?: Control[]
+    ) {
         this._scrollContainer = scrollContainer;
         this._parentControl = parentControl;
         this._parentControlDomSuffix = parentControlDomSuffix;
@@ -27,7 +42,7 @@ export default class ResizeAdapter {
         ResizeHandler.deregister(this._containerResizeListener);
         window.clearTimeout(this._liveChangeTimer);
     }
-    isResizeInitialized() {
+    isResizeInitialized(): boolean {
         return !this._onAfterRenderingFirstTimeExecuted;
     }
     initializeResize() {
@@ -41,7 +56,7 @@ export default class ResizeAdapter {
             }, 0);
         }
     }
-    _onResize() {
+    _onResize(): boolean {
         let resultChanged = false;
         let oldScrollContainerHeight;
         let newScrollContainerHeight;

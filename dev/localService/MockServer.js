@@ -177,17 +177,14 @@ export default {
                     "S"
                 );
             case "Guid":
-                return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
-                    /[xy]/g,
-                    function (c) {
-                        var r = (this._getPseudoRandomNumber("Guid") * 16) | 0,
-                            v = c === "x" ? r : (r & 0x3) | 0x8;
-                        return v.toString(16);
-                    }.bind(this)
-                );
+                return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+                    const r = (this._getPseudoRandomNumber("Guid") * 16) | 0;
+                    const v = c === "x" ? r : (r & 0x3) | 0x8;
+                    return v.toString(16);
+                });
             case "Binary":
-                var nMask = Math.floor(-2147483648 + this._getPseudoRandomNumber("Binary") * 4294967295),
-                    sMask = "";
+                const nMask = Math.floor(-2147483648 + this._getPseudoRandomNumber("Binary") * 4294967295);
+                const sMask = "";
                 /*eslint-disable */
                 for (
                     var nFlag = 0, nShifted = nMask;

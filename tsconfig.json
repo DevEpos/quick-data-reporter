@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "target": "es2015",
+        "module": "es2015",
+        "experimentalDecorators": true,
+        "removeComments": false,
+        "skipLibCheck": true,
+        "strictNullChecks": false,
+        "strictPropertyInitialization": false,
+        "preserveConstEnums": true,
+        "allowSyntheticDefaultImports": true,
+        "sourceMap": false,
+        "allowJs": true,
+        "strict": true,
+        "outDir": "./dist",
+        "baseUrl": "./",
+        "rootDir": "./dev",
+        "paths": {
+            "devepos/qdrt/*": ["./dev/*"],
+            "sap/ui/thirdparty/jquery": ["node_modules/@types/jquery/index.d.ts"]
+        },
+        "types": ["@sapui5/ts-types-esm/types"]
+    },
+    "include": ["./dev/**/*"]
+}

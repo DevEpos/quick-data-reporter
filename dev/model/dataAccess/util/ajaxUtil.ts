@@ -1,15 +1,24 @@
-import $ from "jQuery.sap.global";
+import jQuery from "sap/ui/thirdparty/jquery";
 import SystemUtil from "../../util/systemUtil";
 
 const SAP_LANGUAGE_PARAM = "sap-language";
 const SAP_CLIENT_PARAM = "sap-client";
 
 /**
- * Adds SAP Query parameters to url
- * @param {String} urlString url string
- * @returns {String} url string with SAP query parameters
+ * Response from AJAX request
  */
-function addSapQueryParamsToUrl(urlString = "") {
+declare type AjaxResponse = {
+    data?: any;
+    status?: int;
+    request: JQuery.jqXHR<any>;
+};
+
+/**
+ * Adds SAP Query parameters to url
+ * @param urlString url string
+ * @returns url string with SAP query parameters
+ */
+function addSapQueryParamsToUrl(urlString = ""): string {
     const url = urlString.startsWith("http") ? new URL(urlString) : new URL(`http:/${urlString}`);
     if (!url.searchParams.has(SAP_LANGUAGE_PARAM)) {
         const language = SystemUtil.getCurrentLanguage();
@@ -28,28 +37,29 @@ function addSapQueryParamsToUrl(urlString = "") {
 }
 
 export default {
+    _CSRFToken: undefined,
     /**
      * CSRF Token Header
      */
     CSRF_TOKEN_HEADER: "X-CSRF-Token",
     /**
      * Promisfied AJAX call
-     * @param {string} url request url
-     * @param {Object} parameters parameters for the request
-     * @param {Object} parameters.headers optional http headers
-     * @param {Object} parameters.data payload for the request
-     * @param {string} parameters.dataType the expected data type (default: json)
-     * @param {string} parameters.username username for basic authentication
-     * @param {string} parameters.password password for basic authentication
-     * @param {string} parameters.method request method (e.g. GET/POST/PUT)
-     * @param {string} parameters.CSRFToken CSRF token for POST/PUT/DELETE
-     * @param {boolean} addSapQueryParams if <code>true</code> the sap query parameters
+     * @param url request url
+     * @param parameters parameters for the request
+     * @param parameters.headers optional http headers
+     * @param parameters.data payload for the request
+     * @param parameters.dataType the expected data type (default: json)
+     * @param parameters.username username for basic authentication
+     * @param parameters.password password for basic authentication
+     * @param parameters.method request method (e.g. GET/POST/PUT)
+     * @param parameters.CSRFToken CSRF token for POST/PUT/DELETE
+     * @param addSapQueryParams if <code>true</code> the sap query parameters
      *      'language' and 'client' will be added to the request url
-     * @returns {Promise<Object>} promise to ajax request
+     * @returns promise to ajax request
      * @public
      */
     send(
-        url,
+        url: string,
         {
             headers = {},
             method = "GET",
@@ -60,13 +70,13 @@ export default {
             password = ""
         } = {},
         addSapQueryParams = true
-    ) {
+    ): Promise<AjaxResponse> {
         if (addSapQueryParams) {
             url = addSapQueryParamsToUrl(url);
         }
         this._addCSRFToRequestData(headers, CSRFToken);
         return new Promise((fnResolve, fnReject) => {
-            $.ajax({
+            jQuery.ajax({
                 url: url,
                 headers: headers,
                 method: method,
@@ -85,29 +95,29 @@ export default {
     },
     /**
      * Fetches Data synchronously
-     * @param {string} url url for the request
-     * @param {Object} parameters Parameters
-     * @param {String} parameters.method Request method
-     * @param {String} parameters.url URL string for request
-     * @param {Array|Object} parameters.data Optional payload for the request,
-     * @param {String} parameters.dataType The expected result type of the response
-     * @param {Object} parameters.headers Optional map with request headers (key/value pairs)
-     * @param {string} parameters.CSRFToken CSRF token for POST/PUT/DELETE
-     * @param {boolean} addSapQueryParams if <code>true</code> the sap query parameters
+     * @param url url for the request
+     * @param parameters Parameters
+     * @param parameters.method Request method
+     * @param parameters.url URL string for request
+     * @param parameters.data Optional payload for the request,
+     * @param parameters.dataType The expected result type of the response
+     * @param parameters.headers Optional map with request headers (key/value pairs)
+     * @param parameters.CSRFToken CSRF token for POST/PUT/DELETE
+     * @param addSapQueryParams if <code>true</code> the sap query parameters
      *      'language' and 'client' will be added to the request url
-     * @returns {Object} the result of synchronous request
+     * @returns the result of synchronous request
      */
     sendSync(
-        url,
-        { method = "GET", data, dataType = "json", headers = {}, CSRFToken = "" } = {},
+        url: string,
+        { method = "GET", data = undefined, dataType = "json", headers = {}, CSRFToken = "" } = {},
         addSapQueryParams = true
-    ) {
+    ): AjaxResponse {
         let response;
         if (addSapQueryParams) {
             url = addSapQueryParamsToUrl(url);
         }
         this._addCSRFToRequestData(headers, CSRFToken);
-        $.ajax({
+        jQuery.ajax({
             method,
             url: url,
             data,
@@ -126,11 +136,11 @@ export default {
     },
     /**
      * Fetches CSRF token
-     * @param {boolean} invalidate if <code>true</code> the token will be fetched again from the backend
-     * @returns {Promise<string>} the value of the CSRF-Token
+     * @param invalidate if <code>true</code> the token will be fetched again from the backend
+     * @returns the value of the CSRF-Token
      * @public
      */
-    async fetchCSRF(invalidate = false) {
+    async fetchCSRF(invalidate?: boolean): Promise<string> {
         if (invalidate) {
             this._CSRFToken = "";
         }
@@ -147,7 +157,7 @@ export default {
         this._CSRFToken = result?.request?.getResponseHeader(this.CSRF_TOKEN_HEADER);
         return this._CSRFToken;
     },
-    _addCSRFToRequestData(headers, CSRFToken) {
+    _addCSRFToRequestData(headers: any, CSRFToken: string) {
         if (!headers[this.CSRF_TOKEN_HEADER] && CSRFToken) {
             headers[this.CSRF_TOKEN_HEADER] = CSRFToken;
         }

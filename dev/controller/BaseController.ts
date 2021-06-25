@@ -1,5 +1,9 @@
+import ResourceBundle from "sap/base/i18n/ResourceBundle";
+import Router from "sap/ui/core/routing/Router";
 import Controller from "sap/ui/core/mvc/Controller";
 import History from "sap/ui/core/routing/History";
+import Model from "sap/ui/model/Model";
+import QdrtComponent from "../Component";
 
 /**
  * Base controller for all view controllers
@@ -7,20 +11,23 @@ import History from "sap/ui/core/routing/History";
  * @namespace devepos.qdrt.controller
  */
 export default class BaseController extends Controller {
+    protected router: Router;
     onInit() {
-        this.router = this.getRouter();
+        this.router = this.getRouter() as Router;
+    }
+    getOwnerComponent(): QdrtComponent {
+        return <QdrtComponent>super.getOwnerComponent();
     }
     getRouter() {
         return this.getOwnerComponent().getRouter();
     }
-
     /**
      * Convenience method for getting the view model by name in every controller of the application.
      * @public
      * @param {string} name the model name
      * @returns {sap.ui.model.Model} the model instance
      */
-    getModel(name) {
+    getModel(name: string): Model {
         return this.getView().getModel(name);
     }
 
@@ -29,19 +36,17 @@ export default class BaseController extends Controller {
      * @public
      * @param {sap.ui.model.Model} model the model instance
      * @param {string} name the model name
-     * @returns {sap.ui.mvc.View} the view instance
      */
-    setModel(model, name) {
-        return this.getView().setModel(model, name);
+    setModel(model: Model, name: string) {
+        this.getView().setModel(model, name);
     }
 
     /**
      * Convenience method for getting the resource bundle.
-     * @public
-     * @returns {sap.ui.model.resource.ResourceModel} the resourceModel of the component
+     * @returns the resourceModel of the component
      */
-    getResourceBundle() {
-        return this.getOwnerComponent().getModel("i18n").getResourceBundle();
+    getResourceBundle(): ResourceBundle {
+        return this.getOwnerComponent().getResourceBundle();
     }
 
     /**
@@ -56,6 +61,7 @@ export default class BaseController extends Controller {
         if (previousHash !== undefined) {
             history.go(-1);
         } else {
+            // @ts-ignore - navTo method has only 3 parameters on lower versions
             this.router.navTo("main", {}, true);
         }
     }

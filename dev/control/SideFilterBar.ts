@@ -6,6 +6,7 @@ import ToolbarSpacer from "sap/m/ToolbarSpacer";
 import Title from "sap/m/Title";
 import VerticalLayout from "sap/ui/layout/VerticalLayout";
 import QuickFilter from "./QuickFilter";
+import { ButtonType } from "sap/m/library";
 
 /**
  * FilterBar with vertical orientation
@@ -31,6 +32,10 @@ export default class SideFilterBar extends Panel {
      * Currently no custom renderer is needed
      */
     renderer = "sap.m.PanelRenderer";
+    _onAfterRenderingFirstTimeExecuted: boolean;
+    _liveChangeTimer: number;
+    _filterContainer: any;
+    _scrollContainer: ScrollContainer;
     init() {
         Panel.prototype.init.call(this);
         this._onAfterRenderingFirstTimeExecuted = false;
@@ -45,7 +50,7 @@ export default class SideFilterBar extends Panel {
                     new Button({
                         icon: "sap-icon://add",
                         tooltip: "{i18n>entity_sideFilterBar_newFilter}",
-                        type: sap.m.ButtonType.Transparent,
+                        type: ButtonType.Transparent,
                         press: () => {
                             this._addNewFilter();
                         }
@@ -53,7 +58,7 @@ export default class SideFilterBar extends Panel {
                     new Button({
                         icon: "sap-icon://delete",
                         tooltip: "{i18n>entity_sideFilterBar_deleteAllFilters}",
-                        type: sap.m.ButtonType.Transparent,
+                        type: ButtonType.Transparent,
                         press: () => {
                             this._filterContainer.removeAllContent();
                         }
@@ -74,12 +79,12 @@ export default class SideFilterBar extends Panel {
 
         this.addContent(this._scrollContainer);
     }
-    onAfterRendering() {
+    onAfterRendering(event: jQuery.Event) {
         // do custom afterRendering
-        Panel.prototype.onAfterRendering.call(this);
+        Panel.prototype.onAfterRendering.call(this, event);
     }
-    onBeforeRendering() {
-        Panel.prototype.onBeforeRendering.call(this);
+    onBeforeRendering(event: jQuery.Event) {
+        Panel.prototype.onBeforeRendering.call(this, event);
         // do custom beforeRendering
     }
     exit() {
@@ -89,7 +94,7 @@ export default class SideFilterBar extends Panel {
     _addNewFilter() {
         this._filterContainer.addContent(this._createQuickFilter("New Filter"));
     }
-    _createQuickFilter(columnName) {
+    _createQuickFilter(columnName: string) {
         return new QuickFilter({ columnName });
     }
 }

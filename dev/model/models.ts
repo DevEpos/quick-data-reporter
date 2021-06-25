@@ -7,7 +7,7 @@ export default {
      * @returns {sap.ui.model.json.JSONModel} the device model
      * @public
      */
-    createDeviceModel() {
+    createDeviceModel(): JSONModel {
         const oModel = new JSONModel(Device);
         oModel.setDefaultBindingMode("OneWay");
         return oModel;
@@ -19,7 +19,7 @@ export default {
      * @returns {sap.ui.model.json.JSONModel} the created JSON model
      * @public
      */
-    createViewModel(data, observeChanges = false) {
+    createViewModel(data?: any, observeChanges?: boolean): JSONModel {
         return new JSONModel(data, observeChanges);
     }
 };

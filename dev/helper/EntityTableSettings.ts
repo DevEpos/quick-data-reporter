@@ -1,6 +1,11 @@
 import models from "../model/models";
+import JSONModel from "sap/ui/model/json/JSONModel";
 import deepExtend from "sap/base/util/deepExtend";
 import Fragment from "sap/ui/core/Fragment";
+import View from "sap/ui/core/mvc/View";
+import P13nGroupPanel from "sap/m/P13nGroupPanel";
+import P13nDialog from "sap/m/P13nDialog";
+import Event from "sap/ui/base/Event";
 
 /**
  * Table settings for a database entity
@@ -8,11 +13,18 @@ import Fragment from "sap/ui/core/Fragment";
  * @alias devepos.qdrt.model.util.EntityTableSettings
  */
 export default class EntityTableSettings {
+    _view: View;
+    _entityType: string;
+    _entityName: string;
+    _model: JSONModel;
+    _settingsDialog: P13nDialog;
+    _groupPanel: P13nGroupPanel;
+
     /**
      * Creates a new TableSettings
      * @param {sap.ui.core.mvc.View} the view where the dialog is called in
      */
-    constructor(view) {
+    constructor(view: View) {
         this._view = view;
         this._entityType = "";
         this._entityName = "";
@@ -31,16 +43,14 @@ export default class EntityTableSettings {
             this._view?.removeDependent(this._settingsDialog);
             this._settingsDialog.destroy();
             this._settingsDialog = null;
-            this._columnsPanel = null;
             this._groupPanel = null;
-            this._sortPanel = null;
         }
     }
     /**
      * Sets the column metadata for the current entity
      * @param {Object} columnMetadata column metadata for the entity
      */
-    setColumnMetadata(columnMetadata) {
+    setColumnMetadata(columnMetadata: any) {
         const modelData = this._model.getData();
         modelData.columnMetadata = columnMetadata || [];
         modelData.p13n.columnsItems = [];
@@ -54,10 +64,10 @@ export default class EntityTableSettings {
                 visible: true
             });
         }
-        this._model.updateBindings();
+        this._model.updateBindings(false);
     }
 
-    setSortItems(sortItems) {}
+    setSortItems(sortItems: any) {}
 
     /**
      * Shows the settings
@@ -71,9 +81,7 @@ export default class EntityTableSettings {
             });
             this._view.addDependent(this._settingsDialog);
             this._settingsDialog.setModel(this._model);
-            this._columnsPanel = this._view.byId("columnsPanel");
-            this._sortPanel = this._view.byId("sortPanel");
-            this._groupPanel = this._view.byId("groupPanel");
+            this._groupPanel = this._view.byId("groupPanel") as P13nGroupPanel;
         }
         // TODO: save current state of model
         // this.dataBeforeOpen = deepExtend({}, this._model.getData());
@@ -82,29 +90,30 @@ export default class EntityTableSettings {
 
     /**
      * Sets information of the entity
-     * @param {String} type the type of the entity
-     * @param {String} name the name of the entity
+     * @param type the type of the entity
+     * @param name the name of the entity
      */
-    setEntityInfo(type, name) {
+    setEntityInfo(type: string, name: string) {
         this._entityType = type;
         this._entityName = name;
     }
 
-    onCancel(event) {
+    onCancel(event: Event) {
         // TODO: reset model to state before open dialog
         this._settingsDialog.close();
+        event.getParameter("");
     }
-    onReset(event) {
+    onReset(event: Event) {
         // TODO: restore initial table settings
     }
-    onOK(event) {
+    onOK(event: Event) {
         this._settingsDialog.close();
     }
     /**
      * Handler for when group items are added, updated or removed
-     * @param {Object} event event payload
+     * @param event event payload
      */
-    onGroupItemUpdate(event) {
+    onGroupItemUpdate(event: Event) {
         // TODO: adjust available sort/columns and current sort/columns
     }
 }

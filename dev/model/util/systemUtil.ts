@@ -1,9 +1,13 @@
+/**
+ * Utility for retrieving ABAP system values
+ */
 export default {
     /**
      * Retrieves the current client for Backend calls
      * @returns {string} the found client
      */
-    getCurrentClient() {
+    getCurrentClient(): string {
+        // @ts-ignore
         let sClient = sap?.ushell?.Container.getLogonSystem?.().getClient();
         if (!sClient) {
             // retrieve client from current url
@@ -19,7 +23,7 @@ export default {
      * Retrieves the current language for backend calls
      * @returns {String} the current language
      */
-    getCurrentLanguage() {
+    getCurrentLanguage(): string {
         return sap.ui.getCore().getConfiguration().getLanguage();
     }
 };

@@ -1,12 +1,15 @@
-import Control from "sap/ui/core/Control";
+import Control, { $ControlSettings } from "sap/ui/core/Control";
 import Button from "sap/m/Button";
 import MultiInput from "sap/m/MultiInput";
-import Label from "sap/m/Label";
 import Text from "sap/m/Text";
-import ToolbarSpacer from "sap/m/ToolbarSpacer";
-import Title from "sap/m/Title";
 import FlexBox from "sap/m/FlexBox";
 import VerticalLayout from "sap/ui/layout/VerticalLayout";
+import RenderManager from "sap/ui/core/RenderManager";
+import { ButtonType, FlexAlignItems, FlexJustifyContent } from "sap/m/library";
+
+export interface IQuickFilterSettings extends $ControlSettings {
+    columnName: string;
+}
 
 /**
  * Quick Filter in {@link devepos.qdrt.control.SideFilterBar}
@@ -18,8 +21,7 @@ export default class QuickFilter extends Control {
         properties: {
             columnName: {
                 type: "string",
-                group: "Misc",
-                defaultValue: null
+                group: "Misc"
             }
         },
         aggregations: {
@@ -32,23 +34,28 @@ export default class QuickFilter extends Control {
     };
     renderer = {
         apiVersion: 2,
-        render(rm, control) {
-            rm.renderControl(control.getAggregation("filter"));
+        render(rm: RenderManager, control: QuickFilter) {
+            rm.renderControl(control.getAggregation("filter") as Control);
         }
     };
+
+    _filterName: Text;
+    constructor(settings: IQuickFilterSettings) {
+        super(settings);
+    }
     init() {
         this._filterName = new Text();
         const filterCont = new VerticalLayout({
             content: [
                 new FlexBox({
-                    alignItems: sap.m.FlexAlignItems.Center,
-                    justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
+                    alignItems: FlexAlignItems.Center,
+                    justifyContent: FlexJustifyContent.SpaceBetween,
                     items: [
                         this._filterName,
                         new Button({
                             icon: "sap-icon://decline",
                             tooltip: "{i18n>entity_sideFilterBar_filter_delete}",
-                            type: sap.m.ButtonType.Transparent,
+                            type: ButtonType.Transparent,
                             press: () => {
                                 this.destroy();
                             }
@@ -62,7 +69,7 @@ export default class QuickFilter extends Control {
         filterCont.addStyleClass("deveposQdrtQuickFilter");
         this.setAggregation("filter", filterCont);
     }
-    setColumnName(columnName) {
+    setColumnName(columnName: string) {
         this.setProperty("columnName", columnName);
 
         this._filterName?.setText(columnName);

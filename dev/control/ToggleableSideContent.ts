@@ -1,4 +1,6 @@
 import Control from "sap/ui/core/Control";
+import { CSSSize, CSSSizeShortHand } from "sap/ui/core/library";
+import { SideContentPosition } from "sap/ui/layout/library";
 
 /**
  * Control with a main part and a toggleable side content.
@@ -35,6 +37,18 @@ export default class ToggleableSideContent extends Control {
         },
         events: {}
     };
+    getSideContentVisible?(): boolean;
+    setSideContentVisible?(visible: boolean): this;
+    getContentWidth?(): CSSSize;
+    setContentWidth?(width: CSSSize): this;
+    getSideContentWidth?(): CSSSize;
+    setSideContentWidth?(width: CSSSize): this;
+    getSideContentPosition?(): SideContentPosition;
+    setSideContentPosition?(position: SideContentPosition): this;
+    getSideContent?(): Control;
+    setSideContent?(sideContent: Control): this;
+    getContent?(): Control;
+    setContent?(content: Control): this;
     init() {}
     onAfterRendering() {}
     onBeforeRendering() {}

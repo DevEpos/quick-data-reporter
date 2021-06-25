@@ -9,11 +9,11 @@ const SERVICE_URL = "/sap/zqdrtrest/entities/{type}/{name}/metadata";
 export default class EntityMetadataService {
     /**
      * Retrieves metadata for entity
-     * @param {String} type type of the entity
-     * @param {String} name the name of the entity
-     * @returns {Promise<Object>} Promise with object from the response
+     * @param type type of the entity
+     * @param name the name of the entity
+     * @returns Promise with object from the response
      */
-    async getMetadata(type, name) {
+    async getMetadata(type: string, name: string): Promise<any> {
         const CSRFToken = await ajaxUtil.fetchCSRF();
         const response = await ajaxUtil.send(`${SERVICE_URL.replace("{type}", type).replace("{name}", name)}`, {
             data: {},

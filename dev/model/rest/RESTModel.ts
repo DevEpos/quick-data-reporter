@@ -7,8 +7,10 @@ import JSONModel from "sap/ui/model/json/JSONModel";
 export default class RESTModel extends JSONModel {
     /**
      * Creates a new RESTModel instance
+     * @param data js object
+     * @param observe whether to observe the JSON data for property changes
      */
-    constructor() {
-        JSONModel.apply(this, arguments);
+    constructor(data?: object, observe?: boolean) {
+        super(data, observe);
     }
 }

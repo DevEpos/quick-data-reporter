@@ -1,6 +1,11 @@
 import models from "../model/models";
 import BaseController from "./BaseController";
 import EntitySearchService from "../model/dataAccess/rest/EntitySearchService";
+import JSONModel from "sap/ui/model/json/JSONModel";
+import Event from "sap/ui/base/Event";
+import Table from "sap/m/Table";
+import Control from "sap/ui/core/Control";
+import StandardListItem from "sap/m/StandardListItem";
 
 /**
  * Main Page controller
@@ -8,30 +13,27 @@ import EntitySearchService from "../model/dataAccess/rest/EntitySearchService";
  * @namespace devepos.qdrt.controller
  */
 export default class MainPageController extends BaseController {
+    _searchService: EntitySearchService;
+    _viewModel: JSONModel;
+    _dataModel: JSONModel;
+
     onInit() {
-        BaseController.prototype.onInit.call(this);
+        super.onInit();
         this._searchService = new EntitySearchService();
-        this._openEntityMap = new Map();
         this._viewModel = models.createViewModel({ currentEntity: { name: "" } });
         this.getView().setModel(this._viewModel, "ui");
+
         this._dataModel = models.createViewModel({ foundEntities: [] });
         this.getView().setModel(this._dataModel);
-        this.onSearchForEntities({
-            mParams: {
-                query: "demo*"
-            },
-            getParameter(id) {
-                return this.mParams[id];
-            }
-        });
+        this.onSearchForEntities(new Event("", null, { query: "demo*" }));
     }
 
     /**
      * Event handler for click on database entity
      * @param {Object} event event object
      */
-    onOpenEntity(event) {
-        const selectedEntity = this._dataModel.getObject(event.getSource().getBindingContextPath());
+    onOpenEntity(event: Event) {
+        const selectedEntity = this._dataModel.getObject((event.getSource() as Control).getBindingContext().getPath());
         if (selectedEntity) {
             this.router.navTo("entity", {
                 type: encodeURIComponent(selectedEntity.type),
@@ -39,8 +41,8 @@ export default class MainPageController extends BaseController {
             });
         }
     }
-    onToggleFavorite(event) {
-        const selectedPath = event.getSource()?.getBindingContext()?.getPath();
+    onToggleFavorite(event: Event) {
+        const selectedPath = (event.getSource() as Control)?.getBindingContext()?.getPath();
         const selectedEntity = this._dataModel.getObject(selectedPath);
         if (selectedEntity) {
             if (selectedEntity?.isFavorite) {
@@ -52,13 +54,13 @@ export default class MainPageController extends BaseController {
         }
     }
 
-    async onSearchForEntities(event) {
+    async onSearchForEntities(event: Event) {
         const filterValue = event.getParameter("query");
         if (!filterValue) {
             return;
         }
 
-        const filterTable = this.getView().byId("foundEntitiesTable");
+        const filterTable = this.getView().byId("foundEntitiesTable") as Table;
 
         filterTable.setBusy(true);
 
