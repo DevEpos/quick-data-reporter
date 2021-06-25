@@ -111,16 +111,11 @@ export default class EntityController extends BaseController {
      */
     columnsFactory(id: string, context: Context): Column {
         const columnMetadataInfo = context.getObject() as IEntityColMetadata;
-        // const columnName = context.getProperty("name");
-        // const shortDescr = context.getProperty("shortDescription");
-        // const mediumDescr = context.getProperty("mediumDescription");
-        // const longDescr = context.getProperty("longDescription");
-        // const length = context.getProperty("length");
-        // const dataType = context.getProperty("type");
+
         let width = "5rem";
-        if (length > 50) {
+        if (columnMetadataInfo.length > 50) {
             width = "15rem";
-        } else if (length > 9) {
+        } else if (columnMetadataInfo.length > 9) {
             width = "15rem";
         }
 
