@@ -7,7 +7,13 @@ import VerticalLayout from "sap/ui/layout/VerticalLayout";
 import RenderManager from "sap/ui/core/RenderManager";
 import { ButtonType, FlexAlignItems, FlexJustifyContent } from "sap/m/library";
 
+/**
+ * Control settings for {@link devepos.qdrt.control.QuickFilter}
+ */
 export interface IQuickFilterSettings extends $ControlSettings {
+    /**
+     * The name of the column
+     */
     columnName: string;
 }
 
@@ -40,6 +46,7 @@ export default class QuickFilter extends Control {
     };
 
     private _filterName: Text;
+
     constructor(settings: IQuickFilterSettings) {
         super(settings);
     }
