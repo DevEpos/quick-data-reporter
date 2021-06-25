@@ -12,7 +12,7 @@ export default class DataPreviewService {
      * Retrieves entity data
      * @param {String} type type of the entity
      * @param {String} entity the name of the entity
-     * @returns {Promise<Object>}
+     * @returns {Promise<Object>} the object from the response if response was ok
      */
     async getEntityData(type, entity) {
         const CSRFToken = await ajaxUtil.fetchCSRF();

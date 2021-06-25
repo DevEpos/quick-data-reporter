@@ -101,7 +101,7 @@ export default class EntityTableSettings {
         this._settingsDialog.close();
     }
     /**
-     * Handler for when group items are added, updated or removed 
+     * Handler for when group items are added, updated or removed
      * @param {Object} event event payload
      */
     onGroupItemUpdate(event) {

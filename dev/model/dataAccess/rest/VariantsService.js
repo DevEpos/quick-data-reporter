@@ -11,7 +11,7 @@ export default class VariantsService {
      * Retrieves variants for entity
      * @param {String} type type of the entity
      * @param {String} name the name of the entity
-     * @returns {Promise<Object>}
+     * @returns {Promise<Object>} Promise of response data
      */
     async getVariants(type, name) {
         const CSRFToken = await ajaxUtil.fetchCSRF();

@@ -130,18 +130,19 @@ export default {
         if (!index) {
             index = Math.floor(this._getPseudoRandomNumber("String") * 10000) + 101;
         }
+        let date;
         switch (type) {
             case "String":
                 return propertyName + " " + index;
             case "DateTime":
-                var date = new Date();
+                date = new Date();
                 date.setFullYear(2000 + Math.floor(this._getPseudoRandomNumber("DateTime") * 20));
                 date.setDate(Math.floor(this._getPseudoRandomNumber("DateTime") * 30));
                 date.setMonth(Math.floor(this._getPseudoRandomNumber("DateTime") * 12));
                 date.setMilliseconds(0);
                 return "/Date(" + date.getTime() + ")/";
             case "Date":
-                var date = new Date();
+                date = new Date();
                 date.setFullYear(2000 + Math.floor(this._getPseudoRandomNumber("DateTime") * 20));
                 date.setDate(Math.floor(this._getPseudoRandomNumber("DateTime") * 30));
                 date.setMonth(Math.floor(this._getPseudoRandomNumber("DateTime") * 12));
@@ -196,7 +197,7 @@ export default {
                 /*eslint-enable */
                 return sMask;
             case "DateTimeOffset":
-                var date = new Date();
+                date = new Date();
                 date.setFullYear(2000 + Math.floor(this._getPseudoRandomNumber("DateTimeOffset") * 20));
                 date.setDate(Math.floor(this._getPseudoRandomNumber("DateTimeOffset") * 30));
                 date.setMonth(Math.floor(this._getPseudoRandomNumber("DateTimeOffset") * 12));

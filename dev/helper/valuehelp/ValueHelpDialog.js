@@ -9,39 +9,38 @@ import JSONModel from "sap/ui/model/json/JSONModel";
 import Input from "sap/m/Input";
 
 /**
- * Constructor for ValueHelpDialog
- *
- * @param {map} [params]
- *    The following parameters can be defined:
- * @param {sap.ui.model.json.JSONModel|sap.ui.model.odata.v2.ODataModel} [params.model]
- *    The data model for the bindingPath
- * @param {object} [params.inputField]
- *    input field reference
- * @param {map[]} [params.fields]
- *    fields definition for table columns and filter fields
- * @param {object} [params.keyField]
- *      the metadata information of the key field to be used
- * @param {boolean} [params.basicSearchEnabled]
- *    flag to indicate if the basic search field should be enabled in the filter bar
- * @param {boolean} [params.multipleSelection=false]
- *    enable or disable multiple selection
- * @param {boolean} [params.loadDataAtOpen=false]
- *    enable/disable the immediate data loading after the dialog is open
- * @param {boolean} [params.useAllFieldsInResultTable=false]
- *    flag to show all fields in result table
- * @param {map} [params.filterValues]
- *    map of initial filter values
- * @param {Array} [params.initialTokens]
- *    array of tokens that should be displayed after dialog opens
- *
- * @class
  * Util for calling a value help dialog
  *
- * @constructor
  * @public
  * @alias devepos.qdrt.helper.valuehelp.ValueHelpDialog
  */
 export default class ValueHelpDialog extends BaseObject {
+    /**
+     * Constructor for ValueHelpDialog
+     *
+     * @param {map} [params]
+     *    The following parameters can be defined:
+     * @param {sap.ui.model.json.JSONModel|sap.ui.model.odata.v2.ODataModel} [params.model]
+     *    The data model for the bindingPath
+     * @param {object} [params.inputField]
+     *    input field reference
+     * @param {map[]} [params.fields]
+     *    fields definition for table columns and filter fields
+     * @param {object} [params.keyField]
+     *      the metadata information of the key field to be used
+     * @param {boolean} [params.basicSearchEnabled]
+     *    flag to indicate if the basic search field should be enabled in the filter bar
+     * @param {boolean} [params.multipleSelection=false]
+     *    enable or disable multiple selection
+     * @param {boolean} [params.loadDataAtOpen=false]
+     *    enable/disable the immediate data loading after the dialog is open
+     * @param {boolean} [params.useAllFieldsInResultTable=false]
+     *    flag to show all fields in result table
+     * @param {map} [params.filterValues]
+     *    map of initial filter values
+     * @param {Array} [params.initialTokens]
+     *    array of tokens that should be displayed after dialog opens
+     */
     constructor(params) {
         this.inputField = params.inputField;
         this.fieldsConfig = params.fields;
@@ -267,9 +266,7 @@ export default class ValueHelpDialog extends BaseObject {
                         if (splitTab.length === 2) {
                             filters.push(new Filter(splitTab[0], FilterOperator.Contains, selection.getValue()));
                         } else {
-                            filters.push(
-                                new Filter(selection.getId(), FilterOperator.Contains, selection.getValue())
-                            );
+                            filters.push(new Filter(selection.getId(), FilterOperator.Contains, selection.getValue()));
                         }
                     }
                 });

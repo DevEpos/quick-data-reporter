@@ -84,7 +84,6 @@ export default class EntityController extends BaseController {
             const selectionData = await this._previewService.getEntityData(entityInfo.type, entityInfo.name);
             if (selectionData) {
                 this._dataModel.setProperty("/rows", selectionData);
-                this._dataModel.setProperty("/count", selectionData?.length ? selectionData.length : 0);
             }
         } catch (reqError) {
             // TODO: handle error
@@ -95,10 +94,9 @@ export default class EntityController extends BaseController {
      * Creates columns
      * @param {String} id the id of the column
      * @param {sap.ui.model.ContextBinding} context the context binding of the column
-     * @returns
+     * @returns {sap.ui.table.Column} the created column
      */
     columnsFactory(id, context) {
-        this._dataPreviewTable.autoRes;
         const columnName = context.getProperty("name");
         const shortDescr = context.getProperty("shortDescription");
         const mediumDescr = context.getProperty("mediumDescription");
@@ -154,6 +152,7 @@ export default class EntityController extends BaseController {
                 break;
             case "Decimal":
                 hAlign = "End";
+                break;
             default:
                 break;
         }

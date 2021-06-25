@@ -14,11 +14,12 @@ export default {
     },
     /**
      * Creates new json view model
-     * @param {Object} oData the data for the model
+     * @param {Object} data the data for the model
+     * @param {boolean} observeChanges if <code>true</code> all property changes will trigger an automatic binding update
      * @returns {sap.ui.model.json.JSONModel} the created JSON model
      * @public
      */
-    createViewModel(oData) {
-        return new JSONModel(oData);
+    createViewModel(data, observeChanges = false) {
+        return new JSONModel(data, observeChanges);
     }
 };

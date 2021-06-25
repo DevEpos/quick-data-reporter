@@ -11,7 +11,7 @@ export default class EntityMetadataService {
      * Retrieves metadata for entity
      * @param {String} type type of the entity
      * @param {String} name the name of the entity
-     * @returns {Promise<Object>}
+     * @returns {Promise<Object>} Promise with object from the response
      */
     async getMetadata(type, name) {
         const CSRFToken = await ajaxUtil.fetchCSRF();
