@@ -7,7 +7,7 @@ const SAP_CLIENT_PARAM = "sap-client";
 /**
  * Response from AJAX request
  */
-declare type AjaxResponse = {
+export type AjaxResponse = {
     data?: any;
     status?: int;
     request: JQuery.jqXHR<any>;
@@ -157,7 +157,7 @@ export default {
         this._CSRFToken = result?.request?.getResponseHeader(this.CSRF_TOKEN_HEADER);
         return this._CSRFToken;
     },
-    _addCSRFToRequestData(headers: any, CSRFToken: string) {
+    _addCSRFToRequestData(headers: Record<string, unknown>, CSRFToken: string): void {
         if (!headers[this.CSRF_TOKEN_HEADER] && CSRFToken) {
             headers[this.CSRF_TOKEN_HEADER] = CSRFToken;
         }

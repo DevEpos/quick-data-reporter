@@ -8,7 +8,8 @@
     "name": "stockbal"
   },
   "scripts": {
-    "lint": "eslint dev",
+    "lint": "eslint --ext .ts,.js dev",
+    "ts-typecheck": "tsc --noEmit",
     "build:js": "babel dev --out-dir webapp  --source-maps true --extensions \".ts,.js\" --copy-files",
     "compile:less": "less-watch-compiler dev/css webapp/css main.less --run-once",
     "watch:js": "babel dev --out-dir webapp --source-maps inline --extensions \".ts,.js\" --copy-files --watch",
@@ -17,9 +18,9 @@
     "build:ui5": "ui5 build --include-task=generateManifestBundle generateCachebusterInfo buildThemes --exclude-task=ui5-task-nwabap-deployer --clean-dest",
     "start:ui5": "ui5 serve --port 1081 --open \"index.html?sap-language=EN\"",
     "start:ui5_mock": "ui5 serve --config ui5-mock.yaml --port 1081 --open \"index_mock.html?sap-language=EN\"",
-    "build": "npm-run-all clean build:js compile:less build:ui5",
+    "build": "npm-run-all clean ts-typecheck build:js compile:less build:ui5",
     "clean": "rimraf webapp dist",
-    "deploy": "npm-run-all clean build:js deploy:ui5",
+    "deploy": "npm-run-all clean ts-typecheck build:js compile:less deploy:ui5",
     "start": "npm-run-all clean build:js --parallel watch:js watch:less start:ui5",
     "start:mock": "npm-run-all clean build:js --parallel watch:js watch:less start:ui5_mock"
   },
@@ -37,6 +38,8 @@
     "@babel/preset-typescript": "7.14.5",
     "@sapui5/ts-types-esm": "^1.91.0",
     "@types/jquery": "3.5.5",
+    "@typescript-eslint/eslint-plugin": "^4.28.0",
+    "@typescript-eslint/parser": "^4.28.0",
     "babel": "^6.23.0",
     "babel-preset-transform-ui5": "^7.0.3",
     "dotenv": "^9.0.2",

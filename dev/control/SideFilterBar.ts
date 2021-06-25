@@ -9,6 +9,7 @@ import QuickFilter from "./QuickFilter";
 import { ButtonType } from "sap/m/library";
 import ColumnItem from "../element/ColumnItem";
 import FilterItem from "../element/FilterItem";
+import jQuery from "sap/ui/thirdparty/jquery";
 
 /**
  * FilterBar with vertical orientation
@@ -34,7 +35,7 @@ export default class SideFilterBar extends Panel {
      * Currently no custom renderer is needed
      */
     renderer = "sap.m.PanelRenderer";
-    
+
     private _filterContainer: VerticalLayout;
     private _scrollContainer: ScrollContainer;
 
@@ -47,7 +48,7 @@ export default class SideFilterBar extends Panel {
     addFilterItem?(item: FilterItem): this;
     //#endregion
 
-    init() {
+    init(): void {
         Panel.prototype.init.call(this);
         this.setWidth("100%");
         this.setHeight("100%");
@@ -88,15 +89,15 @@ export default class SideFilterBar extends Panel {
 
         this.addContent(this._scrollContainer);
     }
-    onAfterRendering(event: jQuery.Event) {
+    onAfterRendering(event: jQuery.Event): void {
         // do custom afterRendering
         Panel.prototype.onAfterRendering.call(this, event);
     }
-    onBeforeRendering(event: jQuery.Event) {
+    onBeforeRendering(event: jQuery.Event): void {
         Panel.prototype.onBeforeRendering.call(this, event);
         // do custom beforeRendering
     }
-    exit() {
+    exit(): void {
         Panel.prototype.exit.call(this);
     }
 

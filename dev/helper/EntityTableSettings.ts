@@ -1,12 +1,11 @@
 import models from "../model/models";
 import JSONModel from "sap/ui/model/json/JSONModel";
-import deepExtend from "sap/base/util/deepExtend";
 import Fragment from "sap/ui/core/Fragment";
 import View from "sap/ui/core/mvc/View";
 import P13nGroupPanel from "sap/m/P13nGroupPanel";
 import P13nDialog from "sap/m/P13nDialog";
 import Event from "sap/ui/base/Event";
-import { EntityType, IEntityColMetadata } from "../model/ServiceModel";
+import { IEntityColMetadata } from "../model/ServiceModel";
 
 /**
  * Table settings for a database entity
@@ -23,7 +22,7 @@ export default class EntityTableSettings {
 
     /**
      * Creates a new TableSettings
-     * @param {sap.ui.core.mvc.View} the view where the dialog is called in
+     * @param {sap.ui.core.mvc.View} view the view where the dialog is called in
      */
     constructor(view: View) {
         this._view = view;
@@ -37,7 +36,7 @@ export default class EntityTableSettings {
             }
         });
     }
-    destroyDialog() {
+    destroyDialog(): void {
         if (this._settingsDialog) {
             this._view?.removeDependent(this._settingsDialog);
             this._settingsDialog.destroy();
@@ -49,7 +48,7 @@ export default class EntityTableSettings {
      * Sets the column metadata for the current entity
      * @param {Object} columnMetadata column metadata for the entity
      */
-    setColumnMetadata(columnMetadata: IEntityColMetadata[]) {
+    setColumnMetadata(columnMetadata: IEntityColMetadata[]): void {
         const modelData = this._model.getData();
         modelData.columnMetadata = columnMetadata || [];
         modelData.p13n.columnsItems = [];
@@ -65,12 +64,14 @@ export default class EntityTableSettings {
         this._model.updateBindings(false);
     }
 
-    setSortItems(sortItems: any) {}
+    setSortItems(sortItems: any): void {
+        return;
+    }
 
     /**
      * Shows the settings
      */
-    async showSettingsDialog() {
+    async showSettingsDialog(): Promise<void> {
         if (!this._settingsDialog) {
             this._settingsDialog = await Fragment.load({
                 id: this._view.getId(),
@@ -91,27 +92,27 @@ export default class EntityTableSettings {
      * @param type the type of the entity
      * @param name the name of the entity
      */
-    setEntityInfo(type: string, name: string) {
+    setEntityInfo(type: string, name: string): void {
         this._entityType = type;
         this._entityName = name;
     }
 
-    onCancel(event: Event) {
+    onCancel(event: Event): void {
         // TODO: reset model to state before open dialog
         this._settingsDialog.close();
         event.getParameter("");
     }
-    onReset(event: Event) {
+    onReset(event: Event): void {
         // TODO: restore initial table settings
     }
-    onOK(event: Event) {
+    onOK(event: Event): void {
         this._settingsDialog.close();
     }
     /**
      * Handler for when group items are added, updated or removed
      * @param event event payload
      */
-    onGroupItemUpdate(event: Event) {
+    onGroupItemUpdate(event: Event): void {
         // TODO: adjust available sort/columns and current sort/columns
     }
 }

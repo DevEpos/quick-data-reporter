@@ -29,7 +29,7 @@ export default class EntityController extends BaseController {
      * Initializes entity controller
      *
      */
-    onInit() {
+    onInit(): void {
         BaseController.prototype.onInit.call(this);
         this._uiModel = models.createViewModel({
             sideContentVisible: true
@@ -49,7 +49,7 @@ export default class EntityController extends BaseController {
         this.router.getRoute("main").attachPatternMatched(this._onMainMatched, this);
     }
 
-    private _onMainMatched(event: Event) {
+    private _onMainMatched() {
         if (this._entityTableSettings) {
             this._entityTableSettings.destroyDialog();
         }
@@ -84,13 +84,13 @@ export default class EntityController extends BaseController {
     /**
      * Handles entity settings event
      */
-    async onTableSettings() {
+    async onTableSettings(): Promise<void> {
         this._entityTableSettings.showSettingsDialog();
     }
     /**
      * Event handler to trigger data update
      */
-    async onUpdateData() {
+    async onUpdateData(): Promise<void> {
         this._dataPreviewTable.setBusy(true);
         const { entity: entityInfo } = this._dataModel.getData();
         try {

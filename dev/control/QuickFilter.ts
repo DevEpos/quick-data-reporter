@@ -40,7 +40,7 @@ export default class QuickFilter extends Control {
     };
     renderer = {
         apiVersion: 2,
-        render(rm: RenderManager, control: QuickFilter) {
+        render(rm: RenderManager, control: QuickFilter): void {
             rm.renderControl(control.getAggregation("filter") as Control);
         }
     };
@@ -50,7 +50,7 @@ export default class QuickFilter extends Control {
     constructor(settings: IQuickFilterSettings) {
         super(settings);
     }
-    init() {
+    init(): void {
         this._filterName = new Text();
         const filterCont = new VerticalLayout({
             content: [
@@ -76,13 +76,10 @@ export default class QuickFilter extends Control {
         filterCont.addStyleClass("deveposQdrtQuickFilter");
         this.setAggregation("filter", filterCont);
     }
-    setColumnName(columnName: string) {
+    setColumnName(columnName: string): QuickFilter {
         this.setProperty("columnName", columnName);
 
         this._filterName?.setText(columnName);
         return this;
     }
-    onAfterRendering() {}
-    onBeforeRendering() {}
-    exit() {}
 }

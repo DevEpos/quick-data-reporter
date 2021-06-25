@@ -24,7 +24,7 @@ export default class RESTListBinding extends JSONListBinding {
         context: Context,
         sorters?: Sorter | Sorter[],
         filters?: Filter | Filter[],
-        parameters?: object
+        parameters?: Record<string,unknown>
     ) {
         super(model, path, context, sorters, filters, parameters);
     }

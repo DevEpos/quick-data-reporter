@@ -38,14 +38,14 @@ export default class ResizeAdapter {
 
         this._containerResizeListener = ResizeHandler.register(this._parentControl, this._onResize.bind(this));
     }
-    destroy() {
+    destroy(): void {
         ResizeHandler.deregister(this._containerResizeListener);
         window.clearTimeout(this._liveChangeTimer);
     }
     isResizeInitialized(): boolean {
         return !this._onAfterRenderingFirstTimeExecuted;
     }
-    initializeResize() {
+    initializeResize(): void {
         // adapt scroll-container very first time to the right size of the browser
         if (!this._onAfterRenderingFirstTimeExecuted) {
             this._onAfterRenderingFirstTimeExecuted = true;
@@ -56,7 +56,7 @@ export default class ResizeAdapter {
             }, 0);
         }
     }
-    _onResize(): boolean {
+    private _onResize(): boolean {
         let resultChanged = false;
         let oldScrollContainerHeight;
         let newScrollContainerHeight;

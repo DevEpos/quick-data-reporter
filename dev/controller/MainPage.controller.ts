@@ -5,7 +5,6 @@ import JSONModel from "sap/ui/model/json/JSONModel";
 import Event from "sap/ui/base/Event";
 import Table from "sap/m/Table";
 import Control from "sap/ui/core/Control";
-import StandardListItem from "sap/m/StandardListItem";
 import { EntityType } from "../model/ServiceModel";
 
 /**
@@ -18,7 +17,7 @@ export default class MainPageController extends BaseController {
     _viewModel: JSONModel;
     _dataModel: JSONModel;
 
-    onInit() {
+    onInit(): void {
         super.onInit();
         this._searchService = new EntitySearchService();
         this._viewModel = models.createViewModel({ currentEntity: { name: "" } });
@@ -33,7 +32,7 @@ export default class MainPageController extends BaseController {
      * Event handler for click on database entity
      * @param {Object} event event object
      */
-    onOpenEntity(event: Event) {
+    onOpenEntity(event: Event): void {
         const selectedEntity = this._dataModel.getObject((event.getSource() as Control).getBindingContext().getPath());
         if (selectedEntity) {
             this.router.navTo("entity", {
@@ -42,7 +41,7 @@ export default class MainPageController extends BaseController {
             });
         }
     }
-    onToggleFavorite(event: Event) {
+    onToggleFavorite(event: Event): void {
         const selectedPath = (event.getSource() as Control)?.getBindingContext()?.getPath();
         const selectedEntity = this._dataModel.getObject(selectedPath);
         if (selectedEntity) {
@@ -55,7 +54,7 @@ export default class MainPageController extends BaseController {
         }
     }
 
-    async onSearchForEntities(event: Event) {
+    async onSearchForEntities(event: Event): Promise<void> {
         const filterValue = event.getParameter("query");
         if (!filterValue) {
             return;

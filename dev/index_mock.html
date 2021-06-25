@@ -20,7 +20,7 @@
                 sap.ui.require(
                     ["sap/m/Shell", "sap/ui/core/ComponentContainer", "devepos/qdrt/localService/MockServer"],
                     function (Shell, ComponentContainer, MockServer) {
-                        MockServer.init();
+                        new MockServer();
                         new Shell({
                             app: new ComponentContainer({
                                 height: "100%",

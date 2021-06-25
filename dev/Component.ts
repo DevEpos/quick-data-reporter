@@ -13,8 +13,9 @@ export default class QdrtComponent extends UIComponent {
         manifest: "json"
     };
 
-    init() {
+    init(): void {
         // call the base component's init function
+        // eslint-disable-next-line prefer-rest-params
         super.init.apply(this, arguments as any);
         // set the device model
         this.setModel(models.createDeviceModel(), "device");
@@ -33,7 +34,7 @@ export default class QdrtComponent extends UIComponent {
         return this._bundle;
     }
 
-    destroy() {
-        super.destroy.apply(this, arguments as any);
+    destroy(supressInvalidate?: boolean): void {
+        super.destroy.apply(this, [supressInvalidate]);
     }
 }

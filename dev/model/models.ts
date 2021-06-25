@@ -19,7 +19,7 @@ export default {
      * @returns the created JSON model
      * @public
      */
-    createViewModel(data?: any, observeChanges?: boolean): JSONModel {
+    createViewModel(data?: object, observeChanges?: boolean): JSONModel {
         return new JSONModel(data, observeChanges);
     }
 };

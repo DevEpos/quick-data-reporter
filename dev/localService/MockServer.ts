@@ -1,15 +1,21 @@
-import MockServer from "sap/ui/core/util/MockServer";
+import _MockServer from "sap/ui/core/util/MockServer";
 import Log from "sap/base/Log";
 import UriParameters from "sap/base/util/UriParameters";
 import AjaxUtil from "../model/dataAccess/util/ajaxUtil";
 import DateFormat from "sap/ui/core/format/DateFormat";
 import CalendarType from "sap/ui/core/CalendarType";
 
-let mockServer;
 const _sAppModulePath = "devepos/qdrt/";
 const _sJsonFilesModulePath = _sAppModulePath + "localService/mockdata/";
 
-export default {
+/**
+ * @namespace devepos.qdrt.localService
+ */
+export default class MockServer {
+    private _mockServer: _MockServer;
+    private _mockData: Record<string, unknown> = {};
+    private _modelFormatter: DateFormat;
+    private _randomSeed: Record<string, number> = {};
     /**
      * Initializes the mock server.
      * You can configure the delay with the URL parameter "serverDelay".
@@ -17,73 +23,73 @@ export default {
      * @public
      *
      */
-    init() {
-        this._mockData = {};
+    constructor() {
         const uriParameters = new UriParameters(window.location.href);
         const mockServerUrl = "/sap/zqdrtrest/";
 
-        mockServer = new MockServer({
+        this._mockServer = new _MockServer({
             rootUri: mockServerUrl
         });
-        this._modelFormatter = DateFormat.getDateInstance({
+        const formatter = DateFormat.getDateInstance({
             calendarType: CalendarType.Gregorian,
             pattern: "yyyy-MM-dd",
             strictParsing: true,
             UTC: true
         });
+        this._modelFormatter = formatter;
         this._randomSeed = {};
 
         // configure mock server with a delay of 1s
-        MockServer.config({
+        _MockServer.config({
             autoRespond: true,
-            autoRespondAfter: uriParameters.get("serverDelay") || 1000
+            autoRespondAfter: (uriParameters.get("serverDelay") as unknown as number) || 1000
         });
 
-        mockServer.setRequests([
+        this._mockServer.setRequests([
             {
                 method: "HEAD",
                 path: /.*/,
-                response: xhr => {
+                response: (xhr: any) => {
                     xhr.respond(200, { "X-CSRF-Token": "Dummy" });
                 }
             },
             {
                 method: "GET",
                 path: /entities\/vh.*/,
-                response: xhr => {
+                response: (xhr: any) => {
                     this._getMockdata(xhr, "dbentities");
                 }
             },
             {
                 method: "POST",
                 path: /entities\/(.*)\/(.*)\/dataPreview.*/,
-                response: xhr => {
+                response: (xhr: any) => {
                     this._getMockdata(xhr, "datapreview");
                 }
             },
             {
                 method: "POST",
                 path: /entities\/(.*)\/(.*)\/metadata.*/,
-                response: xhr => {
+                response: (xhr: any) => {
                     this._getMockdata(xhr, "entityMetadata");
                 }
             }
         ]);
-        mockServer.start();
+        this._mockServer.start();
 
         Log.info("Running the app with mock data");
-    },
+    }
 
     /**
      * Returns the mockserver of the app, should be used in integration tests
      * @public
      * @returns {sap.ui.core.util.MockServer} Mockserver instance
      */
-    getMockServer() {
-        return mockServer;
-    },
+    getMockServer(): _MockServer {
+        return this._mockServer;
+    }
 
-    _getCachedMockdata(jsonFileName) {
+    private _getCachedMockdata(jsonFileName: string) {
         if (this._mockData[jsonFileName]) {
             return this._mockData[jsonFileName];
         } else {
@@ -95,14 +101,14 @@ export default {
             }
             return jsonResponse?.data;
         }
-    },
+    }
 
-    _getJSONContent(jsonFileName) {
+    private _getJSONContent(jsonFileName: string) {
         const localUri = sap.ui.require.toUrl(_sJsonFilesModulePath + jsonFileName + ".json");
         return AjaxUtil.sendSync(localUri);
-    },
+    }
 
-    _getMockdata(xhr, jsonFileName) {
+    private _getMockdata(xhr: any, jsonFileName: string) {
         try {
             const json = this._getCachedMockdata(jsonFileName);
             if (json) {
@@ -113,20 +119,21 @@ export default {
         } catch (errorStatus) {
             xhr.respond(500, {}, "");
         }
-    },
+    }
 
-    _getPseudoRandomNumber(type) {
+    private _getPseudoRandomNumber(type: string): number {
         if (!this._randomSeed) {
             this._randomSeed = {};
         }
+        // eslint-disable-next-line no-prototype-builtins
         if (!this._randomSeed.hasOwnProperty(type)) {
             this._randomSeed[type] = 0;
         }
         this._randomSeed[type] = ((this._randomSeed[type] + 11) * 25214903917) % 281474976710655;
         return this._randomSeed[type] / 281474976710655;
-    },
+    }
 
-    _generatePropertyValue(propertyName, type, index) {
+    private _generatePropertyValue(propertyName: string, type: string, index: int) {
         if (!index) {
             index = Math.floor(this._getPseudoRandomNumber("String") * 10000) + 101;
         }
@@ -183,9 +190,9 @@ export default {
                     return v.toString(16);
                 });
             case "Binary":
-                const nMask = Math.floor(-2147483648 + this._getPseudoRandomNumber("Binary") * 4294967295);
-                const sMask = "";
                 /*eslint-disable */
+                const nMask = Math.floor(-2147483648 + this._getPseudoRandomNumber("Binary") * 4294967295);
+                let sMask = "";
                 for (
                     var nFlag = 0, nShifted = nMask;
                     nFlag < 32;
@@ -204,4 +211,4 @@ export default {
                 return propertyName + " " + index;
         }
     }
-};
+}

@@ -12,13 +12,13 @@ import QdrtComponent from "../Component";
  */
 export default class BaseController extends Controller {
     protected router: Router;
-    onInit() {
+    onInit(): void {
         this.router = this.getRouter() as Router;
     }
     getOwnerComponent(): QdrtComponent {
-        return <QdrtComponent>super.getOwnerComponent();
+        return super.getOwnerComponent() as QdrtComponent;
     }
-    getRouter() {
+    getRouter(): Router {
         return this.getOwnerComponent().getRouter();
     }
     /**
@@ -37,7 +37,7 @@ export default class BaseController extends Controller {
      * @param model the model instance
      * @param name the model name
      */
-    setModel(model: Model, name: string) {
+    setModel(model: Model, name: string): void {
         this.getView().setModel(model, name);
     }
 
@@ -55,12 +55,13 @@ export default class BaseController extends Controller {
      * If not, it will replace the current entry of the browser history with the main route.
      * @public
      */
-    onNavBack() {
+    onNavBack(): void {
         const previousHash = History.getInstance().getPreviousHash();
 
         if (previousHash !== undefined) {
             history.go(-1);
         } else {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore - navTo method has only 3 parameters on lower versions
             this.router.navTo("main", {}, true);
         }
