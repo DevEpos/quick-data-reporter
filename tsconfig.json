@@ -12,7 +12,7 @@
         "sourceMap": false,
         "allowJs": true,
         "strict": true,
-        "outDir": "./dist",
+        "outDir": "./tsc_out",
         "baseUrl": "./",
         "rootDir": "./dev",
         "paths": {
