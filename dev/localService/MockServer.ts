@@ -5,8 +5,9 @@ import AjaxUtil from "../model/dataAccess/util/ajaxUtil";
 import DateFormat from "sap/ui/core/format/DateFormat";
 import CalendarType from "sap/ui/core/CalendarType";
 
-const _sAppModulePath = "devepos/qdrt/";
-const _sJsonFilesModulePath = _sAppModulePath + "localService/mockdata/";
+const APP_MODULE_PATH = "devepos/qdrt/";
+const JSON_FILES_MODULE_PATH = APP_MODULE_PATH + "localService/mockdata/";
+const MOCK_SERVER_URL = "/sap/zqdrtrest/";
 
 /**
  * @namespace devepos.qdrt.localService
@@ -25,20 +26,16 @@ export default class MockServer {
      */
     constructor() {
         const uriParameters = new UriParameters(window.location.href);
-        const mockServerUrl = "/sap/zqdrtrest/";
-
         this._mockServer = new _MockServer({
-            rootUri: mockServerUrl
+            rootUri: MOCK_SERVER_URL
         });
-        const formatter = DateFormat.getDateInstance({
+        this._modelFormatter = DateFormat.getDateInstance({
             calendarType: CalendarType.Gregorian,
             pattern: "yyyy-MM-dd",
             strictParsing: true,
             UTC: true
         });
-        this._modelFormatter = formatter;
         this._randomSeed = {};
-
         // configure mock server with a delay of 1s
         _MockServer.config({
             autoRespond: true,
@@ -104,7 +101,7 @@ export default class MockServer {
     }
 
     private _getJSONContent(jsonFileName: string) {
-        const localUri = sap.ui.require.toUrl(_sJsonFilesModulePath + jsonFileName + ".json");
+        const localUri = sap.ui.require.toUrl(JSON_FILES_MODULE_PATH + jsonFileName + ".json");
         return AjaxUtil.sendSync(localUri);
     }
 
