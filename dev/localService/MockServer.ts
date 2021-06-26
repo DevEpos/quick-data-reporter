@@ -1,9 +1,10 @@
 import _MockServer from "sap/ui/core/util/MockServer";
 import Log from "sap/base/Log";
 import UriParameters from "sap/base/util/UriParameters";
-import AjaxUtil from "../model/dataAccess/util/ajaxUtil";
+import ajaxUtil from "../model/dataAccess/util/ajaxUtil";
 import DateFormat from "sap/ui/core/format/DateFormat";
 import CalendarType from "sap/ui/core/CalendarType";
+import { SinonFakeXMLHttpRequest } from "sinon";
 
 const APP_MODULE_PATH = "devepos/qdrt/";
 const JSON_FILES_MODULE_PATH = APP_MODULE_PATH + "localService/mockdata/";
@@ -46,29 +47,36 @@ export default class MockServer {
             {
                 method: "HEAD",
                 path: /.*/,
-                response: (xhr: any) => {
-                    xhr.respond(200, { "X-CSRF-Token": "Dummy" });
+                response: (xhr: SinonFakeXMLHttpRequest) => {
+                    xhr.respond(200, { "X-CSRF-Token": "Dummy" }, null);
                 }
             },
             {
                 method: "GET",
                 path: /entities\/vh.*/,
-                response: (xhr: any) => {
+                response: (xhr: SinonFakeXMLHttpRequest) => {
                     this._getMockdata(xhr, "dbentities");
                 }
             },
             {
                 method: "POST",
                 path: /entities\/(.*)\/(.*)\/dataPreview.*/,
-                response: (xhr: any) => {
+                response: (xhr: SinonFakeXMLHttpRequest) => {
                     this._getMockdata(xhr, "datapreview");
                 }
             },
             {
-                method: "POST",
+                method: "GET",
                 path: /entities\/(.*)\/(.*)\/metadata.*/,
-                response: (xhr: any) => {
+                response: (xhr: SinonFakeXMLHttpRequest) => {
                     this._getMockdata(xhr, "entityMetadata");
+                }
+            },
+            {
+                method: "GET",
+                path: /entities\/(.*)\/(.*)\/variants.*/,
+                response: (xhr: SinonFakeXMLHttpRequest) => {
+                    this._getMockdata(xhr, "entityvariants");
                 }
             }
         ]);
@@ -102,10 +110,10 @@ export default class MockServer {
 
     private _getJSONContent(jsonFileName: string) {
         const localUri = sap.ui.require.toUrl(JSON_FILES_MODULE_PATH + jsonFileName + ".json");
-        return AjaxUtil.sendSync(localUri);
+        return ajaxUtil.sendSync(localUri);
     }
 
-    private _getMockdata(xhr: any, jsonFileName: string) {
+    private _getMockdata(xhr: SinonFakeXMLHttpRequest, jsonFileName: string) {
         try {
             const json = this._getCachedMockdata(jsonFileName);
             if (json) {

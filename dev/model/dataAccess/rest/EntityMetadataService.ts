@@ -15,11 +15,8 @@ export default class EntityMetadataService {
      * @returns Promise with object from the response
      */
     async getMetadata(type: string, name: string): Promise<IEntityMetadata> {
-        const CSRFToken = await ajaxUtil.fetchCSRF();
         const response = await ajaxUtil.send(`${SERVICE_URL.replace("{type}", type).replace("{name}", name)}`, {
-            data: {},
-            method: "POST",
-            CSRFToken
+            method: "GET"
         });
         return response?.data;
     }

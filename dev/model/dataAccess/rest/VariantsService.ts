@@ -15,10 +15,8 @@ export default class VariantsService {
      * @returns Promise of entity variants
      */
     async getVariants(type: string, name: string): Promise<IEntityVariant[]> {
-        const CSRFToken = await ajaxUtil.fetchCSRF();
         const response = await ajaxUtil.send(`${SERVICE_URL.replace("{type}", type).replace("{name}", name)}`, {
-            data: {},
-            CSRFToken
+            method: "GET"
         });
         return response?.data;
     }

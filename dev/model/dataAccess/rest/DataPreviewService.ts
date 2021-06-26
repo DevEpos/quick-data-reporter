@@ -16,13 +16,12 @@ export default class DataPreviewService {
      * @returns the object from the response if response was ok
      */
     async getEntityData(type: string, entity: string): Promise<IDataPreview> {
-        const CSRFToken = await ajaxUtil.fetchCSRF();
+        const csrfToken = await ajaxUtil.fetchCSRF();
         const response = await ajaxUtil.send(
             `${ENTITY_DP_SERVICE_URL.replace("{type}", type).replace("{name}", entity)}`,
             {
-                data: {},
                 method: "POST",
-                CSRFToken
+                csrfToken
             }
         );
         return response?.data;
