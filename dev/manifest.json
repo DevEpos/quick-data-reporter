@@ -44,7 +44,7 @@
                 "routerClass": "sap.m.routing.Router",
                 "viewType": "XML",
                 "viewPath": "devepos.qdrt.view",
-                "controlId": "idAppControl",
+                "controlId": "rootNavigation",
                 "controlAggregation": "pages",
                 "transition": "slide"
             },
@@ -62,12 +62,10 @@
             ],
             "targets": {
                 "main": {
-                    "viewName": "MainPage",
-                    "viewLevel": 0
+                    "viewName": "MainPage"
                 },
                 "entity": {
-                    "viewName": "Entity",
-                    "viewLevel": 1
+                    "viewName": "Entity"
                 }
             }
         }

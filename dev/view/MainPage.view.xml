@@ -11,14 +11,11 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <Title text="{i18n>title}" />
+                    <Title text="{i18n>dbEntities_table_title} ({/foundEntities/length})" />
                 </f:heading>
                 <f:content>
                 </f:content>
                 <f:actions>
-                    <Button tooltip="{i18n>mainToolbar_settings}"
-                        icon="sap-icon://action-settings"
-                        type="Transparent" />
                 </f:actions>
             </f:DynamicPageTitle>
         </f:title>
@@ -29,8 +26,6 @@
                 sticky="ColumnHeaders,HeaderToolbar">
                 <headerToolbar>
                     <Toolbar >
-                        <Title text="{i18n>dbEntities_table_title}"
-                            level="H2" />
                         <ToolbarSpacer />
                         <Select>
                             <items>
