@@ -79,6 +79,10 @@ export default class EntityTableSettings {
                 controller: this
             });
             this._view.addDependent(this._settingsDialog);
+            // TODO: check Fiori Elements implementation if dialog is destroyed after each call
+            // this._settingsDialog.attachAfterClose(() => {
+            //     this.destroyDialog();
+            // });
             this._settingsDialog.setModel(this._model);
             this._groupPanel = this._view.byId("groupPanel") as P13nGroupPanel;
         }
@@ -107,6 +111,9 @@ export default class EntityTableSettings {
     }
     onOK(event: Event): void {
         this._settingsDialog.close();
+    }
+    onChangeColumnsItems(event: Event): void {
+        this._model.setProperty("/p13n/columnsItems", event.getParameter("items"));
     }
     /**
      * Handler for when group items are added, updated or removed
