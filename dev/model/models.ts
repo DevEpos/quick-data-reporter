@@ -1,6 +1,5 @@
 import JSONModel from "sap/ui/model/json/JSONModel";
 import Device from "sap/ui/Device";
-import ReactiveJSONModel from "./ReactiveJSONModel";
 
 export default {
     /**
@@ -20,7 +19,7 @@ export default {
      * @returns the created JSON model
      * @public
      */
-    createViewModel(data?: object, observeChanges?: boolean): ReactiveJSONModel {
-        return new ReactiveJSONModel(data, observeChanges);
+    createViewModel(data?: object, observeChanges?: boolean): JSONModel {
+        return new JSONModel(data, observeChanges);
     }
 };

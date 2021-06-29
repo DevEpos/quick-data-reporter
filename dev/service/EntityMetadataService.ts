@@ -1,5 +1,5 @@
-import { IEntityMetadata } from "../../ServiceModel";
-import ajaxUtil from "../util/ajaxUtil";
+import ajaxUtil from "./util/ajaxUtil";
+import { IEntityMetadata } from "../model/ServiceModel";
 
 const SERVICE_URL = "/sap/zqdrtrest/entities/{type}/{name}/metadata";
 

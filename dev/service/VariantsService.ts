@@ -1,5 +1,5 @@
-import { IEntityVariant } from "../../ServiceModel";
-import ajaxUtil from "../util/ajaxUtil";
+import { IEntityVariant } from "../model/ServiceModel";
+import ajaxUtil from "./util/ajaxUtil";
 
 const SERVICE_URL = "/sap/zqdrtrest/entities/{type}/{name}/variants";
 

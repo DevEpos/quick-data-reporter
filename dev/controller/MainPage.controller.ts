@@ -1,6 +1,6 @@
 import models from "../model/models";
 import BaseController from "./BaseController";
-import EntitySearchService from "../model/dataAccess/rest/EntitySearchService";
+import EntitySearchService from "../service/EntitySearchService";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import Event from "sap/ui/base/Event";
 import Table from "sap/m/Table";

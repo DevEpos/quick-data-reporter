@@ -1,5 +1,5 @@
-import { IDbEntity } from "../../ServiceModel";
-import ajaxUtil from "../util/ajaxUtil";
+import ajaxUtil from "./util/ajaxUtil";
+import { IDbEntity } from "../model/ServiceModel";
 
 const SERVICE_URL = "/sap/zqdrtrest/entities/vh";
 

@@ -1,5 +1,5 @@
-import { IDataPreview } from "../../ServiceModel";
-import ajaxUtil from "../util/ajaxUtil";
+import { IDataPreview } from "../model/ServiceModel";
+import ajaxUtil from "./util/ajaxUtil";
 
 const ENTITY_DP_SERVICE_URL = "/sap/zqdrtrest/entities/{type}/{name}/dataPreview";
 const FREESTYLE_DP_SERVICE_URL = "/sap/zqdrtrest/freestyleDataPreview";

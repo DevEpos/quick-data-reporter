@@ -1,5 +1,5 @@
 import jQuery from "sap/ui/thirdparty/jquery";
-import SystemUtil from "../../util/systemUtil";
+import SystemUtil from "../../helper/systemUtil";
 
 const SAP_LANGUAGE_PARAM = "sap-language";
 const SAP_CLIENT_PARAM = "sap-client";
