@@ -37,7 +37,7 @@
                             rows="{/rows}"
                             visibleRowCountMode="Auto">
                             <table:extension>
-                                <OverflowToolbar>
+                                <OverflowToolbar class="sapMTBHeader-CTX">
                                     <Title text="{i18n>entity_table_title} ({/rows/length})"
                                         titleStyle="H4"/>
                                     <ToolbarSeparator />
