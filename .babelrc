@@ -1,5 +1,5 @@
 {
     "ignore": ["**/*.d.ts"],
-    "presets": ["@babel/preset-typescript", "@babel/preset-env", "transform-ui5"],
+    "presets": ["transform-ui5", "@babel/preset-typescript", "@babel/preset-env"],
     "plugins": ["@babel/plugin-proposal-class-properties", "@babel/plugin-proposal-nullish-coalescing-operator"]
 }
