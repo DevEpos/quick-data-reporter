@@ -5,7 +5,8 @@ import {
     FilterCond,
     SortCond,
     ColumnConfig,
-    AggregationCond
+    AggregationCond,
+    EntityColMetadata
 } from "./ServiceModel";
 
 /**
@@ -54,4 +55,11 @@ export default class Entity implements ConfigurableEntity {
     sortItems: SortCond[] = [];
     columnsItems: ColumnConfig[] = [];
     aggregationItems: AggregationCond[] = [];
+    /**
+     * Returns all visible columns
+     */
+    get visibleColMetadata(): EntityColMetadata[] {
+        const visibleColKeys = this.columnsItems.filter(col => col.visible).map(col => col.columnKey);
+        return this.metadata.colMetadata.filter(colItem => visibleColKeys.includes(colItem.name));
+    }
 }

@@ -73,6 +73,7 @@ export default class EntityState extends BaseState<Entity> {
         this.data.aggregationItems.length = 0;
         this.data.sortItems.length = 0;
         this.data.filterItems.length = 0;
+        this.data.columnsItems.length = 0;
         this.data.rows.length = 0;
         const colMetadata = this.data.metadata?.colMetadata;
         if (colMetadata) {

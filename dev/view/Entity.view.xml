@@ -31,7 +31,7 @@
                     <Panel height="100%">
                         <table:Table id="dataPreviewTable"
                             columns="{
-                                path: '/metadata/colMetadata',
+                                path: '/visibleColMetadata',
                                 factory: '.columnsFactory'
                             }"
                             rows="{/rows}"

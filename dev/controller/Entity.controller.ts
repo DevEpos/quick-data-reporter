@@ -1,6 +1,6 @@
 import BaseController from "./BaseController";
 import models from "../model/models";
-import { EntityType } from "../model/ServiceModel";
+import { ColumnConfig, EntityType } from "../model/ServiceModel";
 import EntityTableSettings from "../helper/EntityTableSettings";
 import Column from "sap/ui/table/Column";
 import Text from "sap/m/Text";
