@@ -1,17 +1,17 @@
 <core:FragmentDefinition xmlns="sap.m"
     xmlns:core="sap.ui.core">
     <P13nDialog showReset="true"
-        showResetEnabled="{path: '/ShowResetEnabled'}"
         ok="onOK"
         title="{i18n>entity_settingsDialog_title}"
         cancel="onCancel"
         reset="onReset"
+        showResetEnabled="true"
         class="sapUiSizeCompact">
         <panels>
             <P13nColumnsPanel id="columnsPanel"
                 changeColumnsItems="onChangeColumnsItems"
-                items="{/columnMetadata}"
-                columnsItems="{/p13n/columnsItems}">
+                items="{/allColumnsItems}"
+                columnsItems="{/columnsItems}">
                 <items>
                     <P13nItem columnKey="{name}"
                         text="{longDescription}"/>
@@ -23,8 +23,11 @@
                 </columnsItems>
             </P13nColumnsPanel>
             <P13nSortPanel id="sortPanel"
-                items="{/columnMetadata}"
-                sortItems="{/p13n/sortItems}">
+                items="{/allColumnsItems}"
+                sortItems="{/sortItems}"
+                addSortItem="onSortItemUpdate"
+                updateSortItem="onSortItemUpdate"
+                removeSortItem="onSortItemUpdate">
                 <items>
                     <P13nItem columnKey="{name}"
                         text="{longDescription}"/>
@@ -35,13 +38,14 @@
                 </sortItems>
             </P13nSortPanel>
             <P13nGroupPanel id="groupPanel"
-                groupItems="{/p13n/aggregationItems}"
+                groupItems="{/aggregationItems}"
                 addGroupItem="onGroupItemUpdate"
-                removeGroupItem="onGroupItemUpdate"
                 updateGroupItem="onGroupItemUpdate"
+                removeGroupItem="onGroupItemUpdate"
                 items="{/columnMetadata}">
                 <groupItems>
-                    <P13nGroupItem columnKey="{columnKey}"></P13nGroupItem>
+                    <P13nGroupItem columnKey="{columnKey}"
+                        showIfGrouped="{showIfGrouped}"></P13nGroupItem>
                 </groupItems>
                 <items>
                     <P13nItem columnKey="{name}"

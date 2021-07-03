@@ -14,7 +14,7 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <Title text="Entity {/entity/name}"></Title>
+                    <Title text="Entity {/name}"></Title>
                 </f:heading>
                 <f:actions>
                     <ToggleButton icon="sap-icon://filter"
@@ -31,7 +31,7 @@
                     <Panel height="100%">
                         <table:Table id="dataPreviewTable"
                             columns="{
-                                path: '/columnMetadata',
+                                path: '/metadata/colMetadata',
                                 factory: '.columnsFactory'
                             }"
                             rows="{/rows}"

@@ -4,7 +4,32 @@ export enum EntityType {
     View = "V"
 }
 
-export interface IDbEntity {
+export interface FilterCond {
+    columnKey: string;
+    operation: string;
+    value1?: any;
+    value2?: any;
+    exclude?: boolean;
+}
+
+export interface SortCond {
+    columnKey: string;
+    sortDirection?: string;
+}
+
+export interface AggregationCond {
+    columnKey: string;
+    operation?: string;
+    showIfGrouped?: boolean;
+}
+
+export interface ColumnConfig {
+    columnKey: string;
+    index?: number;
+    visible: boolean;
+}
+
+export interface DbEntity {
     type: EntityType;
     name: string;
     description?: string;
@@ -15,7 +40,7 @@ export interface IDbEntity {
     typeTooltip?: string;
 }
 
-export interface IEntityVariant {
+export interface EntityVariant {
     name?: string;
     author: string;
     executeOnSelection?: boolean;
@@ -25,11 +50,11 @@ export interface IEntityVariant {
     readOnly?: boolean;
 }
 
-export interface IEntityMetadata {
-    colMetadata?: IEntityColMetadata[];
+export interface EntityMetadata {
+    colMetadata?: EntityColMetadata[];
 }
 
-export interface IEntityColMetadata {
+export interface EntityColMetadata {
     /**
      * The name of the column
      */
@@ -56,12 +81,14 @@ export interface IEntityColMetadata {
     longDescription?: string;
 }
 
+export type DataRow = Record<string, unknown>;
+
 /**
  * Result from data preview service
  */
-export interface IDataPreview {
+export interface DataPreview {
     /**
      * The actual retrieved data rows
      */
-    rows: object[];
+    rows: DataRow[];
 }

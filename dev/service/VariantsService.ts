@@ -1,4 +1,4 @@
-import { IEntityVariant } from "../model/ServiceModel";
+import { EntityVariant } from "../model/ServiceModel";
 import ajaxUtil from "./util/ajaxUtil";
 
 const SERVICE_URL = "/sap/zqdrtrest/entities/{type}/{name}/variants";
@@ -14,7 +14,7 @@ export default class VariantsService {
      * @param name the name of the entity
      * @returns Promise of entity variants
      */
-    async getVariants(type: string, name: string): Promise<IEntityVariant[]> {
+    async getVariants(type: string, name: string): Promise<EntityVariant[]> {
         const response = await ajaxUtil.send(`${SERVICE_URL.replace("{type}", type).replace("{name}", name)}`, {
             method: "GET"
         });

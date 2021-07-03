@@ -1,5 +1,5 @@
 import ajaxUtil from "./util/ajaxUtil";
-import { IDbEntity } from "../model/ServiceModel";
+import { DbEntity } from "../model/ServiceModel";
 
 const SERVICE_URL = "/sap/zqdrtrest/entities/vh";
 
@@ -13,7 +13,7 @@ export default class EntitySearchService {
      * @param filterValue filter value to search entities
      * @returns Promise with response result
      */
-    async searchDbEntities(filterValue: string): Promise<IDbEntity[]> {
+    async searchDbEntities(filterValue: string): Promise<DbEntity[]> {
         const response = await ajaxUtil.send(`${SERVICE_URL}?$top=50&filter=${filterValue}`);
         return response?.data;
     }

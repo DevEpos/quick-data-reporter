@@ -1,12 +1,24 @@
 import models from "../model/models";
+import { ReadOnlyStateData } from "../state/BaseState";
+import { AggregationCond, ColumnConfig, EntityColMetadata, SortCond } from "../model/ServiceModel";
+import Entity, { ConfigurableEntity } from "../model/Entity";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import Fragment from "sap/ui/core/Fragment";
 import View from "sap/ui/core/mvc/View";
 import P13nGroupPanel from "sap/m/P13nGroupPanel";
 import P13nDialog from "sap/m/P13nDialog";
 import Event from "sap/ui/base/Event";
-import { IEntityColMetadata } from "../model/ServiceModel";
+import P13nConditionPanel from "sap/m/P13nConditionPanel";
+import { P13nConditionOperation } from "sap/m/library";
+import deepClone from "sap/base/util/deepClone";
 
+type SettingsModelData = {
+    columnMetadata: EntityColMetadata[];
+    allColumnsItems: EntityColMetadata[];
+    columnsItems: ColumnConfig[];
+    sortItems: SortCond[];
+    aggregationItems: AggregationCond[];
+};
 /**
  * Table settings for a database entity
  *
@@ -14,11 +26,13 @@ import { IEntityColMetadata } from "../model/ServiceModel";
  */
 export default class EntityTableSettings {
     private _view: View;
-    private _entityType: string;
-    private _entityName: string;
+    private _dialogPromise: { resolve: (result: ConfigurableEntity) => void };
+    private _okPayload: ConfigurableEntity;
     private _model: JSONModel;
     private _settingsDialog: P13nDialog;
-    private _groupPanel: P13nGroupPanel;
+    private _groupCondPanel: P13nConditionPanel;
+    private _sortCondPanel: P13nConditionPanel;
+    private _modelCurrentState: SettingsModelData;
 
     /**
      * Creates a new TableSettings
@@ -26,52 +40,23 @@ export default class EntityTableSettings {
      */
     constructor(view: View) {
         this._view = view;
-        this._model = models.createViewModel({
-            columnMetadata: [],
-            p13n: {
-                columnsItems: [],
-                sortItems: [],
-                aggregationItems: [],
-                filterItems: []
-            }
-        });
+        this._model = models.createViewModel();
     }
     destroyDialog(): void {
         if (this._settingsDialog) {
             this._view?.removeDependent(this._settingsDialog);
             this._settingsDialog.destroy();
             this._settingsDialog = null;
-            this._groupPanel = null;
+            this._groupCondPanel = null;
+            this._sortCondPanel = null;
         }
     }
-    /**
-     * Sets the column metadata for the current entity
-     * @param {Object} columnMetadata column metadata for the entity
-     */
-    setColumnMetadata(columnMetadata: IEntityColMetadata[]): void {
-        const modelData = this._model.getData();
-        modelData.columnMetadata = columnMetadata || [];
-        modelData.p13n.columnsItems = [];
-        modelData.p13n.sortItems = [];
-        modelData.p13n.aggregationItems = [];
-        modelData.p13n.filterItems = [];
-        for (const column of columnMetadata) {
-            modelData.p13n.columnsItems.push({
-                columnKey: column.name,
-                visible: true
-            });
-        }
-        this._model.updateBindings(false);
-    }
-
-    setSortItems(sortItems: any): void {
-        return;
-    }
-
     /**
      * Shows the settings
+     * @param state the current entity state for the settings dialog
      */
-    async showSettingsDialog(): Promise<void> {
+    async showSettingsDialog(state: ReadOnlyStateData<Entity>): Promise<ConfigurableEntity> {
+        this._updateInternalModel(state);
         if (!this._settingsDialog) {
             this._settingsDialog = await Fragment.load({
                 id: this._view.getId(),
@@ -81,44 +66,142 @@ export default class EntityTableSettings {
             this._view.addDependent(this._settingsDialog);
             this._settingsDialog.attachAfterClose(() => {
                 this.destroyDialog();
+                this._dialogPromise.resolve(this._okPayload);
             });
             this._settingsDialog.setModel(this._model);
-            this._groupPanel = this._view.byId("groupPanel") as P13nGroupPanel;
+            // retrieve conditionPanel of Group Panel
+            const groupPanelContent = (this._view.byId("groupPanel") as P13nGroupPanel).getAggregation("content");
+            if (Array.isArray(groupPanelContent)) {
+                this._groupCondPanel = groupPanelContent[0] as P13nConditionPanel;
+            }
+            // retrieve conditionPanel of Sort Panel
+            const sortPanelContent = (this._view.byId("sortPanel") as P13nGroupPanel).getAggregation("content");
+            if (Array.isArray(sortPanelContent)) {
+                this._sortCondPanel = sortPanelContent[0] as P13nConditionPanel;
+            }
         }
-        // TODO: save current state of model
-        // this.dataBeforeOpen = deepExtend({}, this._model.getData());
-        this._settingsDialog.open();
+        return new Promise(resolve => {
+            this._dialogPromise = { resolve };
+            this._settingsDialog.open();
+        });
     }
-
-    /**
-     * Sets information of the entity
-     * @param type the type of the entity
-     * @param name the name of the entity
-     */
-    setEntityInfo(type: string, name: string): void {
-        this._entityType = type;
-        this._entityName = name;
-    }
-
-    onCancel(event: Event): void {
-        // TODO: reset model to state before open dialog
+    onCancel(): void {
+        this._okPayload = null;
         this._settingsDialog.close();
-        event.getParameter("");
     }
-    onReset(event: Event): void {
-        // TODO: restore initial table settings
+    onReset(): void {
+        this._modelCurrentState = {
+            columnMetadata: this._modelCurrentState.columnMetadata,
+            allColumnsItems: [...this._modelCurrentState.columnMetadata],
+            columnsItems: [],
+            sortItems: [],
+            aggregationItems: []
+        };
+        for (const column of this._modelCurrentState.columnMetadata) {
+            this._modelCurrentState.columnsItems.push({
+                columnKey: column.name,
+                visible: true
+            });
+        }
+        this._model.setData(deepClone(this._modelCurrentState));
     }
-    onOK(event: Event): void {
+    onOK(): void {
+        this._okPayload = this._model.getData();
         this._settingsDialog.close();
     }
     onChangeColumnsItems(event: Event): void {
-        this._model.setProperty("/p13n/columnsItems", event.getParameter("items"));
+        const modelData = this._model.getData() as SettingsModelData;
+        modelData.columnsItems = event.getParameter("items");
+        if (modelData.aggregationItems?.length > 0) {
+            for (const colItem of modelData.columnsItems) {
+                const groupItem = modelData.aggregationItems.find(item => item.columnKey === colItem.columnKey);
+                if (groupItem) {
+                    groupItem.showIfGrouped = colItem.visible;
+                }
+            }
+        }
+        this._model.updateBindings(true);
     }
-    /**
-     * Handler for when group items are added, updated or removed
-     * @param event event payload
-     */
-    onGroupItemUpdate(event: Event): void {
-        // TODO: adjust available sort/columns and current sort/columns
+    onSortItemUpdate(): void {
+        const modelData = this._model.getData() as SettingsModelData;
+        const sortConditions = this._sortCondPanel?.getConditions() || [];
+        modelData.sortItems.length = 0;
+        for (const sortCond of sortConditions) {
+            modelData.sortItems.push({
+                columnKey: (sortCond as any).keyField,
+                sortDirection: (sortCond as any).operation
+            });
+        }
+        this._model.updateBindings(false);
+    }
+    onGroupItemUpdate(): void {
+        const modelData = this._model.getData() as SettingsModelData;
+        const groupConditions = this._groupCondPanel?.getConditions();
+        modelData.sortItems.length = 0;
+        modelData.aggregationItems.length = 0;
+        if (groupConditions?.length > 0) {
+            const updatedColumns = [];
+            const groupFieldKeys: string[] = [];
+            for (const groupCondItem of groupConditions) {
+                let index = 0;
+                const keyField = (groupCondItem as any).keyField;
+                modelData.aggregationItems.push({
+                    columnKey: keyField,
+                    showIfGrouped: (groupCondItem as any).showIfGrouped
+                });
+                modelData.sortItems.push({
+                    columnKey: keyField,
+                    sortDirection: P13nConditionOperation.Ascending
+                });
+                groupFieldKeys.push(keyField);
+
+                const existingColumn = modelData.columnsItems.find(col => col.columnKey === keyField);
+                if (existingColumn) {
+                    existingColumn.visible = (groupCondItem as any).showIfGrouped;
+                    updatedColumns.push(existingColumn);
+                } else {
+                    updatedColumns.push({
+                        columnKey: keyField,
+                        visible: (groupCondItem as any).showIfGrouped,
+                        index
+                    });
+                }
+                index++;
+            }
+            modelData.columnsItems = updatedColumns;
+            modelData.allColumnsItems = modelData.columnMetadata.filter(colMeta =>
+                groupFieldKeys.includes(colMeta.name)
+            );
+        } else {
+            // remove all dependent information on group items
+            modelData.columnsItems.length = 0;
+            modelData.allColumnsItems = [...modelData.columnMetadata];
+            for (const columnMeta of modelData.columnMetadata) {
+                modelData.columnsItems.push({
+                    columnKey: columnMeta.name,
+                    visible: true
+                });
+            }
+        }
+        this._model.updateBindings(true);
+    }
+
+    private _updateInternalModel(state: ReadOnlyStateData<Entity>) {
+        this._modelCurrentState = {
+            columnMetadata: state.metadata.colMetadata,
+            allColumnsItems: [],
+            columnsItems: [...state.columnsItems],
+            sortItems: [...state.sortItems] || [],
+            aggregationItems: [...state.aggregationItems] || []
+        };
+        if (this._modelCurrentState.aggregationItems?.length > 0) {
+            const aggrItemKeys = this._modelCurrentState.aggregationItems.map(aggrItem => aggrItem.columnKey);
+            this._modelCurrentState.allColumnsItems = this._modelCurrentState.columnMetadata.filter(colItem =>
+                aggrItemKeys.includes(colItem.name)
+            );
+        } else {
+            this._modelCurrentState.allColumnsItems = [...this._modelCurrentState.columnMetadata];
+        }
+        this._model.setData(deepClone(this._modelCurrentState));
     }
 }
