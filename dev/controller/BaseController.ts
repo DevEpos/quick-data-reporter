@@ -23,7 +23,6 @@ export default class BaseController extends Controller {
     }
     /**
      * Convenience method for getting the view model by name in every controller of the application.
-     * @public
      * @param name the model name
      * @returns the model instance
      */
@@ -33,7 +32,6 @@ export default class BaseController extends Controller {
 
     /**
      * Convenience method for setting the view model in every controller of the application.
-     * @public
      * @param model the model instance
      * @param name the model name
      */
@@ -53,7 +51,6 @@ export default class BaseController extends Controller {
      * Event handler for navigating back.
      * It there is a history entry we go one step back in the browser history
      * If not, it will replace the current entry of the browser history with the main route.
-     * @public
      */
     onNavBack(): void {
         const previousHash = History.getInstance().getPreviousHash();
