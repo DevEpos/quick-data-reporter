@@ -53,7 +53,7 @@ export default class MockServer {
             },
             {
                 method: "GET",
-                path: /entities\/vh.*/,
+                path: /entities.*/,
                 response: (xhr: SinonFakeXMLHttpRequest) => {
                     this._getMockdata(xhr, "dbentities");
                 }
