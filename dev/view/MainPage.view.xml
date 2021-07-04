@@ -12,7 +12,6 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <!-- <Title text="{i18n>dbEntities_table_title} ({/foundEntities/length})" /> -->
                     <vm:VariantManagement ></vm:VariantManagement>
                 </f:heading>
             </f:DynamicPageTitle>
@@ -29,14 +28,14 @@
                             <fb:FilterGroupItem name="scopeSelection"
                                 groupName="_MISC"
                                 visibleInFilterBar="true"
-                                label="Scope">
+                                label="{i18n>dbEntities_filterbar_scopeFilter_label}">
                                 <fb:control>
                                     <Select>
                                         <items>
                                             <c:Item key="all"
-                                                text="All" />
+                                                text="{i18n>dbEntities_filterbar_scopeFilter_all}" />
                                             <c:Item key="favorites"
-                                                text="Favorites" />
+                                                text="{i18n>dbEntities_filterbar_scopeFilter_favs}" />
                                         </items>
                                     </Select>
                                 </fb:control>
@@ -44,7 +43,7 @@
                             <fb:FilterGroupItem name="nameFilter"
                                 groupName="_MISC"
                                 visibleInFilterBar="true"
-                                label="Entity name">
+                                label="{i18n>dbEntities_filterbar_entityNameFilter_label}">
                                 <fb:control>
                                     <Input id="nameFilterCtrl"/>
                                 </fb:control>
