@@ -1,6 +1,6 @@
 import BaseController from "./BaseController";
 import models from "../model/models";
-import { ColumnConfig, EntityType } from "../model/ServiceModel";
+import { EntityType } from "../model/ServiceModel";
 import EntityTableSettings from "../helper/EntityTableSettings";
 import Column from "sap/ui/table/Column";
 import Text from "sap/m/Text";
@@ -12,6 +12,8 @@ import Context from "sap/ui/model/Context";
 import { EntityColMetadata } from "../model/ServiceModel";
 import Control from "sap/ui/core/Control";
 import EntityState from "../state/EntityState";
+import Menu from "sap/m/Menu";
+import MenuItem from "sap/m/MenuItem";
 
 /**
  * Controller for a single database entity
@@ -76,6 +78,17 @@ export default class EntityController extends BaseController {
         this._dataPreviewTable.setBusy(true);
         await this._entityState.loadData();
         this._dataPreviewTable.setBusy(false);
+    }
+    onCellContextMenu(event: Event): void {
+        const contextMenu = event.getParameter("contextMenu") as Menu;
+        if (contextMenu) {
+            contextMenu.destroyItems();
+            contextMenu.addItem(
+                new MenuItem({
+                    text: "Quickfilter on Cell"
+                })
+            );
+        }
     }
     /**
      * Creates columns
@@ -151,7 +164,9 @@ export default class EntityController extends BaseController {
             }),
             hAlign,
             width: width,
-            template
+            template,
+            sortProperty: columnMetadataInfo.name,
+            showSortMenuEntry: true
         });
     }
 }
