@@ -1,5 +1,5 @@
 import Entity, { ConfigurableEntity } from "../model/Entity";
-import { EntityType, EntityMetadata, DataRow } from "../model/ServiceModel";
+import { EntityType, EntityMetadata, DataRow, ColumnConfig } from "../model/ServiceModel";
 import EntityService from "../service/EntityService";
 import BaseState from "./BaseState";
 
@@ -17,6 +17,10 @@ export default class EntityState extends BaseState<Entity> {
         this.data.columnsItems = newSettings?.columnsItems;
         this.data.aggregationItems = newSettings?.aggregationItems;
         this.data.sortItems = newSettings?.sortItems;
+        this.updateModel();
+    }
+    setColumnsItems(columnsItems: ColumnConfig[]): void {
+        this.data.columnsItems = columnsItems;
         this.updateModel();
     }
     getCurrentConfiguration(): ConfigurableEntity {

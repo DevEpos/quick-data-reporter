@@ -60,6 +60,8 @@ export default class Entity implements ConfigurableEntity {
      */
     get visibleColMetadata(): EntityColMetadata[] {
         const visibleColKeys = this.columnsItems.filter(col => col.visible).map(col => col.columnKey);
-        return this.metadata.colMetadata.filter(colItem => visibleColKeys.includes(colItem.name));
+        return visibleColKeys.map(visibleColKey =>
+            this.metadata.colMetadata.find(colMeta => colMeta.name === visibleColKey)
+        );
     }
 }

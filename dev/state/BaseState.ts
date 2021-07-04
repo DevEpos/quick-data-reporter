@@ -19,6 +19,14 @@ export default class BaseState<T> {
         this.data = stateData;
     }
 
+    turnOffModelUpdate(): void {
+        this.noModelUpdates = true;
+    }
+
+    turnOnModelUpdate(): void {
+        this.noModelUpdates = false;
+    }
+
     /**
      * Returns the current state data as readonly
      * @returns the current state data

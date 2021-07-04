@@ -30,11 +30,8 @@
                 <app:content>
                     <Panel height="100%">
                         <table:Table id="dataPreviewTable"
-                            columns="{
-                                path: '/visibleColMetadata',
-                                factory: '.columnsFactory'
-                            }"
                             rows="{/rows}"
+                            columnMove="onColumnMove"
                             beforeOpenContextMenu="onCellContextMenu"
                             visibleRowCountMode="Auto">
                             <table:extension>

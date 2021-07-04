@@ -97,10 +97,12 @@ export default class EntityTableSettings {
             sortItems: [],
             aggregationItems: []
         };
+        let colIndex = 0;
         for (const column of this._modelCurrentState.columnMetadata) {
             this._modelCurrentState.columnsItems.push({
                 columnKey: column.name,
-                visible: true
+                visible: true,
+                index: colIndex++
             });
         }
         this._model.setData(deepClone(this._modelCurrentState));

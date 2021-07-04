@@ -2,18 +2,18 @@ import BaseController from "./BaseController";
 import models from "../model/models";
 import { EntityType } from "../model/ServiceModel";
 import EntityTableSettings from "../helper/EntityTableSettings";
+import { EntityColMetadata } from "../model/ServiceModel";
+import EntityState from "../state/EntityState";
 import Column from "sap/ui/table/Column";
 import Text from "sap/m/Text";
 import Table from "sap/ui/table/Table";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import Event from "sap/ui/base/Event";
 import { HorizontalAlign } from "sap/ui/core/library";
-import Context from "sap/ui/model/Context";
-import { EntityColMetadata } from "../model/ServiceModel";
 import Control from "sap/ui/core/Control";
-import EntityState from "../state/EntityState";
 import Menu from "sap/m/Menu";
 import MenuItem from "sap/m/MenuItem";
+import CustomData from "sap/ui/core/CustomData";
 
 /**
  * Controller for a single database entity
@@ -60,6 +60,7 @@ export default class EntityController extends BaseController {
         this._entityState.setEntityInfo(entityInfo.name, entityInfo.type as EntityType);
         this._dataPreviewTable.setBusy(true);
         await this._entityState.loadMetadata();
+        this._createColumns();
         this._dataPreviewTable.setBusy(false);
     }
     /**
@@ -69,6 +70,7 @@ export default class EntityController extends BaseController {
         const newSettings = await this._entityTableSettings.showSettingsDialog(this._entityState.getData());
         if (newSettings) {
             this._entityState.setConfiguration(newSettings);
+            this._createColumns();
         }
     }
     /**
@@ -90,15 +92,45 @@ export default class EntityController extends BaseController {
             );
         }
     }
+    onColumnMove(event: Event): void {
+        const movedColumn = event.getParameter("column") as Column;
+        const newColIndex = event.getParameter("newPos") as number;
+        const oldColIndex = this._dataPreviewTable.indexOfColumn(movedColumn);
+
+        const visibleColItems = [];
+        const hiddenColItems = [];
+        for (const colItem of this._entityState.getData().columnsItems) {
+            if (colItem.visible) {
+                visibleColItems.push(colItem);
+            } else {
+                hiddenColItems.push(colItem);
+            }
+        }
+
+        const oldColumn = visibleColItems.find(colItem => colItem.index === oldColIndex);
+        if (oldColumn) {
+            oldColumn.index = newColIndex;
+        }
+        const sortedItems = visibleColItems.sort((col1, col2) => (col1.index > col2.index ? 1 : -1));
+        for (let i = 0; i < sortedItems.length; i++) {
+            sortedItems[i].index = i;
+        }
+        sortedItems.push(...hiddenColItems);
+        this._entityState.setColumnsItems(sortedItems);
+    }
+    private _createColumns(): void {
+        this._dataPreviewTable.destroyColumns();
+        for (const columnMeta of this._entityState.getData().visibleColMetadata) {
+            this._dataPreviewTable.addColumn(this._createColumn(columnMeta));
+        }
+    }
     /**
      * Creates columns
      * @param id the id of the column
      * @param context the context binding of the column
      * @returns the created column
      */
-    columnsFactory(id: string, context: Context): Column {
-        const columnMetadataInfo = context.getObject() as EntityColMetadata;
-
+    private _createColumn(columnMetadataInfo: EntityColMetadata): Column {
         let width = "5rem";
         if (columnMetadataInfo.length > 50) {
             width = "15rem";
@@ -166,7 +198,11 @@ export default class EntityController extends BaseController {
             width: width,
             template,
             sortProperty: columnMetadataInfo.name,
-            showSortMenuEntry: true
+            showSortMenuEntry: true,
+            customData: new CustomData({
+                key: "columnKey",
+                value: columnMetadataInfo.name
+            })
         });
     }
 }
