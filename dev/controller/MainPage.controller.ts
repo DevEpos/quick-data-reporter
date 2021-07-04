@@ -1,11 +1,12 @@
 import models from "../model/models";
 import BaseController from "./BaseController";
-import EntitySearchService from "../service/EntitySearchService";
+import EntityService from "../service/EntityService";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import Event from "sap/ui/base/Event";
 import Table from "sap/m/Table";
 import Control from "sap/ui/core/Control";
 import { EntityType } from "../model/ServiceModel";
+import MultiInput from "sap/m/MultiInput";
 
 /**
  * Main Page controller
@@ -13,19 +14,33 @@ import { EntityType } from "../model/ServiceModel";
  * @namespace devepos.qdrt.controller
  */
 export default class MainPageController extends BaseController {
-    _searchService: EntitySearchService;
-    _viewModel: JSONModel;
-    _dataModel: JSONModel;
+    private _searchService: EntityService;
+    private _viewModel: JSONModel;
+    private _nameFilter: MultiInput;
+    private _dataModel: JSONModel;
 
     onInit(): void {
         super.onInit();
-        this._searchService = new EntitySearchService();
+        this._searchService = new EntityService();
         this._viewModel = models.createViewModel({ currentEntity: { name: "" } });
         this.getView().setModel(this._viewModel, "ui");
 
         this._dataModel = models.createViewModel({ foundEntities: [] });
         this.getView().setModel(this._dataModel);
-        this.onSearchForEntities(new Event("", null, { query: "demo*" }));
+
+        // get controls from filter bar
+        this._nameFilter = this.byId("nameFilterCtrl") as MultiInput;
+        this._nameFilter.attachSubmit(
+            null,
+            (event: Event) => {
+                this.onSearch();
+            },
+            this
+        );
+
+        // trigger dummy search
+        this._nameFilter.setValue("demo*");
+        this._nameFilter.fireSubmit();
     }
 
     /**
@@ -54,8 +69,8 @@ export default class MainPageController extends BaseController {
         }
     }
 
-    async onSearchForEntities(event: Event): Promise<void> {
-        const filterValue = event.getParameter("query");
+    async onSearch(): Promise<void> {
+        const filterValue = this._nameFilter.getValue();
         if (!filterValue) {
             return;
         }
@@ -64,7 +79,7 @@ export default class MainPageController extends BaseController {
 
         filterTable.setBusy(true);
 
-        const entities = await this._searchService.searchDbEntities(filterValue);
+        const entities = await this._searchService.findEntities(filterValue);
         filterTable.setBusy(false);
 
         if (entities) {

@@ -1,7 +1,8 @@
 <mvc:View controllerName="devepos.qdrt.controller.MainPage"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:c="sap.ui.core"
-    xmlns:v="sap.ui.comp.variants"
+    xmlns:vm="sap.ui.comp.variants"
+    xmlns:fb="sap.ui.comp.filterbar"
     xmlns="sap.m"
     xmlns:f="sap.f"
     xmlns:layout="sap.ui.layout"
@@ -11,14 +12,48 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <Title text="{i18n>dbEntities_table_title} ({/foundEntities/length})" />
+                    <!-- <Title text="{i18n>dbEntities_table_title} ({/foundEntities/length})" /> -->
+                    <vm:VariantManagement ></vm:VariantManagement>
                 </f:heading>
-                <f:content>
-                </f:content>
-                <f:actions>
-                </f:actions>
             </f:DynamicPageTitle>
         </f:title>
+        <f:header>
+            <f:DynamicPageHeader pinnable="true">
+                <f:content>
+                    <fb:FilterBar id="filterbar"
+                        reset="onReset"
+                        search="onSearch"
+                        useToolbar="false"
+                        showGoOnFB="true">
+                        <fb:filterGroupItems>
+                            <fb:FilterGroupItem name="scopeSelection"
+                                groupName="_MISC"
+                                visibleInFilterBar="true"
+                                label="Scope">
+                                <fb:control>
+                                    <Select>
+                                        <items>
+                                            <c:Item key="all"
+                                                text="All" />
+                                            <c:Item key="favorites"
+                                                text="Favorites" />
+                                        </items>
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem name="nameFilter"
+                                groupName="_MISC"
+                                visibleInFilterBar="true"
+                                label="Entity name">
+                                <fb:control>
+                                    <MultiInput id="nameFilterCtrl"/>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                        </fb:filterGroupItems>
+                    </fb:FilterBar>
+                </f:content>
+            </f:DynamicPageHeader>
+        </f:header>
         <f:content>
             <Table id="foundEntitiesTable"
                 width="100%"
@@ -26,19 +61,8 @@
                 sticky="ColumnHeaders,HeaderToolbar">
                 <headerToolbar>
                     <Toolbar >
+                        <Title text="{i18n>dbEntities_table_title} ({/foundEntities/length})" />
                         <ToolbarSpacer />
-                        <Select>
-                            <items>
-                                <c:Item key="all"
-                                    text="All" />
-                                <c:Item key="favorites"
-                                    text="Favorites" />
-                            </items>
-                        </Select>
-                        <SearchField class="mainpage__search"
-                            width="20em"
-                            search="onSearchForEntities"
-                            placeholder="{i18n>dbEntities_table_filterPrompt}" />
                     </Toolbar>
                 </headerToolbar>
                 <columns>
