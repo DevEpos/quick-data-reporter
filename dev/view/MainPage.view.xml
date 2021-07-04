@@ -46,7 +46,7 @@
                                 visibleInFilterBar="true"
                                 label="Entity name">
                                 <fb:control>
-                                    <MultiInput id="nameFilterCtrl"/>
+                                    <Input id="nameFilterCtrl"/>
                                 </fb:control>
                             </fb:FilterGroupItem>
                         </fb:filterGroupItems>

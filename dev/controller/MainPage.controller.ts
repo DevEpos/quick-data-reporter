@@ -1,12 +1,12 @@
-import models from "../model/models";
-import BaseController from "./BaseController";
-import EntityService from "../service/EntityService";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import Event from "sap/ui/base/Event";
 import Table from "sap/m/Table";
 import Control from "sap/ui/core/Control";
+import Input from "sap/m/Input";
+import models from "../model/models";
+import BaseController from "./BaseController";
+import EntityService from "../service/EntityService";
 import { EntityType } from "../model/ServiceModel";
-import MultiInput from "sap/m/MultiInput";
 
 /**
  * Main Page controller
@@ -16,7 +16,7 @@ import MultiInput from "sap/m/MultiInput";
 export default class MainPageController extends BaseController {
     private _searchService: EntityService;
     private _viewModel: JSONModel;
-    private _nameFilter: MultiInput;
+    private _nameFilter: Input;
     private _dataModel: JSONModel;
 
     onInit(): void {
@@ -29,7 +29,7 @@ export default class MainPageController extends BaseController {
         this.getView().setModel(this._dataModel);
 
         // get controls from filter bar
-        this._nameFilter = this.byId("nameFilterCtrl") as MultiInput;
+        this._nameFilter = this.byId("nameFilterCtrl") as Input;
         this._nameFilter.attachSubmit(
             null,
             (event: Event) => {
