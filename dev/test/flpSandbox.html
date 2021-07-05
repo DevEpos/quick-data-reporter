@@ -72,6 +72,12 @@
         >
             // NON-SECURE setting for testing environment
         </script>
+        <script>
+            sap.ui.getCore().attachInit(function () {
+                // initialize the ushell sandbox component
+                sap.ushell.Container.createRenderer().placeAt("content");
+            });
+        </script>
     </head>
 
     <!-- UI Content -->
