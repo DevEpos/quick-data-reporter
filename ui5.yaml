@@ -27,7 +27,6 @@ builder:
     excludes:
       - "/test/**"
       - "/localService/**"
-      - "index_mock.html"
       - "**/.eslintrc"
   customTasks:
     - name: ui5-task-nwabap-deployer
