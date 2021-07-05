@@ -1,27 +1,6 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc"
-	xmlns:m="sap.m"
-	xmlns="sap.tnt"
-	height="100%"
+	xmlns="sap.m"
 	displayBlock="true"
-	controllerName="devepos.qdrt.controller.App">
-	<m:Page id="rootPage">
-		<m:customHeader>
-			<ToolHeader design="Auto">
-				<content>
-					<m:Image src="../img/favicon.png"
-						height="1.5rem"></m:Image>
-					<m:Title text="{i18n>title}"/>
-					<m:ToolbarSpacer />
-					<m:Button tooltip="{i18n>theme_switcher_tooltip}"
-						type="Transparent"
-						press="onThemeSwitch"
-						icon="sap-icon://palette"/>
-					<m:Button tooltip="{i18n>mainToolbar_settings}"
-						icon="sap-icon://action-settings"
-						type="Transparent" />
-				</content>
-			</ToolHeader>
-		</m:customHeader>
-		<m:NavContainer id="rootNavigation" />
-	</m:Page>
+	width="100%">
+	<App id="idAppControl" />
 </mvc:View>
