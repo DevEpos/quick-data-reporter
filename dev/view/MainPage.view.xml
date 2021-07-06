@@ -2,6 +2,7 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:c="sap.ui.core"
     xmlns:vm="sap.ui.comp.variants"
+    xmlns:svm="sap.ui.comp.smartvariants"
     xmlns:fb="sap.ui.comp.filterbar"
     xmlns="sap.m"
     xmlns:f="sap.f"
@@ -12,7 +13,7 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <vm:VariantManagement ></vm:VariantManagement>
+                    <svm:SmartVariantManagementUi2 id="variantManagement" />
                 </f:heading>
             </f:DynamicPageTitle>
         </f:title>
@@ -20,9 +21,10 @@
             <f:DynamicPageHeader pinnable="true">
                 <f:content>
                     <fb:FilterBar id="filterbar"
-                        reset="onReset"
+                        showFilterConfiguration="false"
                         search="onSearch"
                         useToolbar="false"
+                        persistencyKey="DevEposQdrt_MainPage_PersCont"
                         showGoOnFB="true">
                         <fb:filterGroupItems>
                             <fb:FilterGroupItem name="scopeSelection"

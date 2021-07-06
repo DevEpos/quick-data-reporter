@@ -1,12 +1,16 @@
+import models from "../model/models";
+import BaseController from "./BaseController";
+import EntityService from "../service/EntityService";
+import { EntityType } from "../model/ServiceModel";
+import SmartVariantManagementConnector from "../helper/variants/SmartVariantManagementConnector";
+
 import JSONModel from "sap/ui/model/json/JSONModel";
 import Event from "sap/ui/base/Event";
 import Table from "sap/m/Table";
 import Control from "sap/ui/core/Control";
 import Input from "sap/m/Input";
-import models from "../model/models";
-import BaseController from "./BaseController";
-import EntityService from "../service/EntityService";
-import { EntityType } from "../model/ServiceModel";
+import SmartVariantManagementUi2 from "sap/ui/comp/smartvariants/SmartVariantManagementUi2";
+import FilterBar from "sap/ui/comp/filterbar/FilterBar";
 
 /**
  * Main Page controller
@@ -28,19 +32,27 @@ export default class MainPageController extends BaseController {
         this._dataModel = models.createViewModel({ foundEntities: [] });
         this.getView().setModel(this._dataModel);
 
+        new SmartVariantManagementConnector(
+            this.byId("filterbar") as FilterBar,
+            this.byId("variantManagement") as SmartVariantManagementUi2
+        ).connectFilterBar();
+
         // get controls from filter bar
         this._nameFilter = this.byId("nameFilterCtrl") as Input;
-        this._nameFilter.attachSubmit(
+        this._nameFilter.attachChange(
             null,
-            (event: Event) => {
+            () => {
                 this.onSearch();
             },
             this
         );
-
-        // trigger dummy search
-        this._nameFilter.setValue("demo*");
-        this._nameFilter.fireSubmit();
+        this._nameFilter.attachSubmit(
+            null,
+            () => {
+                this.onSearch();
+            },
+            this
+        );
     }
 
     /**
