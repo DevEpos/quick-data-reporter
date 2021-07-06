@@ -1,4 +1,4 @@
-import ajaxUtil from "./util/ajaxUtil";
+import ajaxUtil from "./ajaxUtil";
 import { DataPreview, DbEntity, EntityMetadata, EntityVariant } from "../model/ServiceModel";
 
 const BASE_SRV_URL = "/sap/zqdrtrest/entities";

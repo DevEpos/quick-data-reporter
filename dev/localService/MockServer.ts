@@ -1,7 +1,8 @@
+import ajaxUtil from "../service/ajaxUtil";
+
 import _MockServer from "sap/ui/core/util/MockServer";
 import Log from "sap/base/Log";
 import UriParameters from "sap/base/util/UriParameters";
-import ajaxUtil from "../service/util/ajaxUtil";
 import DateFormat from "sap/ui/core/format/DateFormat";
 import CalendarType from "sap/ui/core/CalendarType";
 import { SinonFakeXMLHttpRequest } from "sinon";
