@@ -4,6 +4,8 @@ import { EntityType } from "../model/ServiceModel";
 import EntityTableSettings from "../helper/EntityTableSettings";
 import { EntityColMetadata } from "../model/ServiceModel";
 import EntityState from "../state/EntityState";
+import StateRegistry from "../state/StateRegistry";
+
 import Column from "sap/ui/table/Column";
 import Text from "sap/m/Text";
 import Table from "sap/ui/table/Table";
@@ -33,7 +35,7 @@ export default class EntityController extends BaseController {
         this._uiModel = models.createViewModel({
             sideContentVisible: true
         });
-        this._entityState = new EntityState();
+        this._entityState = StateRegistry.getEntityState();
         this._entityTableSettings = new EntityTableSettings(this.getView());
         this._entityState.getData();
         this._dataPreviewTable = this.getView().byId("dataPreviewTable") as Table;

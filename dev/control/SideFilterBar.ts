@@ -1,3 +1,9 @@
+import ColumnItem from "../element/ColumnItem";
+import FilterItem from "../element/FilterItem";
+import QuickFilter from "./QuickFilter";
+import StateRegistry from "../state/StateRegistry";
+import AddQuickFiltersPopover from "../helper/AddQuickFilterPopover";
+
 import Panel from "sap/m/Panel";
 import ScrollContainer from "sap/m/ScrollContainer";
 import OverflowToolbar from "sap/m/OverflowToolbar";
@@ -5,11 +11,10 @@ import Button from "sap/m/Button";
 import ToolbarSpacer from "sap/m/ToolbarSpacer";
 import Title from "sap/m/Title";
 import VerticalLayout from "sap/ui/layout/VerticalLayout";
-import QuickFilter from "./QuickFilter";
 import { ButtonType } from "sap/m/library";
-import ColumnItem from "../element/ColumnItem";
-import FilterItem from "../element/FilterItem";
 import jQuery from "sap/ui/thirdparty/jquery";
+import Event from "sap/ui/base/Event";
+import Control from "sap/ui/core/Control";
 
 /**
  * FilterBar with vertical orientation
@@ -61,8 +66,8 @@ export default class SideFilterBar extends Panel {
                         icon: "sap-icon://add",
                         tooltip: "{i18n>entity_sideFilterBar_newFilter}",
                         type: ButtonType.Transparent,
-                        press: () => {
-                            this._addNewFilter();
+                        press: (event: Event) => {
+                            this._addNewFilter(event);
                         }
                     }),
                     new Button({
@@ -101,8 +106,14 @@ export default class SideFilterBar extends Panel {
         Panel.prototype.exit.call(this);
     }
 
-    private _addNewFilter() {
-        this._filterContainer.addContent(this._createQuickFilter("New Filter"));
+    private async _addNewFilter(event: Event) {
+        const addFiltersPopover = new AddQuickFiltersPopover(StateRegistry.getEntityState().getData());
+        const selectedFilters = await addFiltersPopover.showPopover(event.getSource() as Control);
+        if (selectedFilters?.length > 0) {
+            for (const selectedFilter of selectedFilters) {
+                this._filterContainer.addContent(this._createQuickFilter(selectedFilter));
+            }
+        }
     }
     private _createQuickFilter(columnName: string) {
         return new QuickFilter({ columnName });

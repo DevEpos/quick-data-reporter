@@ -1,0 +1,59 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <ResponsivePopover afterClose="onAfterClose"
+        placement="VerticalPreferredBottom"
+        verticalScrolling="false"
+        contentHeight="50%">
+        <customHeader>
+            <OverflowToolbar>
+                <content>
+                    <Title text="{i18n>entity_addFilterPopover_title}" />
+                    <ToolbarSpacer />
+                    <ToggleButton pressed="{/multiSelect}"
+                        icon="sap-icon://multi-select"
+                        tooltip="{i18n>entity_addFilterPopover_multiSelect_toggleButton_tooltip}"
+                        type="Transparent"/>
+                </content>
+            </OverflowToolbar>
+        </customHeader>
+        <content>
+            <SearchField placeholder="{i18n>entity_addFilterPopover_searchPrompt}"
+                liveChange="onSearchPromptLiveChange"/>
+            <OverflowToolbar visible="{= ${/selectedItemCount} > 0}">
+                <content>
+                    <Label text="{
+                            parts: [
+                                'i18n>entity_addFilterPopover_selectedFieldsText',
+                                '/selectedItemCount'
+                            ],
+                            formatter: '.formatMessage'
+                        }"/>
+                </content>
+            </OverflowToolbar>
+            <ScrollContainer id="listScroller"
+                vertical="true"
+                horizontal="false"
+                height="inherit">
+                <List id="fieldsList"
+                    items="{/fields}"
+                    includeItemInSelection="true"
+                    mode="{= ${/multiSelect} ? 'MultiSelect' : 'None' }"
+                    selectionChange="onFieldSelectionChange">
+                    <items>
+                        <StandardListItem title="{name}"
+                            selected="{selected}"
+                            type="Active"
+                            press="onFieldPress" />
+                    </items>
+                </List>
+            </ScrollContainer>
+        </content>
+        <endButton>
+            <Button text="{i18n>entity_addFilterPopover_acceptButton_label}"
+                visible="{/multiSelect}"
+                enabled="{/hasSelectedItems}"
+                type="Accept"
+                press="onAcceptSelection"/>
+        </endButton>
+    </ResponsivePopover>
+</core:FragmentDefinition>
