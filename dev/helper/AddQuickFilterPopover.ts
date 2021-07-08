@@ -131,9 +131,6 @@ export default class AddQuickFiltersPopover {
         this._model.attachPropertyChange(
             null,
             (evt: Event) => {
-                if (!this._modelData.multiSelect) {
-                    return;
-                }
                 const path = evt.getParameter("path");
                 if (path === "selected") {
                     setTimeout(this._calculateScrollerHeight.bind(this), 50);
@@ -152,6 +149,7 @@ export default class AddQuickFiltersPopover {
         return this._popover;
     }
     private _calculateScrollerHeight() {
+        console.log("Calculate Scroll Height");
         let infoToolbarHeight = 0;
         if (this._infoToolbar?.getVisible()) {
             infoToolbarHeight = this._infoToolbar.getDomRef()?.clientHeight;
