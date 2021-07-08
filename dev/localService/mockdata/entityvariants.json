@@ -1,20 +1,24 @@
 [
     {
-        "name": "My Default",
+        "key": "MY_DEFAULT",
+        "text": "My Default",
         "author": "STOCKBAL",
         "executeOnSelection": false,
         "favorite": true,
         "global": false,
         "labelReadOnly": true,
-        "readOnly": false
+        "readOnly": false,
+        "dataString": "{\"columnItems\":[],\"sortItems\":[],\"aggregationItems\":[],\"filterItems\":[]}"
     },
     {
-        "name": "Test 123",
+        "key": "TEST_123",
+        "text": "Test 123",
         "author": "STOCKBAL",
         "executeOnSelection": false,
         "favorite": false,
         "global": true,
         "labelReadOnly": true,
-        "readOnly": true
+        "readOnly": true,
+        "dataString": "{\"columnItems\":[{\"columnKey\":\"clsname\",\"index\":0},{\"columnKey\":\"category\",\"index\":1},{\"columnKey\":\"author\",\"index\":2}],\"sortItems\":[],\"aggregationItems\":[], \"filterItems\":[]}"
     }
 ]

@@ -49,6 +49,15 @@ export default class EntityState extends BaseState<Entity> {
             // TODO: handle error
         }
     }
+    async loadVariants(): Promise<void> {
+        try {
+            const variantData = await this._entityService.getVariants(this.data.type, this.data.name);
+            this.data.variants = [...variantData] || [];
+            this.updateModel();
+        } catch (reqError) {
+            // TODO: handle error
+        }
+    }
     async loadMetadata(): Promise<EntityMetadata> {
         try {
             const entityMetadata = await this._entityService.getMetadata(this.data.type, this.data.name);
@@ -83,6 +92,7 @@ export default class EntityState extends BaseState<Entity> {
         this.data.sortItems.length = 0;
         this.data.filterItems.length = 0;
         this.data.columnsItems.length = 0;
+        this.data.variants.length = 0;
         this.data.rows.length = 0;
         const colMetadata = this.data.metadata?.colMetadata;
         if (colMetadata) {

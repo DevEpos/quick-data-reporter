@@ -40,14 +40,24 @@ export interface DbEntity {
     typeTooltip?: string;
 }
 
+export interface EntityVariantData {
+    columnItems?: ColumnConfig[];
+    sortItems?: SortCond[];
+    aggregationItems?: AggregationCond[];
+    filterItems?: FilterCond[];
+}
+
 export interface EntityVariant {
-    name?: string;
+    key: string;
+    text: string;
     author: string;
     executeOnSelection?: boolean;
     favorite?: boolean;
     global?: boolean;
     labelReadOnly?: boolean;
     readOnly?: boolean;
+    dataString: string;
+    data: EntityVariantData;
 }
 
 export interface EntityMetadata {

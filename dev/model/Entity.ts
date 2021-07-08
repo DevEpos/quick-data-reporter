@@ -6,9 +6,22 @@ import {
     SortCond,
     ColumnConfig,
     AggregationCond,
-    EntityColMetadata
+    EntityColMetadata,
+    EntityVariant
 } from "./ServiceModel";
 
+export function createDefaultVariant(): EntityVariant {
+    return {
+        key: "*qdrt_standard*",
+        text: "Standard",
+        readOnly: true,
+        global: false,
+        favorite: true,
+        dataString: "",
+        data: {},
+        author: "SAP"
+    };
+}
 /**
  * Describes an entity which is configurable
  */
@@ -47,6 +60,10 @@ export default class Entity implements ConfigurableEntity {
      * Metadata of an entity
      */
     metadata: EntityMetadata = { colMetadata: [] };
+    /**
+     * List of variants of the entity
+     */
+    variants?: EntityVariant[] = [];
     /**
      * Data rows of an entity
      */

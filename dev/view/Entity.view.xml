@@ -3,7 +3,7 @@
     xmlns:l="sap.ui.layout"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:f="sap.f"
-    xmlns:variants="sap.ui.comp.variants"
+    xmlns:vm="sap.ui.comp.variants"
     xmlns:table="sap.ui.table"
     xmlns:core="sap.ui.core"
     xmlns="sap.m"
@@ -39,9 +39,25 @@
                                     <Title text="{i18n>entity_table_title} ({/rows/length})"
                                         titleStyle="H4"/>
                                     <ToolbarSeparator />
-                                    <variants:VariantManagement useFavorites="true"
+                                    <vm:VariantManagement id="variantManagement"
+                                        useFavorites="true"
+                                        showShare="true"
                                         showSetAsDefault="true"
-                                        showExecuteOnSelection="true"/>
+                                        initialSelectionKey="*standard*"
+                                        defaultVariantKey="*standard*"
+                                        showExecuteOnSelection="true"
+                                        variantItems="{/variants}">
+                                        <vm:variantItems>
+                                            <vm:VariantItem author="{author}"
+                                                key="{key}"
+                                                text="{text}"
+                                                executeOnSelection="{executeOnSelection}"
+                                                favorite="{favorite}"
+                                                global="{global}"
+                                                labelReadOnly="{labelReadOnly}"
+                                                readOnly="{readOnly}"/>
+                                        </vm:variantItems>
+                                    </vm:VariantManagement>
                                     <ToolbarSpacer />
                                     <Label text="{i18n>entity_table_tb_maxRows}"
                                         labelFor="maxRowsInput"/>
