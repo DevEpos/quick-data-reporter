@@ -36,7 +36,7 @@
             <ScrollContainer id="listScroller"
                 vertical="true"
                 horizontal="false"
-                height="inherit">
+                class="deveposQdrt-AddFilterPopover__Scroller">
                 <List id="fieldsList"
                     items="{/fields}"
                     includeItemInSelection="true"

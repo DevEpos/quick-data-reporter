@@ -11,9 +11,6 @@ import formatMessage from "sap/base/strings/formatMessage";
 import ListBinding from "sap/ui/model/ListBinding";
 import Filter from "sap/ui/model/Filter";
 import ScrollContainer from "sap/m/ScrollContainer";
-import OverflowToolbar from "sap/m/OverflowToolbar";
-
-const FRAGMENT_ID = "addFiltersPopover";
 
 interface FieldConfig {
     name: string;
@@ -42,6 +39,11 @@ class PopoverModel {
     }
 }
 
+const FRAGMENT_ID = "addFiltersPopover";
+
+const CSS_CLASS_SCROLLER_SINGLE_SELECT = "deveposQdrt-AddFilterPopover__Scroller";
+const CSS_CLASS_SCROLLER_MULTI_SELECT = "deveposQdrt-AddFilterPopover__Scroller--multiSelect";
+
 /**
  * Popover to add new filters to side filter bar
  */
@@ -52,20 +54,11 @@ export default class AddQuickFiltersPopover {
     private _model: JSONModel;
     private _searchTimer: number;
     private _fieldList: List;
-    private _popupEventDelegate: { onAfterRendering(): void };
     private _popoverPromise: { resolve: (selectedFields: string[]) => void };
     private _scroller: ScrollContainer;
-    private _infoToolbar: OverflowToolbar;
 
     constructor(entityStateData: ReadOnlyStateData<Entity>) {
         this._createModel(entityStateData);
-        this._popupEventDelegate = {
-            onAfterRendering: () => {
-                this._calculateScrollerHeight();
-                // calculation is only needed once
-                this._popover.removeEventDelegate(this._popupEventDelegate);
-            }
-        };
     }
     /**
      * Shows popover to allow user the selection of one or several fields of
@@ -79,7 +72,6 @@ export default class AddQuickFiltersPopover {
         sourceButton.addDependent(popover);
         this._fieldList = Fragment.byId(FRAGMENT_ID, "fieldsList") as List;
         this._scroller = Fragment.byId(FRAGMENT_ID, "listScroller") as ScrollContainer;
-        this._infoToolbar = Fragment.byId(FRAGMENT_ID, "infoToolbar") as OverflowToolbar;
         return new Promise(resolve => {
             this._popoverPromise = { resolve };
             popover.openBy(sourceButton);
@@ -110,7 +102,6 @@ export default class AddQuickFiltersPopover {
         this._popoverPromise.resolve(this._modelData.selectedFields);
     }
     onAfterClose(): void {
-        this._popover.removeEventDelegate(this._popupEventDelegate);
         this._popover?.destroy();
     }
     private _createModel(entityStateData: ReadOnlyStateData<Entity>): void {
@@ -133,7 +124,13 @@ export default class AddQuickFiltersPopover {
             (evt: Event) => {
                 const path = evt.getParameter("path");
                 if (path === "selected") {
-                    setTimeout(this._calculateScrollerHeight.bind(this), 50);
+                    if (this._modelData.hasSelectedItems) {
+                        this._scroller.removeStyleClass(CSS_CLASS_SCROLLER_SINGLE_SELECT);
+                        this._scroller.addStyleClass(CSS_CLASS_SCROLLER_MULTI_SELECT);
+                    } else {
+                        this._scroller.removeStyleClass(CSS_CLASS_SCROLLER_MULTI_SELECT);
+                        this._scroller.addStyleClass(CSS_CLASS_SCROLLER_SINGLE_SELECT);
+                    }
                 }
             },
             this
@@ -145,18 +142,6 @@ export default class AddQuickFiltersPopover {
             name: "devepos.qdrt.fragment.AddFilterPopover",
             controller: this
         });
-        this._popover.addEventDelegate(this._popupEventDelegate, this);
         return this._popover;
-    }
-    private _calculateScrollerHeight() {
-        console.log("Calculate Scroll Height");
-        let infoToolbarHeight = 0;
-        if (this._infoToolbar?.getVisible()) {
-            infoToolbarHeight = this._infoToolbar.getDomRef()?.clientHeight;
-        }
-        const footerDomElem = this._popover?.getDomRef()?.querySelector("footer");
-        if (this._scroller && footerDomElem) {
-            this._scroller.setHeight(`calc(100% - ${footerDomElem.clientHeight + infoToolbarHeight}px)`);
-        }
     }
 }
