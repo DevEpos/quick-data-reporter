@@ -21,7 +21,7 @@ class ToggleableSideContentRenderer {
     render(rm: RenderManager, toggleableSideContent: ToggleableSideContent) {
         // open main control
         rm.openStart("div", toggleableSideContent);
-        rm.class("deveposQdrtToggleableSideContent");
+        rm.class("deveposQdrt-ToggleableSideContent");
         rm.openEnd();
 
         let sideContentWidth;
@@ -68,7 +68,7 @@ class ToggleableSideContentRenderer {
     _renderMain(rm: RenderManager, toggleableSideContent: ToggleableSideContent, width: string) {
         // open main content
         rm.openStart("section", toggleableSideContent.getId() + "-content");
-        rm.class("deveposQdrtToggleableSideContentContent");
+        rm.class("deveposQdrt-ToggleableSideContent__Content");
         rm.style("width", width);
         rm.openEnd();
 
@@ -92,7 +92,7 @@ class ToggleableSideContentRenderer {
         }
         // open side filter
         rm.openStart("section", toggleableSideContent.getId() + "-sideFilter");
-        rm.class("deveposQdrtToggleableSideContentSideContent");
+        rm.class("deveposQdrt-ToggleableSideContent__SideContent");
         rm.style("width", width);
         rm.openEnd();
 

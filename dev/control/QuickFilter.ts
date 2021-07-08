@@ -73,7 +73,7 @@ export default class QuickFilter extends Control {
                 new MultiInput({ width: "100%" })
             ]
         });
-        filterCont.addStyleClass("deveposQdrtQuickFilter");
+        filterCont.addStyleClass("deveposQdrt-QuickFilter");
         this.setAggregation("filter", filterCont);
     }
     setColumnName(columnName: string): QuickFilter {
