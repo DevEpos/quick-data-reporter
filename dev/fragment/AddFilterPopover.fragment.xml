@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns="sap.m"
     xmlns:core="sap.ui.core">
     <ResponsivePopover afterClose="onAfterClose"
-        placement="VerticalPreferredBottom"
+        placement="Left"
         beforeOpen="onBeforeOpen"
         verticalScrolling="false"
         contentHeight="50%">
