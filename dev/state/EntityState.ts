@@ -57,6 +57,11 @@ export default class EntityState extends BaseState<Entity> {
             if (entityMetadata?.colMetadata) {
                 for (let i = 0; i < entityMetadata.colMetadata.length; i++) {
                     const colMeta = entityMetadata.colMetadata[i];
+                    colMeta.description =
+                        colMeta.mediumDescription ||
+                        (colMeta?.longDescription.length <= 20 && colMeta.longDescription) ||
+                        colMeta.shortDescription ||
+                        colMeta.name;
                     this.data.columnsItems.push({
                         columnKey: colMeta.name,
                         visible: true,

@@ -2,6 +2,7 @@
     xmlns:core="sap.ui.core">
     <ResponsivePopover afterClose="onAfterClose"
         placement="VerticalPreferredBottom"
+        beforeOpen="onBeforeOpen"
         verticalScrolling="false"
         contentHeight="50%">
         <customHeader>
@@ -19,7 +20,9 @@
         <content>
             <SearchField placeholder="{i18n>entity_addFilterPopover_searchPrompt}"
                 liveChange="onSearchPromptLiveChange"/>
-            <OverflowToolbar visible="{= ${/selectedItemCount} > 0}">
+            <OverflowToolbar id="infoToolbar"
+                class="sapMTB-Info-CTX"
+                visible="{= ${/selectedItemCount} > 0}">
                 <content>
                     <Label text="{
                             parts: [
@@ -40,8 +43,9 @@
                     mode="{= ${/multiSelect} ? 'MultiSelect' : 'None' }"
                     selectionChange="onFieldSelectionChange">
                     <items>
-                        <StandardListItem title="{name}"
+                        <StandardListItem title="{description}"
                             selected="{selected}"
+                            tooltip="{longDescription}"
                             type="Active"
                             press="onFieldPress" />
                     </items>

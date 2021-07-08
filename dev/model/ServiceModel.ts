@@ -79,6 +79,10 @@ export interface EntityColMetadata {
      * The long description for the column
      */
     longDescription?: string;
+    /**
+     * The description for the ui.
+     */
+    description?: string;
 }
 
 export type DataRow = Record<string, unknown>;
