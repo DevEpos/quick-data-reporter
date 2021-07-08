@@ -84,6 +84,7 @@ export default class SideFilterBar extends Panel {
         this._filterContainer = new VerticalLayout({
             width: "100%"
         });
+        this._filterContainer.addStyleClass("deveposQdrtSideFilterBarContainer");
         this._scrollContainer = new ScrollContainer({
             content: this._filterContainer,
             width: "100%",
