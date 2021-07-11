@@ -14,7 +14,7 @@
                 columnsItems="{/columnsItems}">
                 <items>
                     <P13nItem columnKey="{name}"
-                        text="{longDescription}"/>
+                        text="{description}"/>
                 </items>
                 <columnsItems>
                     <P13nColumnsItem columnKey="{columnKey}"
@@ -30,7 +30,7 @@
                 removeSortItem="onSortItemUpdate">
                 <items>
                     <P13nItem columnKey="{name}"
-                        text="{longDescription}"/>
+                        text="{description}"/>
                 </items>
                 <sortItems>
                     <P13nSortItem columnKey="{columnKey}"
@@ -49,7 +49,7 @@
                 </groupItems>
                 <items>
                     <P13nItem columnKey="{name}"
-                        text="{longDescription}"/>
+                        text="{description}"/>
                 </items>
             </P13nGroupPanel>
         </panels>

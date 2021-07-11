@@ -188,11 +188,7 @@ export default class EntityController extends BaseController {
         }
         return new Column({
             label: new Text({
-                text:
-                    columnMetadataInfo.shortDescription ||
-                    columnMetadataInfo.mediumDescription ||
-                    columnMetadataInfo.longDescription ||
-                    columnMetadataInfo.name,
+                text: columnMetadataInfo.description,
                 tooltip: columnMetadataInfo.name,
                 wrapping: false
             }),

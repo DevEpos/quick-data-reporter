@@ -6,7 +6,8 @@
             "length": 30,
             "shortDescription": "Obj. Type",
             "mediumDescription": "Type Name",
-            "longDescription": "Object Type Name"
+            "longDescription": "Class/Interface",
+            "fieldText": "Object Type Name"
         },
         {
             "name": "version",
@@ -14,7 +15,8 @@
             "length": 1,
             "shortDescription": "V",
             "mediumDescription": "Version",
-            "longDescription": "Version indicator (active/inactive)"
+            "longDescription": "Version",
+            "fieldText": "Version indicator (active/inactive)"
         },
         {
             "name": "category",
@@ -22,7 +24,8 @@
             "length": 2,
             "shortDescription": "Category",
             "mediumDescription": "Category",
-            "longDescription": "Class/Interface category"
+            "longDescription": "Category",
+            "fieldText": "Class/Interface category"
         },
         {
             "name": "exposure",
@@ -30,7 +33,8 @@
             "length": 1,
             "shortDescription": "Visible",
             "mediumDescription": "Visibility",
-            "longDescription": "Visibility of a class or component"
+            "longDescription": "Visibility",
+            "fieldText": "Visibility of a class or component"
         },
         {
             "name": "state",
@@ -38,7 +42,8 @@
             "length": 1,
             "shortDescription": "Status",
             "mediumDescription": "Status",
-            "longDescription": "Status of a class or component"
+            "longDescription": "Status",
+            "fieldText": "Status of a class or component"
         },
         {
             "name": "release",
@@ -46,7 +51,8 @@
             "length": 1,
             "shortDescription": "Release",
             "mediumDescription": "Release",
-            "longDescription": "Release status of a class"
+            "longDescription": "Release",
+            "fieldText": "Release status of a class"
         },
         {
             "name": "author",
@@ -54,7 +60,8 @@
             "length": 12,
             "shortDescription": "Created By",
             "mediumDescription": "Created By",
-            "longDescription": "Author"
+            "longDescription": "Created By",
+            "fieldText": "Author"
         },
         {
             "name": "createdon",
@@ -62,7 +69,8 @@
             "length": 8,
             "shortDescription": "Created On",
             "mediumDescription": "Created On",
-            "longDescription": "Created On"
+            "longDescription": "Created On",
+            "fieldText": "Created On"
         },
         {
             "name": "changedby",
@@ -70,7 +78,8 @@
             "length": 12,
             "shortDescription": "Changed by",
             "mediumDescription": "Last changed by",
-            "longDescription": "Last changed by"
+            "longDescription": "Last changed by",
+            "fieldText": "Last changed by"
         },
         {
             "name": "changedon",
@@ -78,7 +87,8 @@
             "length": 8,
             "shortDescription": "Changed on",
             "mediumDescription": "Changed on",
-            "longDescription": "Changed On"
+            "longDescription": "Changed On",
+            "fieldText": "Changed On"
         },
         {
             "name": "chgdanyby",
@@ -86,7 +96,8 @@
             "length": 12,
             "shortDescription": "Changed by",
             "mediumDescription": "Last changed by",
-            "longDescription": "Last changed by"
+            "longDescription": "Last changed by",
+            "fieldText": "Last changed by"
         },
         {
             "name": "chgdanyon",
@@ -94,7 +105,8 @@
             "length": 8,
             "shortDescription": "Changed on",
             "mediumDescription": "Changed on",
-            "longDescription": "Changed On"
+            "longDescription": "Changed On",
+            "fieldText": "Changed On"
         },
         {
             "name": "clsembed",
@@ -102,7 +114,8 @@
             "length": 1,
             "shortDescription": "Embeddable",
             "mediumDescription": "Embeddable",
-            "longDescription": "Indicator embeddable classes"
+            "longDescription": "Embeddable",
+            "fieldText": "Indicator embeddable classes"
         },
         {
             "name": "clsabstrct",
@@ -110,7 +123,8 @@
             "length": 1,
             "shortDescription": "Abstract",
             "mediumDescription": "Abstract",
-            "longDescription": "Flag for abstract class or method"
+            "longDescription": "Abstract",
+            "fieldText": "Flag for abstract class or method"
         },
         {
             "name": "clsfinal",
@@ -118,13 +132,14 @@
             "length": 1,
             "shortDescription": "Final",
             "mediumDescription": "Final",
-            "longDescription": "Flag for final class/method"
+            "longDescription": "Final",
+            "fieldText": "Flag for final class/method"
         },
         {
             "name": "clsccincl",
             "type": "String",
             "length": 1,
-            "longDescription": "Flags new include structure for local types"
+            "fieldText": "Flags new include structure for local types"
         },
         {
             "name": "clsdefatt",
@@ -132,7 +147,8 @@
             "length": 61,
             "shortDescription": "Int. Comp.",
             "mediumDescription": "Interface Comp.",
-            "longDescription": "Full Component Name"
+            "longDescription": "Interface Component",
+            "fieldText": "Full Component Name"
         },
         {
             "name": "clsdefmtd",
@@ -140,22 +156,24 @@
             "length": 61,
             "shortDescription": "Int. Comp.",
             "mediumDescription": "Interface Comp.",
-            "longDescription": "Full Component Name"
+            "longDescription": "Interface Component",
+            "fieldText": "Full Component Name"
         },
         {
             "name": "refclsname",
             "type": "String",
             "length": 30,
-            "longDescription": "DD: Name of a structured object (e.g. entity, context)"
+            "fieldText": "DD: Name of a structured object (e.g. entity, context)"
         },
-        { "name": "fixpt", "type": "String", "length": 1, "longDescription": "Fixed point arithmetic" },
+        { "name": "fixpt", "type": "String", "length": 1, "fieldText": "Fixed point arithmetic" },
         {
             "name": "varcl",
             "type": "String",
             "length": 1,
             "shortDescription": "Case",
             "mediumDescription": "Case-Sensitive",
-            "longDescription": "Case-Sensitive"
+            "longDescription": "Case-Sensitive",
+            "fieldText": "Case-Sensitive"
         },
         {
             "name": "unicode",
@@ -163,16 +181,18 @@
             "length": 1,
             "shortDescription": "Version",
             "mediumDescription": "ABAP Version",
-            "longDescription": "ABAP Version"
+            "longDescription": "ABAP Version",
+            "fieldText": "ABAP Version"
         },
-        { "name": "rstat", "type": "String", "length": 1, "longDescription": "Status" },
+        { "name": "rstat", "type": "String", "length": 1, "fieldText": "Status" },
         {
             "name": "clsbcimpl",
             "type": "String",
             "length": 30,
             "shortDescription": "Obj. Type",
             "mediumDescription": "Type Name",
-            "longDescription": "Object Type Name"
+            "longDescription": "Class/Interface",
+            "fieldText": "Object Type Name"
         },
         {
             "name": "r3release",
@@ -180,7 +200,8 @@
             "length": 10,
             "shortDescription": "Release",
             "mediumDescription": "SAP Release",
-            "longDescription": "SAP Release"
+            "longDescription": "SAP Release",
+            "fieldText": "SAP Release"
         },
         {
             "name": "clsbctrans",
@@ -188,7 +209,8 @@
             "length": 1,
             "shortDescription": "Transient",
             "mediumDescription": "Transient",
-            "longDescription": "Indicator: Transient Business Class"
+            "longDescription": "Transient Business Class",
+            "fieldText": "Indicator: Transient Business Class"
         },
         {
             "name": "clsbccat",
@@ -196,7 +218,8 @@
             "length": 2,
             "shortDescription": "Category",
             "mediumDescription": "Class Category",
-            "longDescription": "Category of Business Class"
+            "longDescription": "Business Class Category",
+            "fieldText": "Category of Business Class"
         },
         {
             "name": "clsaddon",
@@ -204,16 +227,18 @@
             "length": 30,
             "shortDescription": "Obj. Type",
             "mediumDescription": "Type Name",
-            "longDescription": "Object Type Name"
+            "longDescription": "Class/Interface",
+            "fieldText": "Object Type Name"
         },
-        { "name": "msg_id", "type": "String", "length": 20, "longDescription": "MESSAGE-ID from PROGRAM statement" },
+        { "name": "msg_id", "type": "String", "length": 20, "fieldText": "MESSAGE-ID from PROGRAM statement" },
         {
             "name": "clsproxy",
             "type": "String",
             "length": 1,
             "shortDescription": "Proxy",
             "mediumDescription": "Proxy Class",
-            "longDescription": "Category of the Proxy Class"
+            "longDescription": "Proxy Class",
+            "fieldText": "Category of the Proxy Class"
         },
         {
             "name": "clssharedmemory",
@@ -221,22 +246,25 @@
             "length": 1,
             "shortDescription": "SHM",
             "mediumDescription": "SHM-Enabled",
-            "longDescription": "Flag: Is Class Shared-Memory-Enabled?"
+            "longDescription": "SHM-Enabled",
+            "fieldText": "Flag: Is Class Shared-Memory-Enabled?"
         },
-        { "name": "with_unit_tests", "type": "String", "length": 1, "longDescription": "General Indicator" },
+        { "name": "with_unit_tests", "type": "String", "length": 1, "fieldText": "General Indicator" },
         {
             "name": "duration_type",
             "type": "Byte",
             "isNumeric": true,
             "length": 3,
-            "longDescription": "Upper limit of runtime category (\"SHORT\", \"MEDIUM\", .. )"
+            "longDescription": "Runtime limit",
+            "fieldText": "Upper limit of runtime category (\"SHORT\", \"MEDIUM\", .. )"
         },
         {
             "name": "risk_level",
             "type": "Byte",
             "isNumeric": true,
             "length": 3,
-            "longDescription": "Upper limit of risk level"
+            "longDescription": "Limit of Risk Level",
+            "fieldText": "Upper limit of risk level"
         },
         {
             "name": "within_package",
@@ -244,7 +272,8 @@
             "length": 1,
             "shortDescription": "PackgeFlag",
             "mediumDescription": "Open for Package",
-            "longDescription": "Class Opened for Package"
+            "longDescription": "Open for Package",
+            "fieldText": "Class Opened for Package"
         }
     ]
 }

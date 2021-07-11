@@ -70,6 +70,10 @@ export interface EntityColMetadata {
      */
     name: string;
     /**
+     * Indicates if the field is a key field
+     */
+    isKey?: boolean;
+    /**
      * The data type of the column
      */
     type: string; // use enum
@@ -90,9 +94,25 @@ export interface EntityColMetadata {
      */
     longDescription?: string;
     /**
+     * The DDIC description for the column
+     */
+    fieldText?: string;
+    /**
      * The description for the ui.
      */
     description?: string;
+    /**
+     * Indicates if the field is filterable
+     */
+    filterable?: boolean;
+    /**
+     * Indicates if the field is sortable
+     */
+    sortable?: boolean;
+    /**
+     * Indicates if the field is a technical field and should not be displayed
+     */
+    technical?: boolean;
 }
 
 export type DataRow = Record<string, unknown>;
@@ -105,4 +125,36 @@ export interface DataPreview {
      * The actual retrieved data rows
      */
     rows: DataRow[];
+}
+
+export interface ValueHelpMetadata {
+    /**
+     * The targeted field of a DB entity
+     */
+    targetField: string;
+    /**
+     * The type of the value help
+     */
+    type: "Domain" | "Entity";
+    /**
+     * Identifier of field that is to be used as the token key
+     */
+    tokenKeyField: string;
+    /**
+     * Identifier of field that is to be used as the token description
+     */
+    tokenDescriptionField: string;
+    /**
+     * Field metadata for Table/Filters in value help dialog
+     */
+    fields: ValueHelpField[];
+}
+
+/**
+ * Information about field in a Value Help dialog
+ */
+export interface ValueHelpField extends EntityColMetadata {
+    isDescription?: boolean;
+    visible?: boolean;
+    width?: number;
 }

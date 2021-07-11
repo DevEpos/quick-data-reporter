@@ -68,7 +68,8 @@ export default class EntityState extends BaseState<Entity> {
                     const colMeta = entityMetadata.colMetadata[i];
                     colMeta.description =
                         colMeta.mediumDescription ||
-                        (colMeta?.longDescription.length <= 20 && colMeta.longDescription) ||
+                        (colMeta.longDescription?.length <= 20 && colMeta.longDescription) ||
+                        (colMeta.fieldText?.length <= 20 && colMeta.fieldText) ||
                         colMeta.shortDescription ||
                         colMeta.name;
                     this.data.columnsItems.push({
