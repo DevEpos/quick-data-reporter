@@ -10,18 +10,6 @@ import {
     EntityVariant
 } from "./ServiceModel";
 
-export function createDefaultVariant(): EntityVariant {
-    return {
-        key: "*qdrt_standard*",
-        text: "Standard",
-        readOnly: true,
-        global: false,
-        favorite: true,
-        dataString: "",
-        data: {},
-        author: "SAP"
-    };
-}
 /**
  * Describes an entity which is configurable
  */

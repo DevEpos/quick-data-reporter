@@ -43,8 +43,6 @@
                                         useFavorites="true"
                                         showShare="true"
                                         showSetAsDefault="true"
-                                        initialSelectionKey="*standard*"
-                                        defaultVariantKey="*standard*"
                                         showExecuteOnSelection="true"
                                         variantItems="{/variants}">
                                         <vm:variantItems>

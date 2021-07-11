@@ -43,6 +43,10 @@ export default class EntityController extends BaseController {
         this.getView().setModel(this._entityState.getModel());
         this.router.getRoute("entity").attachPatternMatched(this._onEntityMatched, this);
         this.router.getRoute("main").attachPatternMatched(this._onMainMatched, this);
+
+        const variantManagement = this.byId("variantManagement");
+        // this needs to be done to always the standard variant in the Popover
+        (variantManagement as any)?.setStandardFavorite(true);
     }
 
     private _onMainMatched() {
