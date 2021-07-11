@@ -11,12 +11,30 @@ import formatMessage from "sap/base/strings/formatMessage";
 import ListBinding from "sap/ui/model/ListBinding";
 import Filter from "sap/ui/model/Filter";
 import ScrollContainer from "sap/m/ScrollContainer";
+import FilterOperator from "sap/ui/model/FilterOperator";
 
 interface FieldConfig {
     name: string;
     description: string;
-    longDescription: string;
+    tooltip: string;
+    type: string;
     selected: boolean;
+}
+
+export interface SelectedField {
+    name: string;
+    label: string;
+    tooltip: string;
+    type: string;
+}
+
+function mapToSelectedField(fieldConfig: FieldConfig) {
+    return {
+        name: fieldConfig.name,
+        label: fieldConfig.description,
+        type: fieldConfig.type,
+        tooltip: fieldConfig.tooltip
+    };
 }
 
 class PopoverModel {
@@ -34,8 +52,8 @@ class PopoverModel {
         }
         return selectedItemCount;
     }
-    get selectedFields(): string[] {
-        return this.fields.filter(f => f.selected).map(f => f.name);
+    get selectedFields(): SelectedField[] {
+        return this.fields.filter(f => f.selected).map(f => mapToSelectedField(f));
     }
 }
 
@@ -54,7 +72,7 @@ export default class AddQuickFiltersPopover {
     private _model: JSONModel;
     private _searchTimer: number;
     private _fieldList: List;
-    private _popoverPromise: { resolve: (selectedFields: string[]) => void };
+    private _popoverPromise: { resolve: (selectedFields: SelectedField[]) => void };
     private _scroller: ScrollContainer;
 
     constructor(entityStateData: ReadOnlyStateData<Entity>) {
@@ -66,7 +84,7 @@ export default class AddQuickFiltersPopover {
      * @param sourceButton the button the popover should be opened by
      * @returns Promise with selected field(s)
      */
-    async showPopover(sourceButton: Control): Promise<string[]> {
+    async showPopover(sourceButton: Control): Promise<SelectedField[]> {
         const popover = await this._createPopover();
         popover.setModel(this._model);
         sourceButton.addDependent(popover);
@@ -86,16 +104,16 @@ export default class AddQuickFiltersPopover {
         this._searchTimer = setTimeout(() => {
             const fieldsBinding = this._fieldList.getBinding("items") as ListBinding;
             if (query) {
-                fieldsBinding.filter(new Filter("description", "Contains", query));
+                fieldsBinding.filter(new Filter("description", FilterOperator.Contains, query));
             } else {
                 fieldsBinding.filter([]);
             }
         }, 300);
     }
     onFieldPress(evt: Event): void {
-        const selectedField = ((evt.getSource() as Control)?.getBindingContext()?.getObject() as FieldConfig).name;
+        const selectedFieldConfig = (evt.getSource() as Control)?.getBindingContext()?.getObject() as FieldConfig;
         this._popover.close();
-        this._popoverPromise.resolve([selectedField]);
+        this._popoverPromise.resolve([mapToSelectedField(selectedFieldConfig)]);
     }
     onAcceptSelection(): void {
         this._popover.close();
@@ -111,7 +129,8 @@ export default class AddQuickFiltersPopover {
                 name: colMeta.name,
                 description:
                     colMeta.description === colMeta.name ? colMeta.name : `${colMeta.description} (${colMeta.name})`,
-                longDescription: colMeta.longDescription,
+                tooltip: colMeta.fieldText,
+                type: colMeta.type,
                 selected: false
             });
         }

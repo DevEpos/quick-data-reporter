@@ -2,7 +2,7 @@ import ColumnItem from "../element/ColumnItem";
 import FilterItem from "../element/FilterItem";
 import QuickFilter from "./QuickFilter";
 import StateRegistry from "../state/StateRegistry";
-import AddQuickFiltersPopover from "../helper/AddQuickFilterPopover";
+import AddQuickFiltersPopover, { SelectedField } from "../helper/AddQuickFilterPopover";
 
 import Panel from "sap/m/Panel";
 import ScrollContainer from "sap/m/ScrollContainer";
@@ -116,7 +116,18 @@ export default class SideFilterBar extends Panel {
             }
         }
     }
-    private _createQuickFilter(columnName: string) {
-        return new QuickFilter({ columnName });
+    private _createQuickFilter(filter: SelectedField) {
+        return new QuickFilter({
+            columnName: filter.name,
+            label: filter.label,
+            type: filter.type,
+            tooltip: filter.tooltip,
+            valueHelpRequest: this._onValueHelpRequest.bind(this)
+        });
+    }
+
+    private _onValueHelpRequest(event: Event) {
+        const quickFilter = event.getSource() as QuickFilter;
+        // TODO: show value help dialog
     }
 }

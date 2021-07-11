@@ -45,7 +45,7 @@
                     <items>
                         <StandardListItem title="{description}"
                             selected="{selected}"
-                            tooltip="{longDescription}"
+                            tooltip="{tooltip}"
                             type="Active"
                             press="onFieldPress" />
                     </items>
