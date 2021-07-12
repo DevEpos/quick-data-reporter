@@ -4,6 +4,17 @@ export enum EntityType {
     View = "V"
 }
 
+export enum ValueHelpType {
+    DomainFixValues = "DomainFixValues",
+    DDICSearchHelp = "DDICSearchHelp",
+    CheckTable = "CheckTable",
+    Date = "Date",
+    /**
+     * For future implementations
+     */
+    CdsAnnotation = "CdsAnnotation"
+}
+
 export interface FilterCond {
     columnKey: string;
     operation: string;
@@ -113,6 +124,18 @@ export interface EntityColMetadata {
      * Indicates if the field is a technical field and should not be displayed
      */
     technical?: boolean;
+    /**
+     * Indicates if the field allows case sensitive input
+     */
+    isCaseSensitive?: boolean;
+    /**
+     * Indicates if there is a value help for the field available
+     */
+    hasValueHelp?: boolean;
+    /**
+     * The type of the defined value help if the property "hasValueHelp" is true
+     */
+    valueHelpType?: ValueHelpType;
 }
 
 export type DataRow = Record<string, unknown>;
@@ -135,7 +158,7 @@ export interface ValueHelpMetadata {
     /**
      * The type of the value help
      */
-    type: "Domain" | "Entity";
+    type: ValueHelpType;
     /**
      * Identifier of field that is to be used as the token key
      */

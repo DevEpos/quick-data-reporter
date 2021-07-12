@@ -2,21 +2,27 @@
     "colMetadata": [
         {
             "name": "clsname",
+            "isKey": true,
             "type": "String",
             "length": 30,
             "shortDescription": "Obj. Type",
             "mediumDescription": "Type Name",
             "longDescription": "Class/Interface",
-            "fieldText": "Object Type Name"
+            "fieldText": "Object Type Name",
+            "hasValueHelp": true,
+            "valueHelpType": "CheckTable"
         },
         {
             "name": "version",
+            "isKey": true,
             "type": "String",
             "length": 1,
             "shortDescription": "V",
             "mediumDescription": "Version",
             "longDescription": "Version",
-            "fieldText": "Version indicator (active/inactive)"
+            "fieldText": "Version indicator (active/inactive)",
+            "hasValueHelp": true,
+            "valueHelpType": "DomainFixValues"
         },
         {
             "name": "category",
@@ -25,7 +31,9 @@
             "shortDescription": "Category",
             "mediumDescription": "Category",
             "longDescription": "Category",
-            "fieldText": "Class/Interface category"
+            "fieldText": "Class/Interface category",
+            "hasValueHelp": true,
+            "valueHelpType": "DomainFixValues"
         },
         {
             "name": "exposure",
@@ -34,7 +42,9 @@
             "shortDescription": "Visible",
             "mediumDescription": "Visibility",
             "longDescription": "Visibility",
-            "fieldText": "Visibility of a class or component"
+            "fieldText": "Visibility of a class or component",
+            "hasValueHelp": true,
+            "valueHelpType": "DomainFixValues"
         },
         {
             "name": "state",
@@ -43,7 +53,9 @@
             "shortDescription": "Status",
             "mediumDescription": "Status",
             "longDescription": "Status",
-            "fieldText": "Status of a class or component"
+            "fieldText": "Status of a class or component",
+            "hasValueHelp": true,
+            "valueHelpType": "DomainFixValues"
         },
         {
             "name": "release",
@@ -52,7 +64,9 @@
             "shortDescription": "Release",
             "mediumDescription": "Release",
             "longDescription": "Release",
-            "fieldText": "Release status of a class"
+            "fieldText": "Release status of a class",
+            "hasValueHelp": true,
+            "valueHelpType": "DomainFixValues"
         },
         {
             "name": "author",
@@ -70,7 +84,9 @@
             "shortDescription": "Created On",
             "mediumDescription": "Created On",
             "longDescription": "Created On",
-            "fieldText": "Created On"
+            "fieldText": "Created On",
+            "hasValueHelp": true,
+            "valueHelpType": "Date"
         },
         {
             "name": "changedby",
@@ -88,7 +104,9 @@
             "shortDescription": "Changed on",
             "mediumDescription": "Changed on",
             "longDescription": "Changed On",
-            "fieldText": "Changed On"
+            "fieldText": "Changed On",
+            "hasValueHelp": true,
+            "valueHelpType": "Date"
         },
         {
             "name": "chgdanyby",
@@ -106,11 +124,13 @@
             "shortDescription": "Changed on",
             "mediumDescription": "Changed on",
             "longDescription": "Changed On",
-            "fieldText": "Changed On"
+            "fieldText": "Changed On",
+            "hasValueHelp": true,
+            "valueHelpType": "Date"
         },
         {
             "name": "clsembed",
-            "type": "String",
+            "type": "Boolean",
             "length": 1,
             "shortDescription": "Embeddable",
             "mediumDescription": "Embeddable",
@@ -119,7 +139,7 @@
         },
         {
             "name": "clsabstrct",
-            "type": "String",
+            "type": "Boolean",
             "length": 1,
             "shortDescription": "Abstract",
             "mediumDescription": "Abstract",
@@ -128,7 +148,7 @@
         },
         {
             "name": "clsfinal",
-            "type": "String",
+            "type": "Boolean",
             "length": 1,
             "shortDescription": "Final",
             "mediumDescription": "Final",
@@ -137,7 +157,7 @@
         },
         {
             "name": "clsccincl",
-            "type": "String",
+            "type": "Boolean",
             "length": 1,
             "fieldText": "Flags new include structure for local types"
         },
@@ -165,10 +185,10 @@
             "length": 30,
             "fieldText": "DD: Name of a structured object (e.g. entity, context)"
         },
-        { "name": "fixpt", "type": "String", "length": 1, "fieldText": "Fixed point arithmetic" },
+        { "name": "fixpt", "type": "Boolean", "length": 1, "fieldText": "Fixed point arithmetic" },
         {
             "name": "varcl",
-            "type": "String",
+            "type": "Boolean",
             "length": 1,
             "shortDescription": "Case",
             "mediumDescription": "Case-Sensitive",
@@ -182,9 +202,19 @@
             "shortDescription": "Version",
             "mediumDescription": "ABAP Version",
             "longDescription": "ABAP Version",
-            "fieldText": "ABAP Version"
+            "fieldText": "ABAP Version",
+            "hasValueHelp": true,
+            "isCaseSensitive": true,
+            "valueHelpType": "DomainFixValues"
         },
-        { "name": "rstat", "type": "String", "length": 1, "fieldText": "Status" },
+        {
+            "name": "rstat",
+            "type": "String",
+            "length": 1,
+            "fieldText": "Status",
+            "hasValueHelp": true,
+            "valueHelpType": "DomainFixValues"
+        },
         {
             "name": "clsbcimpl",
             "type": "String",
@@ -205,7 +235,7 @@
         },
         {
             "name": "clsbctrans",
-            "type": "String",
+            "type": "Boolean",
             "length": 1,
             "shortDescription": "Transient",
             "mediumDescription": "Transient",
@@ -219,8 +249,11 @@
             "shortDescription": "Category",
             "mediumDescription": "Class Category",
             "longDescription": "Business Class Category",
-            "fieldText": "Category of Business Class"
+            "fieldText": "Category of Business Class",
+            "hasValueHelp": true,
+            "valueHelpType": "DomainFixValues"
         },
+        { "name": "clsbcnodel", "type": "String", "length": 1, "fieldText": "Directly Implemented Business Class" },
         {
             "name": "clsaddon",
             "type": "String",
@@ -238,25 +271,29 @@
             "shortDescription": "Proxy",
             "mediumDescription": "Proxy Class",
             "longDescription": "Proxy Class",
-            "fieldText": "Category of the Proxy Class"
+            "fieldText": "Category of the Proxy Class",
+            "hasValueHelp": true,
+            "valueHelpType": "DomainFixValues"
         },
         {
             "name": "clssharedmemory",
-            "type": "String",
+            "type": "Boolean",
             "length": 1,
             "shortDescription": "SHM",
             "mediumDescription": "SHM-Enabled",
             "longDescription": "SHM-Enabled",
             "fieldText": "Flag: Is Class Shared-Memory-Enabled?"
         },
-        { "name": "with_unit_tests", "type": "String", "length": 1, "fieldText": "General Indicator" },
+        { "name": "with_unit_tests", "type": "Boolean", "length": 1, "fieldText": "General Indicator" },
         {
             "name": "duration_type",
             "type": "Byte",
             "isNumeric": true,
             "length": 3,
             "longDescription": "Runtime limit",
-            "fieldText": "Upper limit of runtime category (\"SHORT\", \"MEDIUM\", .. )"
+            "fieldText": "Upper limit of runtime category (\"SHORT\", \"MEDIUM\", .. )",
+            "hasValueHelp": true,
+            "valueHelpType": "DomainFixValues"
         },
         {
             "name": "risk_level",
@@ -264,11 +301,13 @@
             "isNumeric": true,
             "length": 3,
             "longDescription": "Limit of Risk Level",
-            "fieldText": "Upper limit of risk level"
+            "fieldText": "Upper limit of risk level",
+            "hasValueHelp": true,
+            "valueHelpType": "DomainFixValues"
         },
         {
             "name": "within_package",
-            "type": "String",
+            "type": "Boolean",
             "length": 1,
             "shortDescription": "PackgeFlag",
             "mediumDescription": "Open for Package",
