@@ -80,7 +80,8 @@
                     </Panel>
                 </app:content>
                 <app:sideContent>
-                    <app:SideFilterBar />
+                    <!-- Create panel for CDS parameters-->
+                    <app:SideFilterPanel headerText="{i18n>entity_sideFilterPanel_title}"/>
                 </app:sideContent>
             </app:ToggleableSideContent>
         </f:content>

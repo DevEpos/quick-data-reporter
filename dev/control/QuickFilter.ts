@@ -43,7 +43,7 @@ export interface QuickFilterSettings extends $ControlSettings {
 }
 
 /**
- * Quick Filter in {@link devepos.qdrt.control.SideFilterBar}
+ * Quick Filter in {@link devepos.qdrt.control.SideFilterPanel}
  *
  * @namespace devepos.qdrt.control
  */
@@ -119,7 +119,7 @@ export default class QuickFilter extends Control {
 
     private _filterName: Label;
     private _filterControl: Control;
-    private _updatedProperties: boolean;
+    private _filterNameUpdateRequired = true;
     private _filterCont: VerticalLayout;
 
     constructor(settings: QuickFilterSettings) {
@@ -134,11 +134,10 @@ export default class QuickFilter extends Control {
     getSingleValueOnly?(): boolean;
     setSingleValueOnly?(singleValueOnly: boolean): this;
     getRequired?(): boolean;
-    setRequired?(required: boolean): this;
     //#endregion
 
     init(): void {
-        this._filterName = new Label({ required: this.getRequired() });
+        this._filterName = new Label();
         this._filterCont = new VerticalLayout({
             width: "100%",
             content: [
@@ -149,7 +148,7 @@ export default class QuickFilter extends Control {
                         this._filterName,
                         new Button({
                             icon: "sap-icon://decline",
-                            tooltip: "{i18n>entity_sideFilterBar_filter_delete}",
+                            tooltip: "{i18n>entity_quickFilter_delete}",
                             type: ButtonType.Transparent,
                             press: () => {
                                 this.destroy();
@@ -168,23 +167,28 @@ export default class QuickFilter extends Control {
         super.destroy.apply(this);
         sap.ui.getCore().detachThemeChanged(this._onThemeChanged, this);
     }
+    setRequired(required: boolean): this {
+        this.setProperty("required", required);
+        this._filterNameUpdateRequired = true;
+        return this;
+    }
     setColumnName(columnName: string): this {
         this.setProperty("columnName", columnName);
 
-        this._updatedProperties = true;
+        this._filterNameUpdateRequired = true;
         return this;
     }
 
     setLabel(label: string): this {
         this.setProperty("label", label);
 
-        this._updatedProperties = true;
+        this._filterNameUpdateRequired = true;
         return this;
     }
 
     setTooltip(tooltip: string): this {
         super.setTooltip(tooltip);
-        this._updatedProperties = true;
+        this._filterNameUpdateRequired = true;
         return this;
     }
 
@@ -199,20 +203,10 @@ export default class QuickFilter extends Control {
             this._filterCont.addContent(this._filterControl);
         }
 
-        if (this._updatedProperties) {
-            const label = this.getLabel();
-            const columnName = this.getColumnName();
-            if (label !== "") {
-                this._filterName?.setText(label);
-            } else {
-                this._filterName?.setText(columnName);
-            }
-
-            const tooltip = this.getTooltip();
-            this._filterName?.setTooltip(tooltip);
+        if (this._filterNameUpdateRequired) {
+            this._updateFilterName();
+            this._filterNameUpdateRequired = false;
         }
-
-        this._updatedProperties = false;
     }
     private _attachEventHandlers() {
         if (this._filterControl instanceof MultiInput) {
@@ -224,6 +218,21 @@ export default class QuickFilter extends Control {
                 this
             );
         }
+    }
+
+    private _updateFilterName() {
+        const label = this.getLabel();
+        const columnName = this.getColumnName();
+        if (label !== "") {
+            this._filterName?.setText(label);
+        } else {
+            this._filterName?.setText(columnName);
+        }
+
+        const tooltip = this.getTooltip();
+        this._filterName?.setTooltip(tooltip);
+
+        this._filterName.setRequired(this.getRequired());
     }
 
     private _createControl(): Control {

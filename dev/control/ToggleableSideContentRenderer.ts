@@ -98,7 +98,9 @@ class ToggleableSideContentRenderer {
 
         const sideContentControls = toggleableSideContent.getSideContent();
         for (const sideContentControl of sideContentControls) {
-            rm.renderControl(sideContentControl);
+            if (sideContentControl.getVisible()) {
+                rm.renderControl(sideContentControl);
+            }
         }
 
         // close side filter
