@@ -1,15 +1,16 @@
 import Control, { $ControlSettings } from "sap/ui/core/Control";
 import Button from "sap/m/Button";
 import MultiInput from "sap/m/MultiInput";
-import Text from "sap/m/Text";
 import FlexBox from "sap/m/FlexBox";
 import VerticalLayout from "sap/ui/layout/VerticalLayout";
 import RenderManager from "sap/ui/core/RenderManager";
 import { ButtonType, FlexAlignItems, FlexJustifyContent } from "sap/m/library";
 import Item from "sap/ui/core/Item";
-import MultiComboBox from "sap/m/MultiComboBox";
 import Token from "sap/m/Token";
 import Parameters from "sap/ui/core/theming/Parameters";
+import Label from "sap/m/Label";
+import ComboBox from "sap/m/ComboBox";
+import Input from "sap/m/Input";
 
 /**
  * Control settings for {@link devepos.qdrt.control.QuickFilter}
@@ -31,6 +32,14 @@ export interface QuickFilterSettings extends $ControlSettings {
      * Gets fired if value help request is triggered on filter control
      */
     valueHelpRequest?: Function;
+    /**
+     * Controls whether only a single value can be entered in the filter
+     */
+    singleValueOnly?: boolean;
+    /**
+     * Controls whether a value is required
+     */
+    required?: boolean;
 }
 
 /**
@@ -62,6 +71,22 @@ export default class QuickFilter extends Control {
             type: {
                 type: "string",
                 group: "Misc"
+            },
+            /**
+             * Controls whether only a single value can be entered in the filter
+             */
+            singleValueOnly: {
+                type: "boolean",
+                group: "Misc",
+                defaultValue: false
+            },
+            /**
+             * Controls whether a value is required
+             */
+            required: {
+                type: "boolean",
+                group: "Misc",
+                defaultValue: false
             }
         },
         aggregations: {
@@ -92,7 +117,7 @@ export default class QuickFilter extends Control {
         }
     };
 
-    private _filterName: Text;
+    private _filterName: Label;
     private _filterControl: Control;
     private _updatedProperties: boolean;
     private _filterCont: VerticalLayout;
@@ -106,10 +131,14 @@ export default class QuickFilter extends Control {
     getLabel?(): string;
     getColumnName?(): string;
     fireValueHelpRequest?(): this;
+    getSingleValueOnly?(): boolean;
+    setSingleValueOnly?(singleValueOnly: boolean): this;
+    getRequired?(): boolean;
+    setRequired?(required: boolean): this;
     //#endregion
 
     init(): void {
-        this._filterName = new Text();
+        this._filterName = new Label({ required: this.getRequired() });
         this._filterCont = new VerticalLayout({
             width: "100%",
             content: [
@@ -201,23 +230,31 @@ export default class QuickFilter extends Control {
         const type = this.getType();
         switch (type) {
             case "Boolean":
-                return new MultiComboBox({
+                return new ComboBox({
                     width: "100%",
                     editable: true,
                     items: [
                         new Item({
-                            key: "X", // should be string form of "true" because deserialization will convert it to "X"/"" anyway??
+                            key: "",
+                            text: ""
+                        }),
+                        new Item({
+                            key: "true",
                             text: "{i18n>booleanType_yes}"
                         }),
                         new Item({
-                            key: "",
+                            key: "false",
                             text: "{i18n>booleanType_no}"
                         })
                     ]
                 });
 
             default:
-                return new MultiInput({ width: "100%" });
+                if (this.getSingleValueOnly()) {
+                    return new Input({ width: "100%" });
+                } else {
+                    return new MultiInput({ width: "100%" });
+                }
         }
     }
 
