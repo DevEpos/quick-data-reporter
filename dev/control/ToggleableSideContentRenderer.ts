@@ -91,12 +91,15 @@ class ToggleableSideContentRenderer {
             return;
         }
         // open side filter
-        rm.openStart("section", toggleableSideContent.getId() + "-sideFilter");
+        rm.openStart("section", toggleableSideContent.getId() + "-sideContent");
         rm.class("deveposQdrt-ToggleableSideContent__SideContent");
         rm.style("width", width);
         rm.openEnd();
 
-        rm.renderControl(toggleableSideContent.getSideContent());
+        const sideContentControls = toggleableSideContent.getSideContent();
+        for (const sideContentControl of sideContentControls) {
+            rm.renderControl(sideContentControl);
+        }
 
         // close side filter
         rm.close("section");

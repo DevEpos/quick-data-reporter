@@ -33,7 +33,7 @@ export default class ToggleableSideContent extends Control {
             /**
              * The side control
              */
-            sideContent: { type: "sap.ui.core.Control", multiple: false, singularName: "sideContent" }
+            sideContent: { type: "sap.ui.core.Control", multiple: true, singularName: "sideContent" }
         },
         events: {}
     };
@@ -47,9 +47,11 @@ export default class ToggleableSideContent extends Control {
     setSideContentWidth?(width: CSSSize): this;
     getSideContentPosition?(): SideContentPosition;
     setSideContentPosition?(position: SideContentPosition): this;
-    getSideContent?(): Control;
+    getSideContent?(): Control[];
     setSideContent?(sideContent: Control): this;
     getContent?(): Control;
+    addSideContent?(control: Control): this;
+    removeAllSideContent?(): this;
     setContent?(content: Control): this;
     //#endregion
 }
