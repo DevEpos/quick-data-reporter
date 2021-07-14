@@ -1,5 +1,12 @@
 import ajaxUtil from "./ajaxUtil";
-import { DataPreview, DbEntity, EntityMetadata, EntityVariant } from "../model/ServiceModel";
+import {
+    DataPreview,
+    DbEntity,
+    EntityMetadata,
+    EntityVariant,
+    EntityType,
+    ValueHelpMetadata
+} from "../model/ServiceModel";
 
 const BASE_SRV_URL = "/sap/zqdrtrest/entities";
 const SUB_ENTITY_SRV_URL = `${BASE_SRV_URL}/{type}/{name}`;
@@ -37,6 +44,25 @@ export default class EntityService {
             {
                 method: "POST",
                 csrfToken
+            }
+        );
+        return response?.data;
+    }
+
+    /**
+     * Retrieves value help metadata for a field in a DB entity
+     *
+     * @param entityName the name of an entity (DB table/DB view/CDS view)
+     * @param entityType the type of the entity
+     * @param field the name of the field for which the value help metatdata should be retrieved
+     * @returns promise with metadata result of the found valuehelp
+     */
+    async getValueHelpMetadata(entityName: string, entityType: EntityType, field: string): Promise<ValueHelpMetadata> {
+        const response = await ajaxUtil.send(
+            `${SUB_ENTITY_SRV_URL.replace("{type}", entityType).replace("{name}", entityName)}/valueHelpMetadata`,
+            {
+                method: "GET",
+                data: { field }
             }
         );
         return response?.data;

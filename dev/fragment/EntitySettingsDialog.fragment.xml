@@ -24,7 +24,7 @@
             </P13nColumnsPanel>
             <P13nSortPanel id="sortPanel"
                 items="{/allColumnsItems}"
-                sortItems="{/sortItems}"
+                sortItems="{/sortCond}"
                 addSortItem="onSortItemUpdate"
                 updateSortItem="onSortItemUpdate"
                 removeSortItem="onSortItemUpdate">
@@ -38,7 +38,7 @@
                 </sortItems>
             </P13nSortPanel>
             <P13nGroupPanel id="groupPanel"
-                groupItems="{/aggregationItems}"
+                groupItems="{/aggregationCond}"
                 addGroupItem="onGroupItemUpdate"
                 updateGroupItem="onGroupItemUpdate"
                 removeGroupItem="onGroupItemUpdate"

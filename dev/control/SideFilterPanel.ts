@@ -142,8 +142,11 @@ export default class SideFilterPanel extends Panel {
         });
     }
 
-    private _onValueHelpRequest(event: Event) {
+    private async _onValueHelpRequest(event: Event) {
         const quickFilter = event.getSource() as QuickFilter;
         // TODO: show value help dialog
+
+        // Get the value help metadata information for the filter field
+        // StateRegistry.getEntityState().getFieldValueHelpInfo(quickFilter.getColumnName());
     }
 }

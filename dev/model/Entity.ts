@@ -7,7 +7,8 @@ import {
     ColumnConfig,
     AggregationCond,
     EntityColMetadata,
-    EntityVariant
+    EntityVariant,
+    ValueHelpMetadata
 } from "./ServiceModel";
 
 /**
@@ -21,7 +22,7 @@ export interface ConfigurableEntity {
     /**
      * Current sort items
      */
-    sortItems: SortCond[];
+    sortCond: SortCond[];
     /**
      * Current column configuration
      */
@@ -29,7 +30,7 @@ export interface ConfigurableEntity {
     /**
      * Current group items
      */
-    aggregationItems: AggregationCond[];
+    aggregationCond: AggregationCond[];
 }
 
 /**
@@ -49,6 +50,10 @@ export default class Entity implements ConfigurableEntity {
      */
     metadata: EntityMetadata = { colMetadata: [] };
     /**
+     * Value help metadata for each field where a value help is defined
+     */
+    valueHelpMetadata: Record<string, ValueHelpMetadata> = {};
+    /**
      * List of variants of the entity
      */
     variants?: EntityVariant[] = [];
@@ -57,9 +62,9 @@ export default class Entity implements ConfigurableEntity {
      */
     rows: DataRow[] = [];
     filterItems: FilterCond[] = [];
-    sortItems: SortCond[] = [];
+    sortCond: SortCond[] = [];
     columnsItems: ColumnConfig[] = [];
-    aggregationItems: AggregationCond[] = [];
+    aggregationCond: AggregationCond[] = [];
     /**
      * Returns all visible columns
      */

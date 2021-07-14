@@ -6,7 +6,8 @@ export enum EntityType {
 
 export enum ValueHelpType {
     DomainFixValues = "DomainFixValues",
-    DDICSearchHelp = "DDICSearchHelp",
+    SimpleDDICSearchHelp = "SimpleDDICSearchHelp",
+    CollectiveDDICSearchHelp = "CollectiveDDICSearchHelp",
     CheckTable = "CheckTable",
     Date = "Date",
     /**
@@ -53,9 +54,9 @@ export interface DbEntity {
 
 export interface EntityVariantData {
     columnItems?: ColumnConfig[];
-    sortItems?: SortCond[];
-    aggregationItems?: AggregationCond[];
-    filterItems?: FilterCond[];
+    sortCond?: SortCond[];
+    aggregationCond?: AggregationCond[];
+    filterCond?: FilterCond[];
 }
 
 export interface EntityVariant {
@@ -150,15 +151,39 @@ export interface DataPreview {
     rows: DataRow[];
 }
 
-export interface ValueHelpMetadata {
+/**
+ * Information about field in a Value Help dialog
+ */
+export interface ValueHelpField extends EntityColMetadata {
+    isDescription?: boolean;
+    visible?: boolean;
+    width?: number;
+}
+
+interface ValueHelpInfo {
     /**
-     * The targeted field of a DB entity
+     * The name of the value help. Depending on the type of the value help
+     * this can be either a domain, a check table or the name of DDIC search help
      */
-    targetField: string;
+    valueHelpName: string;
     /**
      * The type of the value help
      */
     type: ValueHelpType;
+    /**
+     * Field metadata for Table/Filters in value help dialog
+     */
+    fields: ValueHelpField[];
+}
+
+/**
+ * Metadata of a value help for a field in an entity
+ */
+export interface ValueHelpMetadata extends ValueHelpInfo {
+    /**
+     * The targeted field of a DB entity
+     */
+    targetField: string;
     /**
      * Identifier of field that is to be used as the token key
      */
@@ -167,17 +192,22 @@ export interface ValueHelpMetadata {
      * Identifier of field that is to be used as the token description
      */
     tokenDescriptionField: string;
-    /**
-     * Field metadata for Table/Filters in value help dialog
-     */
-    fields: ValueHelpField[];
 }
 
 /**
- * Information about field in a Value Help dialog
+ * Describes a request to retrieve data via value help
  */
-export interface ValueHelpField extends EntityColMetadata {
-    isDescription?: boolean;
-    visible?: boolean;
-    width?: number;
+export interface ValueHelpRequest extends ValueHelpInfo {
+    /**
+     * Optional array of filter conditions
+     */
+    filters?: FilterCond[];
+    /**
+     * Optional array of sort items
+     */
+    sortCond?: SortCond[];
+    /**
+     * The maximum number of rows to retrieve
+     */
+    maxRows?: number;
 }

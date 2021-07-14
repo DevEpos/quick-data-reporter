@@ -79,6 +79,13 @@ export default class MockServer {
                 response: (xhr: SinonFakeXMLHttpRequest) => {
                     this._getMockdata(xhr, "entityvariants");
                 }
+            },
+            {
+                method: "GET",
+                path: /entities\/(.*)\/(.*)\/valueHelpMetadata.*/,
+                response: (xhr: SinonFakeXMLHttpRequest) => {
+                    this._getMockdata(xhr, "valueHelpMetadata");
+                }
             }
         ]);
         this._mockServer.start();

@@ -1,5 +1,5 @@
 import Entity, { ConfigurableEntity } from "../model/Entity";
-import { EntityType, EntityMetadata, DataRow, ColumnConfig } from "../model/ServiceModel";
+import { EntityType, EntityMetadata, DataRow, ColumnConfig, ValueHelpMetadata } from "../model/ServiceModel";
 import EntityService from "../service/EntityService";
 import BaseState from "./BaseState";
 
@@ -15,8 +15,8 @@ export default class EntityState extends BaseState<Entity> {
     }
     setConfiguration(newSettings: ConfigurableEntity): void {
         this.data.columnsItems = newSettings?.columnsItems;
-        this.data.aggregationItems = newSettings?.aggregationItems;
-        this.data.sortItems = newSettings?.sortItems;
+        this.data.aggregationCond = newSettings?.aggregationCond;
+        this.data.sortCond = newSettings?.sortCond;
         this.updateModel();
     }
     setColumnsItems(columnsItems: ColumnConfig[]): void {
@@ -86,15 +86,24 @@ export default class EntityState extends BaseState<Entity> {
         }
         return this.data.metadata;
     }
+    /**
+     * Retrieves value help metadata for the given field
+     * @param fieldName name of a field in the current entity
+     * @returns promise with value help meta data
+     */
+    async getFieldValueHelpInfo(fieldName: string): Promise<ValueHelpMetadata> {
+        return this._entityService.getValueHelpMetadata(this.data.name, this.data.type, fieldName);
+    }
     reset(): void {
         this.data.type = null;
         this.data.name = null;
-        this.data.aggregationItems.length = 0;
-        this.data.sortItems.length = 0;
+        this.data.aggregationCond.length = 0;
+        this.data.sortCond.length = 0;
         this.data.filterItems.length = 0;
         this.data.columnsItems.length = 0;
         this.data.variants.length = 0;
         this.data.rows.length = 0;
+        this.data.valueHelpMetadata = {};
         const colMetadata = this.data.metadata?.colMetadata;
         if (colMetadata) {
             colMetadata.length = 0;

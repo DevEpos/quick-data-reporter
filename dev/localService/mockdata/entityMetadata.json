@@ -75,7 +75,9 @@
             "shortDescription": "Created By",
             "mediumDescription": "Created By",
             "longDescription": "Created By",
-            "fieldText": "Author"
+            "fieldText": "Author",
+            "hasValueHelp": true,
+            "valueHelpType": "SimpleDDICSearchHelp"
         },
         {
             "name": "createdon",

@@ -16,8 +16,8 @@ type SettingsModelData = {
     columnMetadata: EntityColMetadata[];
     allColumnsItems: EntityColMetadata[];
     columnsItems: ColumnConfig[];
-    sortItems: SortCond[];
-    aggregationItems: AggregationCond[];
+    sortCond: SortCond[];
+    aggregationCond: AggregationCond[];
 };
 /**
  * Table settings for a database entity
@@ -94,8 +94,8 @@ export default class EntityTableSettings {
             columnMetadata: this._modelCurrentState.columnMetadata,
             allColumnsItems: [...this._modelCurrentState.columnMetadata],
             columnsItems: [],
-            sortItems: [],
-            aggregationItems: []
+            sortCond: [],
+            aggregationCond: []
         };
         let colIndex = 0;
         for (const column of this._modelCurrentState.columnMetadata) {
@@ -114,9 +114,9 @@ export default class EntityTableSettings {
     onChangeColumnsItems(event: Event): void {
         const modelData = this._model.getData() as SettingsModelData;
         modelData.columnsItems = event.getParameter("items");
-        if (modelData.aggregationItems?.length > 0) {
+        if (modelData.aggregationCond?.length > 0) {
             for (const colItem of modelData.columnsItems) {
-                const groupItem = modelData.aggregationItems.find(item => item.columnKey === colItem.columnKey);
+                const groupItem = modelData.aggregationCond.find(item => item.columnKey === colItem.columnKey);
                 if (groupItem) {
                     groupItem.showIfGrouped = colItem.visible;
                 }
@@ -127,9 +127,9 @@ export default class EntityTableSettings {
     onSortItemUpdate(): void {
         const modelData = this._model.getData() as SettingsModelData;
         const sortConditions = this._sortCondPanel?.getConditions() || [];
-        modelData.sortItems.length = 0;
+        modelData.sortCond.length = 0;
         for (const sortCond of sortConditions) {
-            modelData.sortItems.push({
+            modelData.sortCond.push({
                 columnKey: (sortCond as any).keyField,
                 sortDirection: (sortCond as any).operation
             });
@@ -139,19 +139,19 @@ export default class EntityTableSettings {
     onGroupItemUpdate(): void {
         const modelData = this._model.getData() as SettingsModelData;
         const groupConditions = this._groupCondPanel?.getConditions();
-        modelData.sortItems.length = 0;
-        modelData.aggregationItems.length = 0;
+        modelData.sortCond.length = 0;
+        modelData.aggregationCond.length = 0;
         if (groupConditions?.length > 0) {
             const updatedColumns = [];
             const groupFieldKeys: string[] = [];
             for (const groupCondItem of groupConditions) {
                 let index = 0;
                 const keyField = (groupCondItem as any).keyField;
-                modelData.aggregationItems.push({
+                modelData.aggregationCond.push({
                     columnKey: keyField,
                     showIfGrouped: (groupCondItem as any).showIfGrouped
                 });
-                modelData.sortItems.push({
+                modelData.sortCond.push({
                     columnKey: keyField,
                     sortDirection: P13nConditionOperation.Ascending
                 });
@@ -193,11 +193,11 @@ export default class EntityTableSettings {
             columnMetadata: state.metadata.colMetadata,
             allColumnsItems: [],
             columnsItems: [...state.columnsItems],
-            sortItems: [...state.sortItems] || [],
-            aggregationItems: [...state.aggregationItems] || []
+            sortCond: [...state.sortCond] || [],
+            aggregationCond: [...state.aggregationCond] || []
         };
-        if (this._modelCurrentState.aggregationItems?.length > 0) {
-            const aggrItemKeys = this._modelCurrentState.aggregationItems.map(aggrItem => aggrItem.columnKey);
+        if (this._modelCurrentState.aggregationCond?.length > 0) {
+            const aggrItemKeys = this._modelCurrentState.aggregationCond.map(aggrItem => aggrItem.columnKey);
             this._modelCurrentState.allColumnsItems = this._modelCurrentState.columnMetadata.filter(colItem =>
                 aggrItemKeys.includes(colItem.name)
             );
