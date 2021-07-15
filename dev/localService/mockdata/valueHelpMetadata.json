@@ -12,7 +12,9 @@
             "fieldText": "User Name in User Master Record",
             "shortDescription": "User",
             "mediumDescription": "User",
-            "longDescription": "User"
+            "longDescription": "User",
+            "filterable": true,
+            "visible": true
         },
         {
             "name": "mc_namelas",
@@ -21,7 +23,9 @@
             "fieldText": "Last Name in Uppercase for Search Help",
             "shortDescription": "Last name",
             "mediumDescription": "Last name",
-            "longDescription": "Last name"
+            "longDescription": "Last name",
+            "filterable": true,
+            "visible": true
         },
         {
             "name": "mc_namefir",
@@ -30,7 +34,9 @@
             "fieldText": "First Name in Uppercase for Search Help",
             "shortDescription": "First name",
             "mediumDescription": "First name",
-            "longDescription": "First name"
+            "longDescription": "First name",
+            "filterable": true,
+            "visible": true
         },
         {
             "name": "department",
@@ -40,7 +46,9 @@
             "shortDescription": "Department",
             "mediumDescription": "Department",
             "longDescription": "Department",
-            "isCaseSensitive": true
+            "isCaseSensitive": true,
+            "filterable": true,
+            "visible": true
         },
         {
             "name": "building",
@@ -50,7 +58,9 @@
             "shortDescription": "Buildings",
             "mediumDescription": "Building code",
             "longDescription": "Building code",
-            "isCaseSensitive": true
+            "isCaseSensitive": true,
+            "filterable": true,
+            "visible": true
         },
         {
             "name": "roomnumber",
@@ -60,7 +70,9 @@
             "shortDescription": "Room",
             "mediumDescription": "Room Number",
             "longDescription": "Room Number",
-            "isCaseSensitive": true
+            "isCaseSensitive": true,
+            "filterable": true,
+            "visible": true
         },
         {
             "name": "tel_extens",
@@ -69,7 +81,9 @@
             "fieldText": "First Telephone No.: Extension",
             "shortDescription": "Extension",
             "mediumDescription": "Extension",
-            "longDescription": "Extension"
+            "longDescription": "Extension",
+            "filterable": true,
+            "visible": true
         },
         {
             "name": "kostl",
@@ -78,7 +92,9 @@
             "fieldText": "Cost center",
             "shortDescription": "Cost ctr",
             "mediumDescription": "Cost center",
-            "longDescription": "Cost center"
+            "longDescription": "Cost center",
+            "filterable": true,
+            "visible": true
         },
         {
             "name": "inhouse_ml",
@@ -88,7 +104,9 @@
             "shortDescription": "Internal",
             "mediumDescription": "Internal mail",
             "longDescription": "Internal mail",
-            "isCaseSensitive": true
+            "isCaseSensitive": true,
+            "filterable": true,
+            "visible": true
         },
         {
             "name": "mc_name1",
@@ -97,7 +115,9 @@
             "fieldText": "Name (Field NAME1) in Uppercase for Search Help",
             "shortDescription": "Name",
             "mediumDescription": "Name",
-            "longDescription": "Company name"
+            "longDescription": "Company name",
+            "filterable": true,
+            "visible": true
         },
         {
             "name": "mc_city1",
@@ -106,7 +126,9 @@
             "fieldText": "City name in Uppercase for Search Help",
             "shortDescription": "City",
             "mediumDescription": "City",
-            "longDescription": "City"
+            "longDescription": "City",
+            "filterable": true,
+            "visible": true
         },
         {
             "name": "company",
@@ -115,7 +137,9 @@
             "fieldText": "Company address, cross-system key",
             "shortDescription": "Company",
             "mediumDescription": "Company",
-            "longDescription": "Company"
+            "longDescription": "Company",
+            "filterable": true,
+            "visible": true
         },
         {
             "name": "idadtype",
@@ -124,7 +148,9 @@
             "fieldText": "Address Type of the Identity",
             "shortDescription": "ID Type",
             "mediumDescription": "Identity Add. Type",
-            "longDescription": "Identity Add. Type"
+            "longDescription": "Identity Add. Type",
+            "filterable": true,
+            "visible": true
         }
     ]
 }
