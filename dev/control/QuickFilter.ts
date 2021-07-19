@@ -1,3 +1,5 @@
+import { ValueHelpType } from "../model/ServiceModel";
+
 import Control, { $ControlSettings } from "sap/ui/core/Control";
 import Button from "sap/m/Button";
 import MultiInput from "sap/m/MultiInput";
@@ -40,6 +42,14 @@ export interface QuickFilterSettings extends $ControlSettings {
      * Controls whether a value is required
      */
     required?: boolean;
+    /**
+     * Flag whether or not there is value help defined for the column
+     */
+    hasValueHelp?: boolean;
+    /**
+     * The type of the value help of the column if one is defined
+     */
+    valueHelpType?: ValueHelpType;
 }
 
 /**
@@ -53,41 +63,32 @@ export default class QuickFilter extends Control {
             /**
              * The name of the column for which filter shall be created
              */
-            columnName: {
-                type: "string",
-                group: "Misc"
-            },
+            columnName: { type: "string", group: "Misc" },
             /**
              * The label for the filter, normally this should be the label of the column
              */
-            label: {
-                type: "string",
-                group: "Misc"
-            },
+            label: { type: "string", group: "Misc" },
             /**
              * The data type of the column. This is needed to create the appropriate control.
              * If no type is supplied the default control will be a {@link sap.m.MultiInput} control.
              */
-            type: {
-                type: "string",
-                group: "Misc"
-            },
+            type: { type: "string", group: "Misc" },
             /**
              * Controls whether only a single value can be entered in the filter
              */
-            singleValueOnly: {
-                type: "boolean",
-                group: "Misc",
-                defaultValue: false
-            },
+            singleValueOnly: { type: "boolean", group: "Misc", defaultValue: false },
             /**
              * Controls whether a value is required
              */
-            required: {
-                type: "boolean",
-                group: "Misc",
-                defaultValue: false
-            }
+            required: { type: "boolean", group: "Misc", defaultValue: false },
+            /**
+             * Flag whether or not there is value help defined for the column
+             */
+            hasValueHelp: { type: "boolean", group: "Misc", defaultValue: false },
+            /**
+             * The type of the value help of the column if one is defined
+             */
+            valueHelpType: { type: "string", group: "Misc" }
         },
         aggregations: {
             /**
@@ -134,6 +135,8 @@ export default class QuickFilter extends Control {
     getSingleValueOnly?(): boolean;
     setSingleValueOnly?(singleValueOnly: boolean): this;
     getRequired?(): boolean;
+    getHasValueHelp?(): boolean;
+    getValueHelpType?(): ValueHelpType;
     //#endregion
 
     init(): void {
@@ -166,6 +169,25 @@ export default class QuickFilter extends Control {
     destroy(): void {
         super.destroy.apply(this);
         sap.ui.getCore().detachThemeChanged(this._onThemeChanged, this);
+    }
+    /**
+     * Returns the current value of the filter control
+     * @returns the current value of the filter control
+     */
+    getValue(): string {
+        if (this._filterControl instanceof Input) {
+            return this._filterControl.getValue();
+        } else if (this._filterControl instanceof ComboBox) {
+            return this._filterControl.getSelectedKey();
+        }
+        return null;
+    }
+    /**
+     * Returns the filter control of this quick filter
+     * @returns the filter control
+     */
+    getFilterControl(): Control {
+        return this._filterControl;
     }
     setRequired(required: boolean): this {
         this.setProperty("required", required);
@@ -209,7 +231,7 @@ export default class QuickFilter extends Control {
         }
     }
     private _attachEventHandlers() {
-        if (this._filterControl instanceof MultiInput) {
+        if (this._filterControl instanceof Input) {
             this._filterControl.attachValueHelpRequest(
                 null,
                 () => {

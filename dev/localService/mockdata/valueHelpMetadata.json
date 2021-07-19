@@ -1,156 +1,162 @@
 {
-    "targetField": "author",
-    "tokenKeyField": "bname",
-    "tokenDescriptionField": "",
-    "valueHelpName": "USER_ADDR",
-    "type": "SimpleDDICSearchHelp",
-    "fields": [
-        {
-            "name": "bname",
-            "type": "String",
-            "length": 12,
-            "fieldText": "User Name in User Master Record",
-            "shortDescription": "User",
-            "mediumDescription": "User",
-            "longDescription": "User",
-            "filterable": true,
-            "visible": true
-        },
-        {
-            "name": "mc_namelas",
-            "type": "String",
-            "length": 25,
-            "fieldText": "Last Name in Uppercase for Search Help",
-            "shortDescription": "Last name",
-            "mediumDescription": "Last name",
-            "longDescription": "Last name",
-            "filterable": true,
-            "visible": true
-        },
-        {
-            "name": "mc_namefir",
-            "type": "String",
-            "length": 25,
-            "fieldText": "First Name in Uppercase for Search Help",
-            "shortDescription": "First name",
-            "mediumDescription": "First name",
-            "longDescription": "First name",
-            "filterable": true,
-            "visible": true
-        },
-        {
-            "name": "department",
-            "type": "String",
-            "length": 40,
-            "fieldText": "Department",
-            "shortDescription": "Department",
-            "mediumDescription": "Department",
-            "longDescription": "Department",
-            "isCaseSensitive": true,
-            "filterable": true,
-            "visible": true
-        },
-        {
-            "name": "building",
-            "type": "String",
-            "length": 10,
-            "fieldText": "Building (number or code)",
-            "shortDescription": "Buildings",
-            "mediumDescription": "Building code",
-            "longDescription": "Building code",
-            "isCaseSensitive": true,
-            "filterable": true,
-            "visible": true
-        },
-        {
-            "name": "roomnumber",
-            "type": "String",
-            "length": 10,
-            "fieldText": "Room or Apartment Number",
-            "shortDescription": "Room",
-            "mediumDescription": "Room Number",
-            "longDescription": "Room Number",
-            "isCaseSensitive": true,
-            "filterable": true,
-            "visible": true
-        },
-        {
-            "name": "tel_extens",
-            "type": "String",
-            "length": 20,
-            "fieldText": "First Telephone No.: Extension",
-            "shortDescription": "Extension",
-            "mediumDescription": "Extension",
-            "longDescription": "Extension",
-            "filterable": true,
-            "visible": true
-        },
-        {
-            "name": "kostl",
-            "type": "String",
-            "length": 8,
-            "fieldText": "Cost center",
-            "shortDescription": "Cost ctr",
-            "mediumDescription": "Cost center",
-            "longDescription": "Cost center",
-            "filterable": true,
-            "visible": true
-        },
-        {
-            "name": "inhouse_ml",
-            "type": "String",
-            "length": 10,
-            "fieldText": "Internal Mail Postal Code",
-            "shortDescription": "Internal",
-            "mediumDescription": "Internal mail",
-            "longDescription": "Internal mail",
-            "isCaseSensitive": true,
-            "filterable": true,
-            "visible": true
-        },
-        {
-            "name": "mc_name1",
-            "type": "String",
-            "length": 25,
-            "fieldText": "Name (Field NAME1) in Uppercase for Search Help",
-            "shortDescription": "Name",
-            "mediumDescription": "Name",
-            "longDescription": "Company name",
-            "filterable": true,
-            "visible": true
-        },
-        {
-            "name": "mc_city1",
-            "type": "String",
-            "length": 25,
-            "fieldText": "City name in Uppercase for Search Help",
-            "shortDescription": "City",
-            "mediumDescription": "City",
-            "longDescription": "City",
-            "filterable": true,
-            "visible": true
-        },
-        {
-            "name": "company",
-            "type": "String",
-            "length": 42,
-            "fieldText": "Company address, cross-system key",
-            "shortDescription": "Company",
-            "mediumDescription": "Company",
-            "longDescription": "Company",
-            "filterable": true,
-            "visible": true
-        },
-        {
-            "name": "idadtype",
-            "type": "String",
-            "length": 2,
-            "fieldText": "Address Type of the Identity",
-            "shortDescription": "ID Type",
-            "mediumDescription": "Identity Add. Type",
-            "longDescription": "Identity Add. Type",
-            "filterable": true,
-            "visible": true
-        }
-    ]
+    "author": {
+        "targetField": "author",
+        "tokenKeyField": "bname",
+        "tokenDescriptionField": "",
+        "valueHelpName": "USER_ADDR",
+        "type": "ElementaryDDICSearchHelp",
+        "filterFields": [
+            "bname",
+            "mc_namelas",
+            "mc_namefir",
+            "department",
+            "building",
+            "roomnumber",
+            "tel_extens",
+            "kostl",
+            "inhouse_ml",
+            "company",
+            "mc_name1",
+            "mc_city1",
+            "idadtype"
+        ],
+        "outputFields": [
+            "bname",
+            "mc_namelas",
+            "mc_namefir",
+            "department",
+            "building",
+            "roomnumber",
+            "tel_extens",
+            "kostl",
+            "inhouse_ml",
+            "company",
+            "mc_name1",
+            "mc_city1",
+            "idadtype"
+        ],
+        "fields": [
+            {
+                "name": "bname",
+                "type": "String",
+                "length": 12,
+                "fieldText": "User Name in User Master Record",
+                "shortDescription": "User",
+                "mediumDescription": "User",
+                "longDescription": "User"
+            },
+            {
+                "name": "mc_namelas",
+                "type": "String",
+                "length": 25,
+                "fieldText": "Last Name in Uppercase for Search Help",
+                "shortDescription": "Last name",
+                "mediumDescription": "Last name",
+                "longDescription": "Last name"
+            },
+            {
+                "name": "mc_namefir",
+                "type": "String",
+                "length": 25,
+                "fieldText": "First Name in Uppercase for Search Help",
+                "shortDescription": "First name",
+                "mediumDescription": "First name",
+                "longDescription": "First name"
+            },
+            {
+                "name": "department",
+                "type": "String",
+                "length": 40,
+                "fieldText": "Department",
+                "shortDescription": "Department",
+                "mediumDescription": "Department",
+                "longDescription": "Department",
+                "isCaseSensitive": true
+            },
+            {
+                "name": "building",
+                "type": "String",
+                "length": 10,
+                "fieldText": "Building (number or code)",
+                "shortDescription": "Buildings",
+                "mediumDescription": "Building code",
+                "longDescription": "Building code",
+                "isCaseSensitive": true
+            },
+            {
+                "name": "roomnumber",
+                "type": "String",
+                "length": 10,
+                "fieldText": "Room or Apartment Number",
+                "shortDescription": "Room",
+                "mediumDescription": "Room Number",
+                "longDescription": "Room Number",
+                "isCaseSensitive": true
+            },
+            {
+                "name": "tel_extens",
+                "type": "String",
+                "length": 20,
+                "fieldText": "First Telephone No.: Extension",
+                "shortDescription": "Extension",
+                "mediumDescription": "Extension",
+                "longDescription": "Extension"
+            },
+            {
+                "name": "kostl",
+                "type": "String",
+                "length": 8,
+                "fieldText": "Cost center",
+                "shortDescription": "Cost ctr",
+                "mediumDescription": "Cost center",
+                "longDescription": "Cost center"
+            },
+            {
+                "name": "inhouse_ml",
+                "type": "String",
+                "length": 10,
+                "fieldText": "Internal Mail Postal Code",
+                "shortDescription": "Internal",
+                "mediumDescription": "Internal mail",
+                "longDescription": "Internal mail",
+                "isCaseSensitive": true
+            },
+            {
+                "name": "mc_name1",
+                "type": "String",
+                "length": 25,
+                "fieldText": "Name (Field NAME1) in Uppercase for Search Help",
+                "shortDescription": "Name",
+                "mediumDescription": "Name",
+                "longDescription": "Company name"
+            },
+            {
+                "name": "mc_city1",
+                "type": "String",
+                "length": 25,
+                "fieldText": "City name in Uppercase for Search Help",
+                "shortDescription": "City",
+                "mediumDescription": "City",
+                "longDescription": "City"
+            },
+            {
+                "name": "company",
+                "type": "String",
+                "length": 42,
+                "fieldText": "Company address, cross-system key",
+                "shortDescription": "Company",
+                "mediumDescription": "Company",
+                "longDescription": "Company"
+            },
+            {
+                "name": "idadtype",
+                "type": "String",
+                "length": 2,
+                "fieldText": "Address Type of the Identity",
+                "shortDescription": "ID Type",
+                "mediumDescription": "Identity Add. Type",
+                "longDescription": "Identity Add. Type"
+            }
+        ]
+    }
 }

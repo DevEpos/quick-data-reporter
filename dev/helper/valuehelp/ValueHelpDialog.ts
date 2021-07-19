@@ -1,9 +1,11 @@
-import { ValueHelpField, ValueHelpMetadata } from "devepos/qdrt/model/ServiceModel";
+import { FilterCond, ValueHelpField, ValueHelpMetadata } from "../../model/ServiceModel";
+import ValueHelpModel from "./ValueHelpModel";
+import { SimpleBindingParams } from "../../model/types";
+import FormatUtil from "../FormatUtil";
 
 import BaseObject from "sap/ui/base/Object";
 import ValueHelpDialogSAP from "sap/ui/comp/valuehelpdialog/ValueHelpDialog";
 import FilterBar from "sap/ui/comp/filterbar/FilterBar";
-import Filter from "sap/ui/model/Filter";
 import FilterGroupItem from "sap/ui/comp/filterbar/FilterGroupItem";
 import FilterOperator from "sap/ui/model/FilterOperator";
 import SearchField from "sap/m/SearchField";
@@ -11,8 +13,9 @@ import JSONModel from "sap/ui/model/json/JSONModel";
 import Input from "sap/m/Input";
 import Event from "sap/ui/base/Event";
 import Table from "sap/ui/table/Table";
-import ListBinding from "sap/ui/model/ListBinding";
 import Token from "sap/m/Token";
+import DateType from "sap/ui/model/type/Date";
+import Log from "sap/base/Log";
 
 interface TableColumnConfig {
     label: string;
@@ -22,18 +25,15 @@ interface TableColumnConfig {
     sorted: boolean;
     sortOrder: "Ascending" | "Descending";
     oType?: any;
-    width?: number;
-}
-
-interface SimpleBindingParams {
-    filters?: Filter | Filter[];
-    parameters?: object;
+    /**
+     * Width in css style, e.g. 9em
+     */
+    width?: string;
 }
 
 export type ValueHelpFilterValues = Record<string, any>;
 
 export interface ValueHelpDialogSettings {
-    model: JSONModel;
     /**
      * Input Field reference
      */
@@ -68,10 +68,6 @@ export interface ValueHelpDialogSettings {
      */
     loadDataAtOpen?: boolean;
     /**
-     * If <code>true</code> all defined fields should be visible in the table
-     */
-    useAllFieldsInResultTable?: boolean;
-    /**
      * Map of optional initial filter values
      */
     initialFilters?: ValueHelpFilterValues;
@@ -86,19 +82,17 @@ export interface ValueHelpDialogSettings {
  */
 export default class ValueHelpDialog extends BaseObject {
     //#region properties
-    // TODO: this model needs to encapsulate the actual backend call and fill it's wrapped
-    // internal model
-    private _model: JSONModel;
+    private _vhModel: ValueHelpModel;
     private _filterBar: FilterBar;
+    private _table: Table;
     private _inputControl: Input;
     private _vhDialogMetadata: ValueHelpMetadata;
     private _keyFieldConfig: ValueHelpField;
-    private _fields: { key: string; label?: string }[];
+    private _fields: { key: string; label?: string }[] = [];
     private _dialogTitle: string;
     private _searchFocusField: string;
     private _multipleSelection: boolean;
     private _basicSearchEnabled: boolean;
-    private _useAllFieldsInResultTable: boolean;
     private _initialFilters: ValueHelpFilterValues;
     private _initialTokens: Token[];
     private _tokens: Token[] = [];
@@ -108,9 +102,8 @@ export default class ValueHelpDialog extends BaseObject {
     private _dialogPromise: { resolve: (tokens: Token[]) => void; reject: () => void };
     private _supportRanges: boolean;
     private _supportRangesOnly: boolean;
-    private _columnsConfig: TableColumnConfig[];
-    private _filterItems: FilterGroupItem[];
-    private _bindingPath: string;
+    private _columnsConfig: TableColumnConfig[] = [];
+    private _filterItems: FilterGroupItem[] = [];
     //#endregion
 
     /**
@@ -126,51 +119,59 @@ export default class ValueHelpDialog extends BaseObject {
             throw Error(`No keyfield found with name '${settings.keyFieldName}`);
         }
         this._dialogTitle =
-            this._keyFieldConfig.mediumDescription || this._keyFieldConfig.longDescription || this._keyFieldConfig.name;
-        this._model = settings.model;
+            this._keyFieldConfig.description ||
+            this._keyFieldConfig.mediumDescription ||
+            this._keyFieldConfig.longDescription ||
+            this._keyFieldConfig.name;
         this._multipleSelection = settings.multipleSelection || false;
         this._basicSearchEnabled = settings.basisSearchEnabled || false;
-        this._useAllFieldsInResultTable = settings.useAllFieldsInResultTable || false;
         this._initialFilters = settings.initialFilters || {};
         this._initialTokens = settings.initialTokens || [];
         this._searchFocusField = this._basicSearchEnabled ? this._keyFieldConfig.name : "";
         this._loadDataAtOpen = settings.loadDataAtOpen || false;
         this._supportRanges = settings.supportRanges || false;
         this._supportRangesOnly = settings.supportRangesOnly || false;
+        this._vhModel = new ValueHelpModel(this._vhDialogMetadata);
     }
 
     /**
      * Opens the value help dialog for given bindingPath which will be
      * used to fill the result table
      *
-     * @param bindingPath the bindingPath used for the result table
      * @returns promise which will get resolved upon clicking ok
      */
-    async showDialog(bindingPath: string): Promise<Token[]> {
+    async showDialog(): Promise<Token[]> {
         this._dialog = null;
-        this._bindingPath = bindingPath;
         this._processFieldConfiguration();
         this._columnModel.setData({
             cols: this._columnsConfig
         });
         this._createDialog();
-        this._dialog.setModel(this._columnModel);
+        this._dialog.setModel(this._vhModel.getModel());
         this._dialog.setTokens(this._initialTokens);
-        this._createFilterBar();
-        if (this._filterBar && this._filterBar.attachInitialized) {
-            this._filterBar.attachInitialized(this._onFilterBarInitialized, this);
+        if (!this._supportRangesOnly) {
+            this._createFilterBar();
+            if (this._filterBar && this._filterBar.attachInitialized) {
+                this._filterBar.attachInitialized(this._onFilterBarInitialized, this);
+            }
+            this._table = await this._dialog.getTableAsync();
+            this._table.bindRows({ path: this._vhModel.getBindingPath() });
+            this._table.setModel(this._columnModel, "columns");
+            if (this._loadDataAtOpen) {
+                this._loadData();
+            }
+            this._dialog.setFilterBar(this._filterBar);
         }
-        const table = await this._dialog.getTableAsync();
-        table.setModel(this._columnModel, "columns");
-        if (this._loadDataAtOpen) {
-            this._rebindTable(table);
-        }
-        this._dialog.setRangeKeyFields(this._fields);
-        this._dialog.setFilterBar(this._filterBar);
-        // Probably not needed???
-        // if (!this._inputControl) {
-        //     this._dialog.addStyleClass("sapUiSizeCompact");
-        // }
+        const rangeKeyField = {
+            key: this._keyFieldConfig.name,
+            label: this._keyFieldConfig.description,
+            type: this._keyFieldConfig.type?.toLowerCase(),
+            formatSettings: {
+                // TODO: create new type to handle uppercase formatting
+                maxLength: this._keyFieldConfig.length
+            }
+        };
+        this._dialog.setRangeKeyFields([rangeKeyField]);
         return new Promise((resolve, reject) => {
             // store promise callback functions
             this._dialogPromise = { resolve, reject };
@@ -211,6 +212,8 @@ export default class ValueHelpDialog extends BaseObject {
             supportRangesOnly: this._supportRangesOnly,
             key: this._vhDialogMetadata.tokenKeyField,
             descriptionKey: this._vhDialogMetadata.tokenDescriptionField,
+            maxExcludeRanges: !this._multipleSelection ? "0" : "-1",
+            maxIncludeRanges: !this._multipleSelection ? "1" : "-1",
             ok: (event: Event) => {
                 this._tokens = event.getParameter("tokens") as Token[];
                 this._dialog.close();
@@ -231,32 +234,33 @@ export default class ValueHelpDialog extends BaseObject {
      * columns and the filters for the dialog
      */
     private _processFieldConfiguration() {
+        const fieldsMap: Record<string, ValueHelpField> = {};
         for (const fieldConfig of this._vhDialogMetadata.fields) {
             if (!fieldConfig.description) {
                 fieldConfig.description =
                     fieldConfig.mediumDescription || fieldConfig.longDescription || fieldConfig.name;
             }
-            if (fieldConfig.filterable) {
-                this.addFilterField(fieldConfig);
-            }
-            if (!fieldConfig.isKey && !fieldConfig.isDescription && !this._useAllFieldsInResultTable) {
-                continue;
-            }
+            fieldsMap[fieldConfig.name] = fieldConfig;
+        }
+
+        // 1) consider fields for filterbar
+        for (const filterField of this._vhDialogMetadata?.filterFields ?? []) {
+            this._addFilterField(fieldsMap[filterField]);
+        }
+
+        // 2) consider output fields for table
+        for (const outputField of this._vhDialogMetadata.outputFields) {
+            const fieldConfig = fieldsMap[outputField];
             const columnConfig = <TableColumnConfig>{
                 label: fieldConfig.description,
                 template: fieldConfig.name,
-                // TODO: get tooltip from specific description column
-                // tooltip: fieldConfig.tooltip,
+                tooltip: fieldConfig.description,
+                width: FormatUtil.getWidth(fieldConfig, 15),
                 sort: fieldConfig.sortable ? fieldConfig.name : undefined,
                 sorted: fieldConfig.sortable && fieldConfig.isKey,
-                oType: fieldConfig.type,
-                sortOrder: "Ascending" // sap.ui.table.SortOrder.Ascending
+                oType: fieldConfig.type === "Date" ? new DateType() : undefined,
+                sortOrder: "Ascending"
             };
-            // TODO: determine column width depending on type
-            // see class sap/ui/comp/util/FormatUtil
-            if (fieldConfig.width) {
-                columnConfig.width = fieldConfig.width;
-            }
             this._columnsConfig.push(columnConfig);
             this._fields.push({ key: fieldConfig.name });
         }
@@ -268,13 +272,13 @@ export default class ValueHelpDialog extends BaseObject {
      *
      * @param fieldConfig data for filter field
      */
-    protected addFilterField(fieldConfig: ValueHelpField): void {
+    private _addFilterField(fieldConfig: ValueHelpField): void {
         this._filterItems.push(
             new FilterGroupItem({
                 groupName: "__BASIC",
                 hiddenFilter: false,
                 partOfCurrentVariant: true,
-                visibleInFilterBar: fieldConfig.visible || false,
+                visibleInFilterBar: true,
                 name: fieldConfig.name,
                 label: fieldConfig.description,
                 control: new Input(fieldConfig.name)
@@ -292,67 +296,67 @@ export default class ValueHelpDialog extends BaseObject {
             basicSearch: new SearchField({
                 showSearchButton: true,
                 placeholder: "Search",
-                search: async (event: Event) => {
+                search: (event: Event) => {
                     const filters = [];
                     if (event.getParameter("query") && event.getParameter("query").length > 0) {
-                        filters.push(
-                            new Filter(this._searchFocusField, FilterOperator.Contains, event.getParameter("query"))
-                        );
+                        filters.push({
+                            columnKey: this._searchFocusField,
+                            operation: FilterOperator.Contains,
+                            value1: event.getParameter("query")
+                        });
                     }
-                    (await this._dialog.getTableAsync()).getBinding().filter(filters);
+                    this._loadData({ filters });
                 }
             }),
             filterGroupItems: this._filterItems,
             search: (event: Event) => {
-                const filters = [];
+                const filters: FilterCond[] = [];
                 for (const selection of event.getParameter("selectionSet")) {
                     if (selection.getValue()) {
                         const splitTab = selection.getId().split("_");
                         if (splitTab.length === 2) {
-                            filters.push(new Filter(splitTab[0], FilterOperator.Contains, selection.getValue()));
+                            filters.push({
+                                columnKey: splitTab[0],
+                                operation: FilterOperator.Contains,
+                                value1: selection.getValue()
+                            });
                         } else {
-                            filters.push(new Filter(selection.getId(), FilterOperator.Contains, selection.getValue()));
+                            filters.push({
+                                columnKey: selection.getId(),
+                                operation: FilterOperator.Contains,
+                                value1: selection.getValue()
+                            });
                         }
                     }
                 }
-                this._rebindTable(null, { filters: filters });
+                this._loadData({ filters: filters });
             }
         });
     }
 
     /**
-     * Update the table bindingPath
-     * @param params parameters for the binding
+     * Update the row binding of the table
+     * @param table an optional reference to the table
+     * @param params optional parameters for the binding
      */
-    private async _rebindTable(table?: Table, params?: SimpleBindingParams) {
-        if (!this._dialog) {
+    private async _loadData(params?: SimpleBindingParams) {
+        if (!this._dialog || !this._table) {
             return;
         }
-        const bindingParams = {
-            path: this._bindingPath,
-            filters: params?.filters ?? [],
-            parameters: params?.parameters ?? {},
-            events: {
-                dataReceived: async (event: Event) => {
-                    const binding = event.getSource() as ListBinding;
-                    await this._dialog.getTableAsync();
-                    if (binding && this._dialog && this._dialog.isOpen()) {
-                        const bindingLength = binding.getLength();
-                        if (bindingLength) {
-                            this._dialog.update();
-                        } else {
-                            // Private method access is needed here
-                            (this._dialog as any)._updateTitles();
-                        }
-                    }
-                }
+        const useOverlay = this._table.getRows()?.length > 0;
+        const setBusy = (busy: boolean, useOverlay: boolean) => {
+            if (useOverlay) {
+                this._table.setShowOverlay(busy);
             }
+            this._table.setBusy(busy);
         };
-        if (!table) {
-            table = await this._dialog.getTableAsync();
+        setBusy(true, useOverlay);
+        try {
+            await this._vhModel.fetchData(params);
+        } catch (error) {
+            Log.error("Value help data could not be loaded", error?.statusText ?? error);
         }
-        table.setShowOverlay(false);
-        table.setEnableBusyIndicator(true);
-        table.bindRows(bindingParams as any);
+        this._dialog.update();
+        setBusy(false, useOverlay);
     }
 }

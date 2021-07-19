@@ -1,4 +1,5 @@
 import SystemUtil from "../helper/systemUtil";
+
 import jQuery from "sap/ui/thirdparty/jquery";
 
 const SAP_LANGUAGE_PARAM = "sap-language";
@@ -20,7 +21,7 @@ export type AjaxResponse = {
 export type RequestOptions = {
     method: "GET" | "POST" | "PUT" | "HEAD" | "DELETE";
     headers?: Record<string, string>;
-    data?: object;
+    data?: object | string;
     dataType?: string;
     csrfToken?: string;
     username?: string;

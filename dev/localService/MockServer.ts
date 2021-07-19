@@ -1,4 +1,5 @@
 import ajaxUtil from "../service/ajaxUtil";
+import { ValueHelpRequest } from "../model/ServiceModel";
 
 import _MockServer from "sap/ui/core/util/MockServer";
 import Log from "sap/base/Log";
@@ -84,7 +85,35 @@ export default class MockServer {
                 method: "GET",
                 path: /entities\/(.*)\/(.*)\/valueHelpMetadata.*/,
                 response: (xhr: SinonFakeXMLHttpRequest) => {
-                    this._getMockdata(xhr, "valueHelpMetadata");
+                    const response = this._getCachedMockdata("valueHelpMetadata");
+                    if (!response) {
+                        xhr.respond(204, {}, "");
+                        return;
+                    }
+                    const uriParams = new UriParameters(xhr.url);
+                    xhr.respond(200, {}, JSON.stringify(response[uriParams.get("field")]));
+                }
+            },
+            {
+                method: "POST",
+                path: /valueHelpData.*/,
+                response: (xhr: SinonFakeXMLHttpRequest) => {
+                    const response = this._getCachedMockdata("valueHelpData");
+                    if (!response) {
+                        xhr.respond(204, {}, "");
+                        return;
+                    }
+                    if (xhr.requestBody) {
+                        try {
+                            const payload = JSON.parse(xhr.requestBody) as ValueHelpRequest;
+                            if (payload?.valueHelpName) {
+                                xhr.respond(200, {}, JSON.stringify(response[payload.valueHelpName]));
+                            }
+                        } catch (parseError) {
+                            xhr.respond(500, {}, "Parsing error of request");
+                            return;
+                        }
+                    }
                 }
             }
         ]);

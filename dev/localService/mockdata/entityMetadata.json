@@ -3,6 +3,7 @@
         {
             "name": "clsname",
             "isKey": true,
+            "rollname": "SEOCLSNAME",
             "type": "String",
             "length": 30,
             "shortDescription": "Obj. Type",
@@ -15,6 +16,7 @@
         {
             "name": "version",
             "isKey": true,
+            "rollname": "SEOVERSION",
             "type": "String",
             "length": 1,
             "shortDescription": "V",
@@ -26,6 +28,7 @@
         },
         {
             "name": "category",
+            "rollname": "SEOCATEGRY",
             "type": "String",
             "length": 2,
             "shortDescription": "Category",
@@ -37,6 +40,7 @@
         },
         {
             "name": "exposure",
+            "rollname": "SEOEXPOSE",
             "type": "String",
             "length": 1,
             "shortDescription": "Visible",
@@ -48,6 +52,7 @@
         },
         {
             "name": "state",
+            "rollname": "SEOSTATE",
             "type": "String",
             "length": 1,
             "shortDescription": "Status",
@@ -59,6 +64,7 @@
         },
         {
             "name": "release",
+            "rollname": "SEORELSTAT",
             "type": "String",
             "length": 1,
             "shortDescription": "Release",
@@ -70,6 +76,7 @@
         },
         {
             "name": "author",
+            "rollname": "CNAM",
             "type": "String",
             "length": 12,
             "shortDescription": "Created By",
@@ -77,10 +84,11 @@
             "longDescription": "Created By",
             "fieldText": "Author",
             "hasValueHelp": true,
-            "valueHelpType": "SimpleDDICSearchHelp"
+            "valueHelpType": "ElementaryDDICSearchHelp"
         },
         {
             "name": "createdon",
+            "rollname": "RDIR_CDATE",
             "type": "Date",
             "length": 8,
             "shortDescription": "Created On",
@@ -92,6 +100,7 @@
         },
         {
             "name": "changedby",
+            "rollname": "UNAM",
             "type": "String",
             "length": 12,
             "shortDescription": "Changed by",
@@ -101,6 +110,7 @@
         },
         {
             "name": "changedon",
+            "rollname": "RDIR_UDATE",
             "type": "Date",
             "length": 8,
             "shortDescription": "Changed on",
@@ -112,6 +122,7 @@
         },
         {
             "name": "chgdanyby",
+            "rollname": "UNAM",
             "type": "String",
             "length": 12,
             "shortDescription": "Changed by",
@@ -121,6 +132,7 @@
         },
         {
             "name": "chgdanyon",
+            "rollname": "RDIR_UDATE",
             "type": "Date",
             "length": 8,
             "shortDescription": "Changed on",
@@ -132,6 +144,7 @@
         },
         {
             "name": "clsembed",
+            "rollname": "SEOEMBED",
             "type": "Boolean",
             "length": 1,
             "shortDescription": "Embeddable",
@@ -141,6 +154,7 @@
         },
         {
             "name": "clsabstrct",
+            "rollname": "SEOABSTRCT",
             "type": "Boolean",
             "length": 1,
             "shortDescription": "Abstract",
@@ -150,6 +164,7 @@
         },
         {
             "name": "clsfinal",
+            "rollname": "SEOFINAL",
             "type": "Boolean",
             "length": 1,
             "shortDescription": "Final",
@@ -159,12 +174,14 @@
         },
         {
             "name": "clsccincl",
+            "rollname": "SEOCCINCL",
             "type": "Boolean",
             "length": 1,
             "fieldText": "Flags new include structure for local types"
         },
         {
             "name": "clsdefatt",
+            "rollname": "SEOCPDNAME",
             "type": "String",
             "length": 61,
             "shortDescription": "Int. Comp.",
@@ -174,6 +191,7 @@
         },
         {
             "name": "clsdefmtd",
+            "rollname": "SEOCPDNAME",
             "type": "String",
             "length": 61,
             "shortDescription": "Int. Comp.",
@@ -183,13 +201,15 @@
         },
         {
             "name": "refclsname",
+            "rollname": "DDSTRUCOBJNAME",
             "type": "String",
             "length": 30,
             "fieldText": "DD: Name of a structured object (e.g. entity, context)"
         },
-        { "name": "fixpt", "type": "Boolean", "length": 1, "fieldText": "Fixed point arithmetic" },
+        { "name": "fixpt", "rollname": "FIXPT", "type": "Boolean", "length": 1, "fieldText": "Fixed point arithmetic" },
         {
             "name": "varcl",
+            "rollname": "VARCL",
             "type": "Boolean",
             "length": 1,
             "shortDescription": "Case",
@@ -199,6 +219,7 @@
         },
         {
             "name": "unicode",
+            "rollname": "UCCHECK",
             "type": "String",
             "length": 1,
             "shortDescription": "Version",
@@ -211,6 +232,7 @@
         },
         {
             "name": "rstat",
+            "rollname": "RDIR_RSTAT",
             "type": "String",
             "length": 1,
             "fieldText": "Status",
@@ -219,6 +241,7 @@
         },
         {
             "name": "clsbcimpl",
+            "rollname": "SEOCLSNAME",
             "type": "String",
             "length": 30,
             "shortDescription": "Obj. Type",
@@ -228,6 +251,7 @@
         },
         {
             "name": "r3release",
+            "rollname": "SAPRELEASE",
             "type": "String",
             "length": 10,
             "shortDescription": "Release",
@@ -237,6 +261,7 @@
         },
         {
             "name": "clsbctrans",
+            "rollname": "SEOBCTRANS",
             "type": "Boolean",
             "length": 1,
             "shortDescription": "Transient",
@@ -246,6 +271,7 @@
         },
         {
             "name": "clsbccat",
+            "rollname": "SEOBCCAT",
             "type": "String",
             "length": 2,
             "shortDescription": "Category",
@@ -258,6 +284,7 @@
         { "name": "clsbcnodel", "type": "String", "length": 1, "fieldText": "Directly Implemented Business Class" },
         {
             "name": "clsaddon",
+            "rollname": "SEOCLSNAME",
             "type": "String",
             "length": 30,
             "shortDescription": "Obj. Type",
@@ -265,9 +292,16 @@
             "longDescription": "Class/Interface",
             "fieldText": "Object Type Name"
         },
-        { "name": "msg_id", "type": "String", "length": 20, "fieldText": "MESSAGE-ID from PROGRAM statement" },
+        {
+            "name": "msg_id",
+            "rollname": "ABP_MSGI",
+            "type": "String",
+            "length": 20,
+            "fieldText": "MESSAGE-ID from PROGRAM statement"
+        },
         {
             "name": "clsproxy",
+            "rollname": "SEOPROXY",
             "type": "String",
             "length": 1,
             "shortDescription": "Proxy",
@@ -279,6 +313,7 @@
         },
         {
             "name": "clssharedmemory",
+            "rollname": "SEO_SHARED_MEMORY_ENABLED",
             "type": "Boolean",
             "length": 1,
             "shortDescription": "SHM",
@@ -286,9 +321,16 @@
             "longDescription": "SHM-Enabled",
             "fieldText": "Flag: Is Class Shared-Memory-Enabled?"
         },
-        { "name": "with_unit_tests", "type": "Boolean", "length": 1, "fieldText": "General Indicator" },
+        {
+            "name": "with_unit_tests",
+            "rollname": "SEOFLAG",
+            "type": "Boolean",
+            "length": 1,
+            "fieldText": "General Indicator"
+        },
         {
             "name": "duration_type",
+            "rollname": "SAUNIT_D_ALLOWED_RT_DURATION",
             "type": "Byte",
             "isNumeric": true,
             "length": 3,
@@ -299,6 +341,7 @@
         },
         {
             "name": "risk_level",
+            "rollname": "SAUNIT_D_ALLOWED_RISK_LEVEL",
             "type": "Byte",
             "isNumeric": true,
             "length": 3,
@@ -309,6 +352,7 @@
         },
         {
             "name": "within_package",
+            "rollname": "SEOPACK",
             "type": "Boolean",
             "length": 1,
             "shortDescription": "PackgeFlag",

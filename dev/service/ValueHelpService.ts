@@ -1,7 +1,7 @@
-import { ValueHelpMetadata, DataPreview } from "../model/ServiceModel";
+import { DataPreview, ValueHelpRequest } from "../model/ServiceModel";
 import ajaxUtil from "./ajaxUtil";
 
-const BASE_URL = `/sap/zqdrtrest/valuehelpdata`;
+const BASE_URL = `/sap/zqdrtrest/valueHelpData`;
 /**
  * Service to retrieve information about value helps
  */
@@ -9,14 +9,14 @@ export default class ValueHelpService {
     /**
      * Retrieves value help metadata for a field in a DB entity
      *
-     * @param valueHelpMetadata the metadata for the value help
+     * @param valueHelpRequest the request information to fetch value help data
      * @returns promise with metadata result of the found valuehelp
      */
-    async retrieveValueHelpData(valueHelpMetadata: ValueHelpMetadata): Promise<DataPreview> {
+    async retrieveValueHelpData(valueHelpRequest: ValueHelpRequest): Promise<DataPreview> {
         const csrfToken = await ajaxUtil.fetchCSRF();
         const response = await ajaxUtil.send(`${BASE_URL}`, {
             method: "POST",
-            data: valueHelpMetadata,
+            data: JSON.stringify(valueHelpRequest),
             csrfToken
         });
         return response?.data;

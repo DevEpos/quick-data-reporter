@@ -3,6 +3,7 @@ import FilterItem from "../element/FilterItem";
 import QuickFilter from "./QuickFilter";
 import StateRegistry from "../state/StateRegistry";
 import AddQuickFiltersPopover, { SelectedField } from "../helper/AddQuickFilterPopover";
+import ValueHelpFactory from "../helper/valuehelp/ValueHelpFactory";
 
 import Panel from "sap/m/Panel";
 import ScrollContainer from "sap/m/ScrollContainer";
@@ -15,6 +16,7 @@ import { ButtonType } from "sap/m/library";
 import jQuery from "sap/ui/thirdparty/jquery";
 import Event from "sap/ui/base/Event";
 import Control from "sap/ui/core/Control";
+import Input from "sap/m/Input";
 
 /**
  * FilterBar with vertical orientation
@@ -144,9 +146,17 @@ export default class SideFilterPanel extends Panel {
 
     private async _onValueHelpRequest(event: Event) {
         const quickFilter = event.getSource() as QuickFilter;
-        // TODO: show value help dialog
+        const entityState = StateRegistry.getEntityState();
 
         // Get the value help metadata information for the filter field
-        // StateRegistry.getEntityState().getFieldValueHelpInfo(quickFilter.getColumnName());
+        quickFilter.setBusy(true);
+        const vhMetadata = await entityState.getFieldValueHelpInfo(quickFilter.getColumnName());
+        quickFilter.setBusy(false);
+        const vhDialog = ValueHelpFactory.getInstance().createValueHelpDialog(
+            vhMetadata,
+            quickFilter.getFilterControl() as Input,
+            !quickFilter.getSingleValueOnly()
+        );
+        vhDialog.showDialog();
     }
 }

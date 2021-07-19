@@ -1,0 +1,90 @@
+{
+    "USER_ADDR": [
+        {
+            "bname": "BWDEVELOPER",
+            "mc_namelas": "JANE",
+            "mc_namefir": "DOE",
+            "mc_name1": "ITELO2",
+            "company": "ITELO2"
+        },
+        { "bname": "DDIC" },
+        { "bname": "DEVELOPER", "mc_namelas": "STOCKBAL", "mc_name1": "ITELO1", "company": "ITELO1" },
+        { "bname": "SAP*" },
+        { "bname": "SDMI_DLRYYAU", "idadtype": 1 },
+        { "bname": "TAGTEST", "mc_namelas": "TAGTEST", "mc_name1": "ITELO1", "company": "ITELO1" }
+    ],
+    "SEOVERSION": [
+        { "fixValue": "0", "description": "Inactive" },
+        { "fixValue": "1", "description": "Active" }
+    ],
+    "SEOCATEGRY": [
+        { "fixValue": "00", "description": "General object type" },
+        { "fixValue": "01", "description": "Exit class" },
+        { "fixValue": "10", "description": "Persistent class" },
+        { "fixValue": "11", "description": "Factory for persistent class" },
+        { "fixValue": "12", "description": "Status class for persistent class" },
+        { "fixValue": "20", "description": "View class" },
+        { "fixValue": "30", "description": "Proxy class for remote interface" },
+        { "fixValue": "40", "description": "Exception class" },
+        { "fixValue": "50", "description": "Business class" },
+        { "fixValue": "51", "description": "Business class interface for static components" },
+        { "fixValue": "52", "description": "Business class interface for instance-dependent components" },
+        { "fixValue": "60", "description": "BSP application class" },
+        { "fixValue": "70", "description": "Basis class for BSP element handlers" },
+        { "fixValue": "80", "description": "Web Dynpro runtime object" },
+        { "fixValue": "90", "description": "ESI: Provider interface (generated)" },
+        { "fixValue": "45", "description": "Area class (shared objects)" },
+        { "fixValue": "05", "description": "Test class (ABAP Unit)" },
+        { "fixValue": "65", "description": "Interface for parameter types for database procedure proxies" },
+        { "fixValue": "06", "description": "Behavior        (Class ... for Behavior of ...)" }
+    ],
+    "SEOEXPOSE": [
+        { "fixValue": "0", "description": "Private" },
+        { "fixValue": "1", "description": "Protected" },
+        { "fixValue": "2", "description": "Public" }
+    ],
+    "SEOSTATE": [
+        { "fixValue": "0", "description": "Only modeled" },
+        { "fixValue": "1", "description": "Implemented" },
+        { "fixValue": "2", "description": "Implemented                 *** obsolete ***" }
+    ],
+    "SEORELSTAT": [
+        { "fixValue": "0", "description": "Not released" },
+        { "fixValue": "1", "description": "Released internally" }
+    ],
+    "UCCHECK": [
+        { "fixValue": "2", "description": "ABAP for key users" },
+        { "fixValue": "3", "description": "Static ABAP with limited object use (obsolete)" },
+        { "fixValue": "4", "description": "Standard ABAP with limited object use (obsolete)" },
+        { "fixValue": "5", "description": "ABAP for SAP Cloud Platform" },
+        { "fixValue": "X", "description": "Standard ABAP (Unicode)" },
+        { "fixValue": "", "description": "Non-Unicode ABAP (obsolete)" }
+    ],
+    "RDIR_RSTAT": [
+        { "fixValue": "P", "description": "SAP Standard Production Program" },
+        { "fixValue": "K", "description": "Customer Production Program" },
+        { "fixValue": "S", "description": "System Program" },
+        { "fixValue": "T", "description": "Test Program" },
+        { "fixValue": "", "description": "Unclassified" }
+    ],
+    "SEOBCCAT": [
+        { "fixValue": "00", "description": "Organizational Unit" },
+        { "fixValue": "01", "description": "Application Business Class" },
+        { "fixValue": "02", "description": "Business Class for APIs" }
+    ],
+    "SEOPROXY": [
+        { "fixValue": "", "description": "No proxy class" },
+        { "fixValue": "X", "description": "Proxy class" },
+        { "fixValue": "M", "description": "MDRS proxy class" }
+    ],
+    "SAUNIT_D_ALLOWED_RT_DURATION": [
+        { "fixValue": "12", "description": "Short" },
+        { "fixValue": "24", "description": "Medium" },
+        { "fixValue": "36", "description": "Long" }
+    ],
+    "SAUNIT_D_ALLOWED_RISK_LEVEL": [
+        { "fixValue": "11", "description": "Harmless" },
+        { "fixValue": "22", "description": "Dangerous" },
+        { "fixValue": "33", "description": "Critical" }
+    ]
+}

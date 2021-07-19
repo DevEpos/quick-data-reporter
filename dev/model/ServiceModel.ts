@@ -6,7 +6,7 @@ export enum EntityType {
 
 export enum ValueHelpType {
     DomainFixValues = "DomainFixValues",
-    SimpleDDICSearchHelp = "SimpleDDICSearchHelp",
+    ElementaryDDICSearchHelp = "ElementaryDDICSearchHelp",
     CollectiveDDICSearchHelp = "CollectiveDDICSearchHelp",
     CheckTable = "CheckTable",
     Date = "Date",
@@ -92,7 +92,11 @@ export interface EntityColMetadata {
     /**
      * The max number of characters/digits this column can hold
      */
-    length: int;
+    length: number;
+    /**
+     * The data element assigned as column type
+     */
+    rollname?: string;
     /**
      * The short description for the column
      */
@@ -157,7 +161,10 @@ export interface DataPreview {
 export interface ValueHelpField extends EntityColMetadata {
     isDescription?: boolean;
     visible?: boolean;
-    width?: number;
+    /**
+     * Width in CSS style, e.g. 9em
+     */
+    width?: string;
 }
 
 interface ValueHelpInfo {
@@ -173,7 +180,7 @@ interface ValueHelpInfo {
     /**
      * Field metadata for Table/Filters in value help dialog
      */
-    fields: ValueHelpField[];
+    fields?: ValueHelpField[];
 }
 
 /**
@@ -183,15 +190,23 @@ export interface ValueHelpMetadata extends ValueHelpInfo {
     /**
      * The targeted field of a DB entity
      */
-    targetField: string;
+    targetField?: string;
     /**
      * Identifier of field that is to be used as the token key
      */
-    tokenKeyField: string;
+    tokenKeyField?: string;
     /**
      * Identifier of field that is to be used as the token description
      */
-    tokenDescriptionField: string;
+    tokenDescriptionField?: string;
+    /**
+     * Ids of filter fields
+     */
+    filterFields?: string[];
+    /**
+     * Ids of output fields
+     */
+    outputFields?: string[];
 }
 
 /**

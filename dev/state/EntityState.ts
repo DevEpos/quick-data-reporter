@@ -1,5 +1,13 @@
+import ValueHelpUtil from "../helper/valuehelp/ValueHelpUtil";
 import Entity, { ConfigurableEntity } from "../model/Entity";
-import { EntityType, EntityMetadata, DataRow, ColumnConfig, ValueHelpMetadata } from "../model/ServiceModel";
+import {
+    EntityType,
+    EntityMetadata,
+    DataRow,
+    ColumnConfig,
+    ValueHelpMetadata,
+    ValueHelpType
+} from "../model/ServiceModel";
 import EntityService from "../service/EntityService";
 import BaseState from "./BaseState";
 
@@ -88,11 +96,14 @@ export default class EntityState extends BaseState<Entity> {
     }
     /**
      * Retrieves value help metadata for the given field
-     * @param fieldName name of a field in the current entity
+     * @param fieldName metadata information of a field
      * @returns promise with value help meta data
      */
     async getFieldValueHelpInfo(fieldName: string): Promise<ValueHelpMetadata> {
-        return this._entityService.getValueHelpMetadata(this.data.name, this.data.type, fieldName);
+        if (!this.data.valueHelpMetadata.hasOwnProperty(fieldName)) {
+            await this._determineValueHelpInfo(fieldName);
+        }
+        return this.data.valueHelpMetadata[fieldName];
     }
     reset(): void {
         this.data.type = null;
@@ -109,5 +120,35 @@ export default class EntityState extends BaseState<Entity> {
             colMetadata.length = 0;
         }
         this.updateModel();
+    }
+
+    private async _determineValueHelpInfo(fieldName: string): Promise<void> {
+        const fieldMeta = this.data.metadata.colMetadata.find(f => f.name === fieldName);
+
+        switch (fieldMeta.valueHelpType) {
+            case ValueHelpType.CheckTable:
+            case ValueHelpType.ElementaryDDICSearchHelp:
+            case ValueHelpType.CollectiveDDICSearchHelp:
+            case ValueHelpType.CdsAnnotation:
+                try {
+                    const vhMetadataForField = await this._entityService.getValueHelpMetadata(
+                        this.data.name,
+                        this.data.type,
+                        fieldName
+                    );
+                    this.data.valueHelpMetadata[fieldName] = vhMetadataForField;
+                } catch (error) {
+                    // TODO: handle service error
+                }
+                break;
+
+            case ValueHelpType.DomainFixValues:
+                this.data.valueHelpMetadata[fieldName] = ValueHelpUtil.getDomainFixValuesVhMetadata(fieldMeta);
+                break;
+
+            default:
+                this.data.valueHelpMetadata[fieldName] = ValueHelpUtil.getNoVhMetadata(fieldMeta);
+                break;
+        }
     }
 }
