@@ -167,7 +167,6 @@ export default class ValueHelpDialog extends BaseObject {
             label: this._keyFieldConfig.description,
             type: this._keyFieldConfig.type?.toLowerCase(),
             formatSettings: {
-                // TODO: create new type to handle uppercase formatting
                 maxLength: this._keyFieldConfig.length
             }
         };
@@ -211,6 +210,7 @@ export default class ValueHelpDialog extends BaseObject {
             supportRanges: this._supportRanges,
             supportRangesOnly: this._supportRangesOnly,
             key: this._vhDialogMetadata.tokenKeyField,
+            displayFormat: this._keyFieldConfig?.isCaseSensitive ? "" : "UpperCase",
             descriptionKey: this._vhDialogMetadata.tokenDescriptionField,
             maxExcludeRanges: !this._multipleSelection ? "0" : "-1",
             maxIncludeRanges: !this._multipleSelection ? "1" : "-1",
