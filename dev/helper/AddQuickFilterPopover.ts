@@ -13,14 +13,6 @@ import Filter from "sap/ui/model/Filter";
 import ScrollContainer from "sap/m/ScrollContainer";
 import FilterOperator from "sap/ui/model/FilterOperator";
 
-interface FieldConfig {
-    name: string;
-    description: string;
-    tooltip: string;
-    type: string;
-    selected: boolean;
-}
-
 export interface SelectedField {
     name: string;
     label: string;
@@ -28,13 +20,8 @@ export interface SelectedField {
     type: string;
 }
 
-function mapToSelectedField(fieldConfig: FieldConfig) {
-    return {
-        name: fieldConfig.name,
-        label: fieldConfig.description,
-        type: fieldConfig.type,
-        tooltip: fieldConfig.tooltip
-    };
+interface FieldConfig extends SelectedField {
+    selected: boolean;
 }
 
 class PopoverModel {
@@ -53,7 +40,7 @@ class PopoverModel {
         return selectedItemCount;
     }
     get selectedFields(): SelectedField[] {
-        return this.fields.filter(f => f.selected).map(f => mapToSelectedField(f));
+        return this.fields.filter(f => f.selected);
     }
 }
 
@@ -104,7 +91,7 @@ export default class AddQuickFiltersPopover {
         this._searchTimer = setTimeout(() => {
             const fieldsBinding = this._fieldList.getBinding("items") as ListBinding;
             if (query) {
-                fieldsBinding.filter(new Filter("description", FilterOperator.Contains, query));
+                fieldsBinding.filter(new Filter("label", FilterOperator.Contains, query));
             } else {
                 fieldsBinding.filter([]);
             }
@@ -113,7 +100,7 @@ export default class AddQuickFiltersPopover {
     onFieldPress(evt: Event): void {
         const selectedFieldConfig = (evt.getSource() as Control)?.getBindingContext()?.getObject() as FieldConfig;
         this._popover.close();
-        this._popoverPromise.resolve([mapToSelectedField(selectedFieldConfig)]);
+        this._popoverPromise.resolve([selectedFieldConfig]);
     }
     onAcceptSelection(): void {
         this._popover.close();
@@ -127,8 +114,7 @@ export default class AddQuickFiltersPopover {
         for (const colMeta of entityStateData?.metadata?.colMetadata) {
             this._modelData.fields.push({
                 name: colMeta.name,
-                description:
-                    colMeta.description === colMeta.name ? colMeta.name : `${colMeta.description} (${colMeta.name})`,
+                label: colMeta.description === colMeta.name ? colMeta.name : `${colMeta.description} (${colMeta.name})`,
                 tooltip: colMeta.fieldText,
                 type: colMeta.type,
                 selected: false

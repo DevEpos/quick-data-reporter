@@ -43,7 +43,7 @@
                     mode="{= ${/multiSelect} ? 'MultiSelect' : 'None' }"
                     selectionChange="onFieldSelectionChange">
                     <items>
-                        <StandardListItem title="{description}"
+                        <StandardListItem title="{label}"
                             selected="{selected}"
                             tooltip="{tooltip}"
                             type="Active"
