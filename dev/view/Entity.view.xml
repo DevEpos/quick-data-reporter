@@ -81,7 +81,8 @@
                 </app:content>
                 <app:sideContent>
                     <!-- Create panel for CDS parameters-->
-                    <app:SideFilterPanel headerText="{i18n>entity_sideFilterPanel_title}"/>
+                    <app:SideFilterPanel headerText="{i18n>entity_sideFilterPanel_title}"
+                        availableFilterMetadata="{/metadata/colMetadata}"/>
                 </app:sideContent>
             </app:ToggleableSideContent>
         </f:content>

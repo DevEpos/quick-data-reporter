@@ -1,5 +1,4 @@
-import { ReadOnlyStateData } from "../state/BaseState";
-import Entity from "../model/Entity";
+import { EntityColMetadata } from "../model/ServiceModel";
 
 import ResponsivePopover from "sap/m/ResponsivePopover";
 import Control from "sap/ui/core/Control";
@@ -62,8 +61,8 @@ export default class AddQuickFiltersPopover {
     private _popoverPromise: { resolve: (selectedFields: SelectedField[]) => void };
     private _scroller: ScrollContainer;
 
-    constructor(entityStateData: ReadOnlyStateData<Entity>) {
-        this._createModel(entityStateData);
+    constructor(filterMetadata: EntityColMetadata[]) {
+        this._createModel(filterMetadata);
     }
     /**
      * Shows popover to allow user the selection of one or several fields of
@@ -109,14 +108,17 @@ export default class AddQuickFiltersPopover {
     onAfterClose(): void {
         this._popover?.destroy();
     }
-    private _createModel(entityStateData: ReadOnlyStateData<Entity>): void {
+    private _createModel(filterMetadata: EntityColMetadata[]): void {
         this._modelData = new PopoverModel();
-        for (const colMeta of entityStateData?.metadata?.colMetadata) {
+        for (const filterMeta of filterMetadata) {
             this._modelData.fields.push({
-                name: colMeta.name,
-                label: colMeta.description === colMeta.name ? colMeta.name : `${colMeta.description} (${colMeta.name})`,
-                tooltip: colMeta.fieldText,
-                type: colMeta.type,
+                name: filterMeta.name,
+                label:
+                    filterMeta.description === filterMeta.name
+                        ? filterMeta.name
+                        : `${filterMeta.description} (${filterMeta.name})`,
+                tooltip: filterMeta.fieldText,
+                type: filterMeta.type,
                 selected: false
             });
         }

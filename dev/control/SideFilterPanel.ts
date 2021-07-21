@@ -17,6 +17,7 @@ import jQuery from "sap/ui/thirdparty/jquery";
 import Event from "sap/ui/base/Event";
 import Control from "sap/ui/core/Control";
 import Input from "sap/m/Input";
+import { EntityColMetadata } from "../model/ServiceModel";
 
 /**
  * FilterBar with vertical orientation
@@ -30,6 +31,13 @@ export default class SideFilterPanel extends Panel {
                 type: "boolean",
                 group: "Misc",
                 defaultValue: true
+            },
+            /**
+             * Array with all metadata of all available filters
+             */
+            availableFilterMetadata: {
+                type: "object",
+                group: "Misc"
             }
         },
         aggregations: {
@@ -57,6 +65,7 @@ export default class SideFilterPanel extends Panel {
     setFilterItems?(items: FilterItem[]): this;
     addFilterItem?(item: FilterItem): this;
     getUseToolbar?(): boolean;
+    getAvailableFilterMetadata?(): EntityColMetadata[];
     //#endregion
 
     init(): void {
@@ -126,7 +135,7 @@ export default class SideFilterPanel extends Panel {
     }
 
     private async _addNewFilter(event: Event) {
-        const addFiltersPopover = new AddQuickFiltersPopover(StateRegistry.getEntityState().getData());
+        const addFiltersPopover = new AddQuickFiltersPopover(this.getAvailableFilterMetadata());
         const selectedFilters = await addFiltersPopover.showPopover(event.getSource() as Control);
         if (selectedFilters?.length > 0) {
             for (const selectedFilter of selectedFilters) {
