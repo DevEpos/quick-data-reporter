@@ -15,6 +15,7 @@ import ComboBox from "sap/m/ComboBox";
 import Input from "sap/m/Input";
 import Event from "sap/ui/base/Event";
 import { ValueState } from "sap/ui/core/library";
+import DatePicker from "sap/m/DatePicker";
 
 /**
  * Control settings for {@link devepos.qdrt.control.QuickFilter}
@@ -246,6 +247,21 @@ export default class QuickFilter extends Control {
     }
 
     setTokens(tokens: Token[]): this {
+        if (this._filterControl instanceof MultiInput) {
+            this._filterControl.setTokens(tokens);
+        }
+        return this;
+    }
+
+    setValue(value: string): this {
+        if (this.getSingleValueOnly()) {
+            return this;
+        }
+        if (this._filterControl instanceof DatePicker || this._filterControl instanceof Input) {
+            this._filterControl.setValue(value);
+        } else if (this._filterControl instanceof ComboBox) {
+            this._filterControl.setSelectedKey(value);
+        }
         return this;
     }
 
@@ -335,6 +351,13 @@ export default class QuickFilter extends Control {
                         })
                     ]
                 });
+
+            case "Date":
+                if (this.getSingleValueOnly()) {
+                    return new DatePicker({ width: "100%" });
+                } else {
+                    return new MultiInput({ width: "100%" });
+                }
 
             default:
                 if (this.getSingleValueOnly()) {
