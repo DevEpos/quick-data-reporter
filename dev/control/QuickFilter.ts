@@ -188,11 +188,18 @@ export default class QuickFilter extends Control {
         // this._filterCont.addStyleClass("deveposQdrt-QuickFilter");
         this.setAggregation("filter", this._filterCont);
 
-        sap.ui.getCore().attachThemeChanged(this._onThemeChanged, this);
+        this.addEventDelegate({
+            onThemeChanged: () => {
+                /**
+                 * As theme parameters are used the control needs to be re-rendered upon
+                 * theme change.
+                 */
+                this.invalidate();
+            }
+        });
     }
     destroy(): void {
         super.destroy.apply(this);
-        sap.ui.getCore().detachThemeChanged(this._onThemeChanged, this);
     }
     /**
      * Returns the current value of the filter control
@@ -336,13 +343,5 @@ export default class QuickFilter extends Control {
                     return new MultiInput({ width: "100%" });
                 }
         }
-    }
-
-    /**
-     * As theme parameters are used the control needs to be re-rendered upon
-     * theme change.
-     */
-    private _onThemeChanged() {
-        this.invalidate();
     }
 }
