@@ -13,6 +13,8 @@ import Parameters from "sap/ui/core/theming/Parameters";
 import Label from "sap/m/Label";
 import ComboBox from "sap/m/ComboBox";
 import Input from "sap/m/Input";
+import Event from "sap/ui/base/Event";
+import { ValueState } from "sap/ui/core/library";
 
 /**
  * Control settings for {@link devepos.qdrt.control.QuickFilter}
@@ -35,6 +37,14 @@ export interface QuickFilterSettings extends $ControlSettings {
      */
     valueHelpRequest?: Function;
     /**
+     * Event handler for the change event
+     */
+    change?: Function;
+    /**
+     * Event handler for the submit event.
+     */
+    submit?: Function;
+    /**
      * Controls whether only a single value can be entered in the filter
      */
     singleValueOnly?: boolean;
@@ -51,6 +61,8 @@ export interface QuickFilterSettings extends $ControlSettings {
      */
     valueHelpType?: ValueHelpType;
 }
+
+const CUSTOM_DATA__IS_CHANGING = "__changing";
 
 /**
  * Quick Filter in {@link devepos.qdrt.control.SideFilterPanel}
@@ -100,7 +112,17 @@ export default class QuickFilter extends Control {
             /**
              * Will be fired before the actual value help request
              */
-            valueHelpRequest: {}
+            valueHelpRequest: {},
+            /**
+             * The change event. Will be fired if the focus of the filter field is lost or if the "Enter" key is pressed.
+             */
+            change: {
+                value: { type: "string" }
+            },
+            /**
+             * Submit event for {@link sap.m.Input} controls
+             */
+            submit: {}
         }
     };
     renderer = {
@@ -132,6 +154,8 @@ export default class QuickFilter extends Control {
     getLabel?(): string;
     getColumnName?(): string;
     fireValueHelpRequest?(): this;
+    fireChange?(parameters?: object): this;
+    fireSubmit?(): this;
     getSingleValueOnly?(): boolean;
     setSingleValueOnly?(singleValueOnly: boolean): this;
     getRequired?(): boolean;
@@ -232,13 +256,38 @@ export default class QuickFilter extends Control {
     }
     private _attachEventHandlers() {
         if (this._filterControl instanceof Input) {
-            this._filterControl.attachValueHelpRequest(
-                null,
-                () => {
-                    this.fireValueHelpRequest();
-                },
-                this
-            );
+            this._filterControl.attachValueHelpRequest(() => {
+                this.fireValueHelpRequest();
+            }, this);
+            this._filterControl.attachChange((event: Event) => {
+                if (this._filterControl instanceof MultiInput) {
+                    this._filterControl.data(CUSTOM_DATA__IS_CHANGING, true);
+                }
+                this.fireChange({ value: event.getParameter("value") });
+            }, this);
+            if (this._filterControl instanceof MultiInput) {
+                this._filterControl.attachSubmit(() => {
+                    if (this._filterControl.data(CUSTOM_DATA__IS_CHANGING)) {
+                        this._filterControl.data(CUSTOM_DATA__IS_CHANGING, false);
+                        return;
+                    }
+                    this.fireSubmit();
+                }, this);
+            }
+        } else if (this._filterControl instanceof ComboBox) {
+            this._filterControl.attachChange(() => {
+                const comboBoxFilter = this._filterControl as ComboBox;
+                const selectedKey = comboBoxFilter.getSelectedKey();
+                const value = comboBoxFilter.getValue();
+
+                if (!selectedKey && value) {
+                    comboBoxFilter.setValueState(ValueState.Error);
+                    comboBoxFilter.setValueStateText("Please enter/select a valid entry!");
+                } else {
+                    comboBoxFilter.setValueState(ValueState.None);
+                    this.fireChange({ value: (this._filterControl as ComboBox).getSelectedKey() });
+                }
+            }, this);
         }
     }
 
