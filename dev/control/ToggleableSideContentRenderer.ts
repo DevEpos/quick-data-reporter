@@ -100,6 +100,7 @@ class ToggleableSideContentRenderer {
         for (const sideContentControl of sideContentControls) {
             if (sideContentControl.getVisible()) {
                 rm.renderControl(sideContentControl);
+                break;
             }
         }
 

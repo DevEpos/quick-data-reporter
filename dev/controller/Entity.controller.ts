@@ -33,7 +33,8 @@ export default class EntityController extends BaseController {
     onInit(): void {
         BaseController.prototype.onInit.call(this);
         this._uiModel = models.createViewModel({
-            sideContentVisible: true
+            sideContentVisible: true,
+            activeSideContent: "filter"
         });
         this._entityState = StateRegistry.getEntityState();
         this._entityTableSettings = new EntityTableSettings(this.getView());

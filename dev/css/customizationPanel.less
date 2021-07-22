@@ -1,0 +1,54 @@
+.deveposQdrt-CustomizationPanel {
+    height: 100%;
+
+    .sapUiTheme-sap_fiori_3_dark & {
+        border-left: 2px solid #495767;
+    }
+    
+    .sapUiTheme-sap_fiori_3_hcb & {
+        border-left: 2px solid white;
+    }
+
+    .sapUiTheme-sap_fiori_3_hcw & {
+        border-left: 2px solid black;
+    }
+
+    .sapUiTheme-sap_fiori_3 &,
+    .sapUiTheme-sap_belize_plus &,
+    .sapUiTheme-sap_belize & {
+        border-left: 2px solid #c3c3c3;
+        box-shadow: -1px 0 5px rgb(175, 175, 175);
+    }
+
+    > header {
+        padding: 0.5rem 0.75rem;
+        margin-bottom: 0.5rem;
+
+        .sapUiTheme-sap_fiori_3 &,
+        .sapUiTheme-sap_fiori_3_dark &,
+        .sapUiTheme-sap_belize_plus &,
+        .sapUiTheme-sap_belize & {
+            background: rgb(59, 112, 165);
+            color: white;
+        }
+
+        .sapUiTheme-sap_fiori_3_hcb & {
+            border-bottom: 2px solid white;
+        }
+        .sapUiTheme-sap_fiori_3_hcw & {
+            border-bottom: 2px solid black;
+        }
+
+        & .deveposQdrt-CustomizationPanel__HeaderTitle {
+            padding-left: 0.5rem;
+            text-shadow: none;
+
+            .sapUiTheme-sap_fiori_3 &,
+            .sapUiTheme-sap_belize_plus &,
+            .sapUiTheme-sap_fiori_3_dark &,
+            .sapUiTheme-sap_belize & {
+                color: white;
+            }
+        }
+    }
+}

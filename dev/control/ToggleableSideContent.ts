@@ -17,11 +17,15 @@ export default class ToggleableSideContent extends Control {
             /**
              * Width of the side content
              */
-            sideContentWidth: { type: "sap.ui.core.CSSSize", group: "Appearance", defaultValue: "350px" },
+            sideContentWidth: { type: "sap.ui.core.CSSSize", group: "Appearance", defaultValue: "370px" },
             /**
              * Position of the side content. The default position is on the right side
              */
-            sideContentPosition: { type: "sap.ui.layout.SideContentPosition", group: "Appearance", defaultValue: "End" }
+            sideContentPosition: {
+                type: "sap.ui.layout.SideContentPosition",
+                group: "Appearance",
+                defaultValue: "End"
+            }
         },
         defaultAggregation: "content",
         aggregations: {

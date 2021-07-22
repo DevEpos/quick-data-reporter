@@ -17,7 +17,24 @@
                     <Title text="Entity {/name}"></Title>
                 </f:heading>
                 <f:actions>
-                    <ToggleButton icon="sap-icon://filter"
+                    <SegmentedButton visible="{ui>/sideContentVisible}"
+                        selectedKey="{ui>/activeSideContent}">
+                        <items>
+                            <SegmentedButtonItem icon="sap-icon://filter"
+                                key="filter"
+                                tooltip="{i18n>entity_customizationPanel_filter_title}"/>
+                            <SegmentedButtonItem icon="sap-icon://action-settings"
+                                key="column"
+                                visible="false"/>
+                            <SegmentedButtonItem icon="sap-icon://sort"
+                                key="sort"
+                                visible="false"/>
+                            <SegmentedButtonItem icon="sap-icon://group-2"
+                                key="group"
+                                visible="false"/>
+                        </items>
+                    </SegmentedButton>
+                    <ToggleButton icon="sap-icon://customize"
                         pressed="{ui>/sideContentVisible}"
                         type="Transparent" />
                 </f:actions>
@@ -80,9 +97,13 @@
                     </Panel>
                 </app:content>
                 <app:sideContent>
-                    <!-- Create panel for CDS parameters-->
-                    <app:SideFilterPanel headerText="{i18n>entity_sideFilterPanel_title}"
-                        availableFilterMetadata="{/metadata/colMetadata}"/>
+                    <app:CustomizationPanel visible="{= ${ui>/activeSideContent} === 'filter'}"
+                        title="{i18n>entity_customizationPanel_filter_title}"
+                        icon="sap-icon://filter">
+                        <!-- Create panel for CDS parameters-->
+                        <app:SideFilterPanel headerText="{i18n>entity_sideFilterPanel_title}"
+                            availableFilterMetadata="{/metadata/colMetadata}"/>
+                    </app:CustomizationPanel>
                 </app:sideContent>
             </app:ToggleableSideContent>
         </f:content>
