@@ -31,6 +31,11 @@ interface TableColumnConfig {
     width?: string;
 }
 
+export type ValueHelpResult = {
+    cancelled: boolean;
+    tokens?: Token[];
+};
+
 export type ValueHelpFilterValues = Record<string, any>;
 
 export interface ValueHelpDialogSettings {
@@ -42,10 +47,6 @@ export interface ValueHelpDialogSettings {
      * Metadata for Table/Tokens/Filters of {@link sap.ui.comp.valuehelpdialog.ValueHelpDialog}
      */
     valueHelpMetadata: ValueHelpMetadata;
-    /**
-     * Name of the key field
-     */
-    keyFieldName: string;
     /**
      * Marks whether the basic search field should be visible in the filter bar
      */
@@ -99,7 +100,7 @@ export default class ValueHelpDialog extends BaseObject {
     private _loadDataAtOpen: boolean;
     private _columnModel = new JSONModel();
     private _dialog: ValueHelpDialogSAP;
-    private _dialogPromise: { resolve: (tokens: Token[]) => void; reject: () => void };
+    private _dialogPromise: { resolve: (result: ValueHelpResult) => void; reject: () => void };
     private _supportRanges: boolean;
     private _supportRangesOnly: boolean;
     private _columnsConfig: TableColumnConfig[] = [];
@@ -114,9 +115,11 @@ export default class ValueHelpDialog extends BaseObject {
         super();
         this._inputControl = settings.inputField;
         this._vhDialogMetadata = settings.valueHelpMetadata;
-        this._keyFieldConfig = this._vhDialogMetadata.fields.find(fc => fc.name === settings.keyFieldName);
+        this._keyFieldConfig = this._vhDialogMetadata.fields.find(
+            fc => fc.name === this._vhDialogMetadata.tokenKeyField
+        );
         if (!this._keyFieldConfig) {
-            throw Error(`No keyfield found with name '${settings.keyFieldName}`);
+            throw Error(`No keyfield found with name '${this._vhDialogMetadata.tokenKeyField}`);
         }
         this._dialogTitle =
             this._keyFieldConfig.description ||
@@ -138,9 +141,9 @@ export default class ValueHelpDialog extends BaseObject {
      * Opens the value help dialog for given bindingPath which will be
      * used to fill the result table
      *
-     * @returns promise which will get resolved upon clicking ok
+     * @returns promise with dialog result
      */
-    async showDialog(): Promise<Token[]> {
+    async showDialog(): Promise<ValueHelpResult> {
         this._dialog = null;
         this._processFieldConfiguration();
         this._columnModel.setData({
@@ -217,14 +220,15 @@ export default class ValueHelpDialog extends BaseObject {
             ok: (event: Event) => {
                 this._tokens = event.getParameter("tokens") as Token[];
                 this._dialog.close();
-                this._dialogPromise.resolve(this._tokens || []);
+                this._dialogPromise.resolve({ cancelled: false, tokens: this._tokens || [] });
             },
             cancel: () => {
                 this._dialog.close();
-                this._dialogPromise.reject();
+                this._dialogPromise.resolve({ cancelled: true });
             },
             afterClose: () => {
                 this._dialog.destroy();
+                this._dialog = null;
             }
         });
     }
@@ -256,8 +260,8 @@ export default class ValueHelpDialog extends BaseObject {
                 template: fieldConfig.name,
                 tooltip: fieldConfig.description,
                 width: FormatUtil.getWidth(fieldConfig, 15),
-                sort: fieldConfig.sortable ? fieldConfig.name : undefined,
-                sorted: fieldConfig.sortable && fieldConfig.isKey,
+                sort: fieldConfig.name,
+                sorted: fieldConfig.isKey || fieldConfig.name === this._keyFieldConfig.name,
                 oType: fieldConfig.type === "Date" ? new DateType() : undefined,
                 sortOrder: "Ascending"
             };
@@ -356,7 +360,10 @@ export default class ValueHelpDialog extends BaseObject {
         } catch (error) {
             Log.error("Value help data could not be loaded", error?.statusText ?? error);
         }
-        this._dialog.update();
-        setBusy(false, useOverlay);
+        // Was the dialog closed in the meantime?
+        if (this._dialog) {
+            this._dialog.update();
+            setBusy(false, useOverlay);
+        }
     }
 }

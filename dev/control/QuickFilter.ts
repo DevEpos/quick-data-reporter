@@ -46,6 +46,10 @@ export interface QuickFilterSettings extends $ControlSettings {
      */
     submit?: Function;
     /**
+     * Event handler for the remove event.
+     */
+    remove?: Function;
+    /**
      * Controls whether only a single value can be entered in the filter
      */
     singleValueOnly?: boolean;
@@ -123,7 +127,11 @@ export default class QuickFilter extends Control {
             /**
              * Submit event for {@link sap.m.Input} controls
              */
-            submit: {}
+            submit: {},
+            /**
+             * Get's fired if filter is removed
+             */
+            remove: {}
         }
     };
     renderer = {
@@ -157,6 +165,7 @@ export default class QuickFilter extends Control {
     fireValueHelpRequest?(): this;
     fireChange?(parameters?: object): this;
     fireSubmit?(): this;
+    fireRemove?(): this;
     getSingleValueOnly?(): boolean;
     setSingleValueOnly?(singleValueOnly: boolean): this;
     getRequired?(): boolean;
@@ -179,6 +188,7 @@ export default class QuickFilter extends Control {
                             tooltip: "{i18n>entity_quickFilter_delete}",
                             type: ButtonType.Transparent,
                             press: () => {
+                                this.fireRemove();
                                 this.destroy();
                             }
                         })
@@ -198,6 +208,11 @@ export default class QuickFilter extends Control {
                 this.invalidate();
             }
         });
+    }
+    clear(): this {
+        this.setValue("");
+        this.setTokens();
+        return this;
     }
     destroy(): void {
         super.destroy.apply(this);
@@ -246,17 +261,18 @@ export default class QuickFilter extends Control {
         return this;
     }
 
-    setTokens(tokens: Token[]): this {
+    setTokens(tokens?: Token[]): this {
         if (this._filterControl instanceof MultiInput) {
-            this._filterControl.setTokens(tokens);
+            if (!tokens || tokens.length === 0) {
+                this._filterControl.removeAllTokens();
+            } else {
+                this._filterControl.setTokens(tokens);
+            }
         }
         return this;
     }
 
     setValue(value: string): this {
-        if (this.getSingleValueOnly()) {
-            return this;
-        }
         if (this._filterControl instanceof DatePicker || this._filterControl instanceof Input) {
             this._filterControl.setValue(value);
         } else if (this._filterControl instanceof ComboBox) {

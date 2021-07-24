@@ -16,10 +16,6 @@ import {
  */
 export interface ConfigurableEntity {
     /**
-     * Current filter items
-     */
-    filterItems: FilterCond[];
-    /**
      * Current sort items
      */
     sortCond: SortCond[];
@@ -32,6 +28,8 @@ export interface ConfigurableEntity {
      */
     aggregationCond: AggregationCond[];
 }
+
+export type TableFilters = Record<string, FilterCond[]>;
 
 /**
  * Describes an entity
@@ -61,7 +59,10 @@ export default class Entity implements ConfigurableEntity {
      * Data rows of an entity
      */
     rows: DataRow[] = [];
-    filterItems: FilterCond[] = [];
+    /**
+     * All visible filters with their set filter values
+     */
+    filters: TableFilters = {};
     sortCond: SortCond[] = [];
     columnsItems: ColumnConfig[] = [];
     aggregationCond: AggregationCond[] = [];

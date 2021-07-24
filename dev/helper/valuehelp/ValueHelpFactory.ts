@@ -1,7 +1,8 @@
-import { ValueHelpMetadata, ValueHelpType } from "../../model/ServiceModel";
+import { FilterCond, ValueHelpMetadata, ValueHelpType } from "../../model/ServiceModel";
 import ValueHelpDialog from "./ValueHelpDialog";
 
 import Input from "sap/m/Input";
+import Token from "sap/m/Token";
 
 /**
  * Factory for creating value helps
@@ -28,12 +29,16 @@ export default class ValueHelpFactory {
      * @param metadata metadata information of a value help
      * @param inputField reference to the input field on which value help is called
      * @param multipleSelection whether or not multiple selection is allowed
+     * @param initialFilters optional array of initial filter conditions
+     * @param initialTokens optional array of conditions as tokens
      * @returns the created value help dialog reference
      */
     createValueHelpDialog(
         metadata: ValueHelpMetadata,
         inputField?: Input,
-        multipleSelection?: boolean
+        multipleSelection?: boolean,
+        initialFilters?: FilterCond[],
+        initialTokens?: Token[]
     ): ValueHelpDialog {
         let supportRangesOnly = false;
         const supportRanges = true;
@@ -43,11 +48,12 @@ export default class ValueHelpFactory {
         }
         const vhDialog = new ValueHelpDialog({
             inputField: inputField,
-            keyFieldName: metadata.tokenKeyField,
             loadDataAtOpen: metadata.type === ValueHelpType.DomainFixValues,
             valueHelpMetadata: metadata,
             multipleSelection: multipleSelection,
             supportRanges: supportRanges,
+            initialFilters: initialFilters,
+            initialTokens: initialTokens,
             supportRangesOnly: supportRangesOnly
         });
 

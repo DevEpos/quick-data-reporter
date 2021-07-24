@@ -1,3 +1,4 @@
+import Log from "sap/base/Log";
 import ValueHelpUtil from "../helper/valuehelp/ValueHelpUtil";
 import Entity, { ConfigurableEntity } from "../model/Entity";
 import {
@@ -110,7 +111,7 @@ export default class EntityState extends BaseState<Entity> {
         this.data.name = null;
         this.data.aggregationCond.length = 0;
         this.data.sortCond.length = 0;
-        this.data.filterItems.length = 0;
+        this.data.filters = {};
         this.data.columnsItems.length = 0;
         this.data.variants.length = 0;
         this.data.rows.length = 0;
@@ -138,7 +139,10 @@ export default class EntityState extends BaseState<Entity> {
                     );
                     this.data.valueHelpMetadata[fieldName] = vhMetadataForField;
                 } catch (error) {
-                    // TODO: handle service error
+                    Log.error(
+                        `Valuehelp metadata at column '${fieldMeta.name}' with type '${fieldMeta.valueHelpType}' could not be determined`
+                    );
+                    this.data.valueHelpMetadata[fieldName] = ValueHelpUtil.getNoVhMetadata(fieldMeta);
                 }
                 break;
 

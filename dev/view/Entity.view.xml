@@ -23,7 +23,7 @@
                             <SegmentedButtonItem icon="sap-icon://filter"
                                 key="filter"
                                 tooltip="{i18n>entity_customizationPanel_filter_title}"/>
-                            <SegmentedButtonItem icon="sap-icon://action-settings"
+                            <SegmentedButtonItem icon="sap-icon://table-column"
                                 key="column"
                                 visible="false"/>
                             <SegmentedButtonItem icon="sap-icon://sort"
@@ -102,7 +102,8 @@
                         icon="sap-icon://filter">
                         <!-- Create panel for CDS parameters-->
                         <app:SideFilterPanel headerText="{i18n>entity_sideFilterPanel_title}"
-                            availableFilterMetadata="{/metadata/colMetadata}"/>
+                            availableFilterMetadata="{/metadata/colMetadata}"
+                            visibleFilters="{/filters}"/>
                     </app:CustomizationPanel>
                 </app:sideContent>
             </app:ToggleableSideContent>

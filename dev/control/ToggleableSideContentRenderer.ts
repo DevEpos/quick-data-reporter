@@ -12,11 +12,8 @@ class ToggleableSideContentRenderer {
      * Renders the HTML for the given control, using the provided
      * {@link sap.ui.core.RenderManager}.
      *
-     * @param {sap.ui.core.RenderManager} rm
-     *            the RenderManager that can be used for writing to
-     *            the Render-Output-Buffer
-     * @param {sap.ui.core.Control} toggleableSideContent
-     *            the side Filter view
+     * @param rm the RenderManager that can be used for writing to the Render-Output-Buffer
+     * @param toggleableSideContent the toggleable side content
      */
     render(rm: RenderManager, toggleableSideContent: ToggleableSideContent) {
         // open main control
@@ -65,7 +62,7 @@ class ToggleableSideContentRenderer {
     /**
      * Renders the main content
      */
-    _renderMain(rm: RenderManager, toggleableSideContent: ToggleableSideContent, width: string) {
+    private _renderMain(rm: RenderManager, toggleableSideContent: ToggleableSideContent, width: string) {
         // open main content
         rm.openStart("section", toggleableSideContent.getId() + "-content");
         rm.class("deveposQdrt-ToggleableSideContent__Content");
@@ -81,7 +78,7 @@ class ToggleableSideContentRenderer {
     /**
      * Renders the side content
      */
-    _renderSideContent(
+    private _renderSideContent(
         rm: RenderManager,
         toggleableSideContent: ToggleableSideContent,
         width: string,

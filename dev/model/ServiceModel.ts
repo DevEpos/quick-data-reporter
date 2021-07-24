@@ -17,7 +17,7 @@ export enum ValueHelpType {
 }
 
 export interface FilterCond {
-    columnKey: string;
+    columnKey?: string;
     operation: string;
     value1?: any;
     value2?: any;
