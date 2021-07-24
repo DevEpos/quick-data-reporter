@@ -3,7 +3,7 @@ import ResizeHandler from "sap/ui/core/ResizeHandler";
 
 /**
  * Helper class for connecting a scroll container
- * @namespace devepos.qdrt.helper
+ * @namespace com.devepos.qdrt.helper
  */
 export default class ResizeAdapter {
     _resizableControl: Control;

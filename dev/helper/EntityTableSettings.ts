@@ -22,7 +22,7 @@ type SettingsModelData = {
 /**
  * Table settings for a database entity
  *
- * @alias devepos.qdrt.model.util.EntityTableSettings
+ * @alias com.devepos.qdrt.model.util.EntityTableSettings
  */
 export default class EntityTableSettings {
     private _view: View;
@@ -60,7 +60,7 @@ export default class EntityTableSettings {
         if (!this._settingsDialog) {
             this._settingsDialog = await Fragment.load({
                 id: this._view.getId(),
-                name: "devepos.qdrt.fragment.EntitySettingsDialog",
+                name: "com.devepos.qdrt.fragment.EntitySettingsDialog",
                 controller: this
             });
             this._view.addDependent(this._settingsDialog);

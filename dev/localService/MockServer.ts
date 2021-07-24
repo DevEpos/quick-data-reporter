@@ -8,12 +8,12 @@ import DateFormat from "sap/ui/core/format/DateFormat";
 import CalendarType from "sap/ui/core/CalendarType";
 import { SinonFakeXMLHttpRequest } from "sinon";
 
-const APP_MODULE_PATH = "devepos/qdrt/";
+const APP_MODULE_PATH = "com/devepos/qdrt/";
 const JSON_FILES_MODULE_PATH = APP_MODULE_PATH + "localService/mockdata/";
 const MOCK_SERVER_URL = "/sap/zqdrtrest/";
 
 /**
- * @namespace devepos.qdrt.localService
+ * @namespace com.devepos.qdrt.localService
  */
 export default class MockServer {
     private _mockServer: _MockServer;

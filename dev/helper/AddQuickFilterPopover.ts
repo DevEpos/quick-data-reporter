@@ -146,7 +146,7 @@ export default class AddQuickFiltersPopover {
     private async _createPopover(): Promise<ResponsivePopover> {
         this._popover = await Fragment.load({
             id: FRAGMENT_ID,
-            name: "devepos.qdrt.fragment.AddFilterPopover",
+            name: "com.devepos.qdrt.fragment.AddFilterPopover",
             controller: this
         });
         return this._popover;

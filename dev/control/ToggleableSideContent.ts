@@ -5,7 +5,7 @@ import { SideContentPosition } from "sap/ui/layout/library";
 /**
  * Control with a main part and a toggleable side content.
  *
- * @namespace devepos.qdrt.control
+ * @namespace com.devepos.qdrt.control
  */
 export default class ToggleableSideContent extends Control {
     metadata = {

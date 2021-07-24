@@ -3,7 +3,7 @@ import { SideContentPosition } from "sap/ui/layout/library";
 import ToggleableSideContent from "./ToggleableSideContent";
 
 /**
- * Renderer for the {@link devepos.qdrt.control.ToggleableSideContent} control
+ * Renderer for the {@link com.devepos.qdrt.control.ToggleableSideContent} control
  */
 class ToggleableSideContentRenderer {
     apiVersion = 2;

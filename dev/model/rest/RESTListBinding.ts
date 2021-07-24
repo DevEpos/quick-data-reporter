@@ -6,7 +6,7 @@ import Sorter from "sap/ui/model/Sorter";
 /**
  * Custom List Binding that supports paging
  *
- * @alias devepos.qdrt.model.rest.RESTListBinding
+ * @alias com.devepos.qdrt.model.rest.RESTListBinding
  */
 export default class RESTListBinding extends JSONListBinding {
     /**

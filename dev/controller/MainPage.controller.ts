@@ -15,7 +15,7 @@ import FilterBar from "sap/ui/comp/filterbar/FilterBar";
 /**
  * Main Page controller
  *
- * @namespace devepos.qdrt.controller
+ * @namespace com.devepos.qdrt.controller
  */
 export default class MainPageController extends BaseController {
     private _searchService: EntityService;

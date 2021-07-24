@@ -7,8 +7,8 @@ import QdrtComponent from "../Component";
 
 /**
  * Base controller for all view controllers
- * @alias devepos.qdrt.controller.BaseController
- * @namespace devepos.qdrt.controller
+ * @alias com.devepos.qdrt.controller.BaseController
+ * @namespace com.devepos.qdrt.controller
  */
 export default class BaseController extends Controller {
     protected router: Router;

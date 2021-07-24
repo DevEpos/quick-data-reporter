@@ -1,11 +1,11 @@
 import UIComponent from "sap/ui/core/UIComponent";
-import models from "devepos/qdrt/model/models";
+import models from "com/devepos/qdrt/model/models";
 import ResourceBundle from "sap/base/i18n/ResourceBundle";
 import ResourceModel from "sap/ui/model/resource/ResourceModel";
 
 /**
  * Component for the Quick Data Reporter
- * @namespace devepos.qdrt
+ * @namespace com.devepos.qdrt
  */
 export default class QdrtComponent extends UIComponent {
     _bundle: ResourceBundle;

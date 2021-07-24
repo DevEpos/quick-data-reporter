@@ -21,7 +21,7 @@ import Input from "sap/m/Input";
 /**
  * FilterBar with vertical orientation
  *
- * @namespace devepos.qdrt.control
+ * @namespace com.devepos.qdrt.control
  */
 export default class SideFilterPanel extends Panel {
     metadata = {

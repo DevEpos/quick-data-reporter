@@ -17,7 +17,7 @@
         "baseUrl": "./",
         "rootDir": "./dev",
         "paths": {
-            "devepos/qdrt/*": ["./dev/*"],
+            "com/devepos/qdrt/*": ["./dev/*"],
             "sap/ui/thirdparty/jquery": ["node_modules/@types/jquery/index.d.ts"]
         },
         "types": ["@sapui5/ts-types-esm/types"]

@@ -1,5 +1,5 @@
-<mvc:View controllerName="devepos.qdrt.controller.Entity"
-    xmlns:app="devepos.qdrt.control"
+<mvc:View controllerName="com.devepos.qdrt.controller.Entity"
+    xmlns:app="com.devepos.qdrt.control"
     xmlns:l="sap.ui.layout"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:f="sap.f"

@@ -20,7 +20,7 @@ import CustomData from "sap/ui/core/CustomData";
 /**
  * Controller for a single database entity
  *
- * @alias devepos.qdrt.controller.Entity
+ * @alias com.devepos.qdrt.controller.Entity
  */
 export default class EntityController extends BaseController {
     private _uiModel: JSONModel;

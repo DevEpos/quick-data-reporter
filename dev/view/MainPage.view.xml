@@ -1,4 +1,4 @@
-<mvc:View controllerName="devepos.qdrt.controller.MainPage"
+<mvc:View controllerName="com.devepos.qdrt.controller.MainPage"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:c="sap.ui.core"
     xmlns:vm="sap.ui.comp.variants"

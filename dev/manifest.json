@@ -1,6 +1,6 @@
 {
     "sap.app": {
-        "id": "devepos.qdrt",
+        "id": "com.devepos.qdrt",
         "type": "application",
         "i18n": "i18n/i18n.properties",
         "dataSources": {},
@@ -25,7 +25,7 @@
         },
         "contentDensities": { "compact": true, "cozy": true },
         "rootView": {
-            "viewName": "devepos.qdrt.view.App",
+            "viewName": "com.devepos.qdrt.view.App",
             "type": "XML",
             "id": "idAppControl"
         },
@@ -46,7 +46,7 @@
             "config": {
                 "routerClass": "sap.m.routing.Router",
                 "viewType": "XML",
-                "viewPath": "devepos.qdrt.view",
+                "viewPath": "com.devepos.qdrt.view",
                 "controlId": "idAppControl",
                 "controlAggregation": "pages",
                 "transition": "slide"

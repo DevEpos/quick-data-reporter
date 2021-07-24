@@ -8,7 +8,7 @@ import RenderManager from "sap/ui/core/RenderManager";
 
 /**
  * Panel for customization like Column settings, Filter criteria, etc.
- * @namespace devepos.qdrt.control
+ * @namespace com.devepos.qdrt.control
  */
 export default class CustomizationPanel extends Control {
     metadata = {
