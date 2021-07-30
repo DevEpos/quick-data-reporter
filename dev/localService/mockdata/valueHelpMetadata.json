@@ -43,7 +43,8 @@
                 "fieldText": "User Name in User Master Record",
                 "shortDescription": "User",
                 "mediumDescription": "User",
-                "longDescription": "User"
+                "longDescription": "User",
+                "displayFormat": "UpperCase"
             },
             {
                 "name": "mc_namelas",
@@ -52,7 +53,8 @@
                 "fieldText": "Last Name in Uppercase for Search Help",
                 "shortDescription": "Last name",
                 "mediumDescription": "Last name",
-                "longDescription": "Last name"
+                "longDescription": "Last name",
+                "displayFormat": "UpperCase"
             },
             {
                 "name": "mc_namefir",
@@ -61,7 +63,8 @@
                 "fieldText": "First Name in Uppercase for Search Help",
                 "shortDescription": "First name",
                 "mediumDescription": "First name",
-                "longDescription": "First name"
+                "longDescription": "First name",
+                "displayFormat": "UpperCase"
             },
             {
                 "name": "department",
@@ -70,8 +73,7 @@
                 "fieldText": "Department",
                 "shortDescription": "Department",
                 "mediumDescription": "Department",
-                "longDescription": "Department",
-                "isCaseSensitive": true
+                "longDescription": "Department"
             },
             {
                 "name": "building",
@@ -80,8 +82,7 @@
                 "fieldText": "Building (number or code)",
                 "shortDescription": "Buildings",
                 "mediumDescription": "Building code",
-                "longDescription": "Building code",
-                "isCaseSensitive": true
+                "longDescription": "Building code"
             },
             {
                 "name": "roomnumber",
@@ -90,8 +91,7 @@
                 "fieldText": "Room or Apartment Number",
                 "shortDescription": "Room",
                 "mediumDescription": "Room Number",
-                "longDescription": "Room Number",
-                "isCaseSensitive": true
+                "longDescription": "Room Number"
             },
             {
                 "name": "tel_extens",
@@ -100,7 +100,8 @@
                 "fieldText": "First Telephone No.: Extension",
                 "shortDescription": "Extension",
                 "mediumDescription": "Extension",
-                "longDescription": "Extension"
+                "longDescription": "Extension",
+                "displayFormat": "UpperCase"
             },
             {
                 "name": "kostl",
@@ -109,7 +110,8 @@
                 "fieldText": "Cost center",
                 "shortDescription": "Cost ctr",
                 "mediumDescription": "Cost center",
-                "longDescription": "Cost center"
+                "longDescription": "Cost center",
+                "displayFormat": "UpperCase"
             },
             {
                 "name": "inhouse_ml",
@@ -118,8 +120,7 @@
                 "fieldText": "Internal Mail Postal Code",
                 "shortDescription": "Internal",
                 "mediumDescription": "Internal mail",
-                "longDescription": "Internal mail",
-                "isCaseSensitive": true
+                "longDescription": "Internal mail"
             },
             {
                 "name": "mc_name1",
@@ -128,7 +129,8 @@
                 "fieldText": "Name (Field NAME1) in Uppercase for Search Help",
                 "shortDescription": "Name",
                 "mediumDescription": "Name",
-                "longDescription": "Company name"
+                "longDescription": "Company name",
+                "displayFormat": "UpperCase"
             },
             {
                 "name": "mc_city1",
@@ -137,7 +139,8 @@
                 "fieldText": "City name in Uppercase for Search Help",
                 "shortDescription": "City",
                 "mediumDescription": "City",
-                "longDescription": "City"
+                "longDescription": "City",
+                "displayFormat": "UpperCase"
             },
             {
                 "name": "company",
@@ -146,7 +149,8 @@
                 "fieldText": "Company address, cross-system key",
                 "shortDescription": "Company",
                 "mediumDescription": "Company",
-                "longDescription": "Company"
+                "longDescription": "Company",
+                "displayFormat": "UpperCase"
             },
             {
                 "name": "idadtype",

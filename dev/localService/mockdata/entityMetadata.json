@@ -11,6 +11,7 @@
             "longDescription": "Class/Interface",
             "fieldText": "Object Type Name",
             "hasValueHelp": true,
+            "displayFormat": "UpperCase",
             "valueHelpType": "CheckTable"
         },
         {
@@ -24,6 +25,7 @@
             "longDescription": "Version",
             "fieldText": "Version indicator (active/inactive)",
             "hasValueHelp": true,
+            "displayFormat": "UpperCase",
             "valueHelpType": "DomainFixValues"
         },
         {
@@ -36,6 +38,7 @@
             "longDescription": "Category",
             "fieldText": "Class/Interface category",
             "hasValueHelp": true,
+            "displayFormat": "UpperCase",
             "valueHelpType": "DomainFixValues"
         },
         {
@@ -48,6 +51,7 @@
             "longDescription": "Visibility",
             "fieldText": "Visibility of a class or component",
             "hasValueHelp": true,
+            "displayFormat": "UpperCase",
             "valueHelpType": "DomainFixValues"
         },
         {
@@ -60,6 +64,7 @@
             "longDescription": "Status",
             "fieldText": "Status of a class or component",
             "hasValueHelp": true,
+            "displayFormat": "UpperCase",
             "valueHelpType": "DomainFixValues"
         },
         {
@@ -72,6 +77,7 @@
             "longDescription": "Release",
             "fieldText": "Release status of a class",
             "hasValueHelp": true,
+            "displayFormat": "UpperCase",
             "valueHelpType": "DomainFixValues"
         },
         {
@@ -83,8 +89,7 @@
             "mediumDescription": "Created By",
             "longDescription": "Created By",
             "fieldText": "Author",
-            "hasValueHelp": true,
-            "valueHelpType": "ElementaryDDICSearchHelp"
+            "displayFormat": "UpperCase"
         },
         {
             "name": "createdon",
@@ -106,7 +111,8 @@
             "shortDescription": "Changed by",
             "mediumDescription": "Last changed by",
             "longDescription": "Last changed by",
-            "fieldText": "Last changed by"
+            "fieldText": "Last changed by",
+            "displayFormat": "UpperCase"
         },
         {
             "name": "changedon",
@@ -128,7 +134,8 @@
             "shortDescription": "Changed by",
             "mediumDescription": "Last changed by",
             "longDescription": "Last changed by",
-            "fieldText": "Last changed by"
+            "fieldText": "Last changed by",
+            "displayFormat": "UpperCase"
         },
         {
             "name": "chgdanyon",
@@ -187,7 +194,8 @@
             "shortDescription": "Int. Comp.",
             "mediumDescription": "Interface Comp.",
             "longDescription": "Interface Component",
-            "fieldText": "Full Component Name"
+            "fieldText": "Full Component Name",
+            "displayFormat": "UpperCase"
         },
         {
             "name": "clsdefmtd",
@@ -197,14 +205,16 @@
             "shortDescription": "Int. Comp.",
             "mediumDescription": "Interface Comp.",
             "longDescription": "Interface Component",
-            "fieldText": "Full Component Name"
+            "fieldText": "Full Component Name",
+            "displayFormat": "UpperCase"
         },
         {
             "name": "refclsname",
             "rollname": "DDSTRUCOBJNAME",
             "type": "String",
             "length": 30,
-            "fieldText": "DD: Name of a structured object (e.g. entity, context)"
+            "fieldText": "DD: Name of a structured object (e.g. entity, context)",
+            "displayFormat": "UpperCase"
         },
         { "name": "fixpt", "rollname": "FIXPT", "type": "Boolean", "length": 1, "fieldText": "Fixed point arithmetic" },
         {
@@ -227,7 +237,6 @@
             "longDescription": "ABAP Version",
             "fieldText": "ABAP Version",
             "hasValueHelp": true,
-            "isCaseSensitive": true,
             "valueHelpType": "DomainFixValues"
         },
         {
@@ -237,6 +246,7 @@
             "length": 1,
             "fieldText": "Status",
             "hasValueHelp": true,
+            "displayFormat": "UpperCase",
             "valueHelpType": "DomainFixValues"
         },
         {
@@ -247,7 +257,8 @@
             "shortDescription": "Obj. Type",
             "mediumDescription": "Type Name",
             "longDescription": "Class/Interface",
-            "fieldText": "Object Type Name"
+            "fieldText": "Object Type Name",
+            "displayFormat": "UpperCase"
         },
         {
             "name": "r3release",
@@ -257,7 +268,8 @@
             "shortDescription": "Release",
             "mediumDescription": "SAP Release",
             "longDescription": "SAP Release",
-            "fieldText": "SAP Release"
+            "fieldText": "SAP Release",
+            "displayFormat": "UpperCase"
         },
         {
             "name": "clsbctrans",
@@ -279,9 +291,16 @@
             "longDescription": "Business Class Category",
             "fieldText": "Category of Business Class",
             "hasValueHelp": true,
+            "displayFormat": "UpperCase",
             "valueHelpType": "DomainFixValues"
         },
-        { "name": "clsbcnodel", "type": "String", "length": 1, "fieldText": "Directly Implemented Business Class" },
+        {
+            "name": "clsbcnodel",
+            "type": "String",
+            "length": 1,
+            "fieldText": "Directly Implemented Business Class",
+            "displayFormat": "UpperCase"
+        },
         {
             "name": "clsaddon",
             "rollname": "SEOCLSNAME",
@@ -290,14 +309,16 @@
             "shortDescription": "Obj. Type",
             "mediumDescription": "Type Name",
             "longDescription": "Class/Interface",
-            "fieldText": "Object Type Name"
+            "fieldText": "Object Type Name",
+            "displayFormat": "UpperCase"
         },
         {
             "name": "msg_id",
             "rollname": "ABP_MSGI",
             "type": "String",
             "length": 20,
-            "fieldText": "MESSAGE-ID from PROGRAM statement"
+            "fieldText": "MESSAGE-ID from PROGRAM statement",
+            "displayFormat": "UpperCase"
         },
         {
             "name": "clsproxy",
@@ -309,6 +330,7 @@
             "longDescription": "Proxy Class",
             "fieldText": "Category of the Proxy Class",
             "hasValueHelp": true,
+            "displayFormat": "UpperCase",
             "valueHelpType": "DomainFixValues"
         },
         {

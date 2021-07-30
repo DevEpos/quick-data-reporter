@@ -4,6 +4,9 @@ export enum EntityType {
     View = "V"
 }
 
+export enum DisplayFormat {
+    UpperCase = "UpperCase"
+}
 export enum ValueHelpType {
     DomainFixValues = "DomainFixValues",
     ElementaryDDICSearchHelp = "ElementaryDDICSearchHelp",
@@ -130,9 +133,9 @@ export interface EntityColMetadata {
      */
     technical?: boolean;
     /**
-     * Indicates if the field allows case sensitive input
+     * The display format to be used for the field
      */
-    isCaseSensitive?: boolean;
+    displayFormat?: string;
     /**
      * Indicates if there is a value help for the field available
      */
