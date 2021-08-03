@@ -7,7 +7,8 @@ import {
     DataRow,
     ColumnConfig,
     ValueHelpMetadata,
-    ValueHelpType
+    ValueHelpType,
+    FieldMetadata
 } from "../model/ServiceModel";
 import EntityService from "../service/EntityService";
 import BaseState from "./BaseState";
@@ -55,7 +56,10 @@ export default class EntityState extends BaseState<Entity> {
                 this.setRows(selectionData?.rows);
             }
         } catch (reqError) {
-            // TODO: handle error
+            Log.error(
+                `Data for entity with type: ${this.data.type}, name: ${this.data.name} could not be loaded`,
+                reqError?.statusText ?? ""
+            );
         }
     }
     async loadVariants(): Promise<void> {
@@ -64,34 +68,42 @@ export default class EntityState extends BaseState<Entity> {
             this.data.variants = [...variantData] || [];
             this.updateModel();
         } catch (reqError) {
-            // TODO: handle error
+            Log.error(
+                `Variants for entity with type: ${this.data.type}, name: ${this.data.name} could not be loaded`,
+                reqError?.statusText ?? ""
+            );
         }
     }
     async loadMetadata(): Promise<EntityMetadata> {
         try {
             const entityMetadata = await this._entityService.getMetadata(this.data.type, this.data.name);
             this.noModelUpdates = true;
-            this.setMetadata({ colMetadata: entityMetadata?.colMetadata || [] });
-            if (entityMetadata?.colMetadata) {
-                for (let i = 0; i < entityMetadata.colMetadata.length; i++) {
-                    const colMeta = entityMetadata.colMetadata[i];
-                    colMeta.description =
-                        colMeta.mediumDescription ||
-                        (colMeta.longDescription?.length <= 20 && colMeta.longDescription) ||
-                        (colMeta.fieldText?.length <= 20 && colMeta.fieldText) ||
-                        colMeta.shortDescription ||
-                        colMeta.name;
+            if (entityMetadata?.fields) {
+                for (let i = 0; i < entityMetadata.fields.length; i++) {
+                    let fieldMeta = Object.create(FieldMetadata.prototype);
+                    entityMetadata.fields[i] = Object.assign(fieldMeta, entityMetadata.fields[i]);
+                    fieldMeta = entityMetadata.fields[i];
+                    fieldMeta.description =
+                        fieldMeta.mediumDescription ||
+                        (fieldMeta.longDescription?.length <= 20 && fieldMeta.longDescription) ||
+                        (fieldMeta.fieldText?.length <= 20 && fieldMeta.fieldText) ||
+                        fieldMeta.shortDescription ||
+                        fieldMeta.name;
                     this.data.columnsItems.push({
-                        columnKey: colMeta.name,
+                        columnKey: fieldMeta.name,
                         visible: true,
                         index: i
                     });
                 }
             }
+            this.setMetadata({ fields: entityMetadata?.fields || [] });
             this.noModelUpdates = false;
             this.updateModel();
         } catch (reqError) {
-            // TODO: handle error
+            Log.error(
+                `Metadata for entity with type: ${this.data.type}, name: ${this.data.name} could not be determined`,
+                reqError?.statusText ?? ""
+            );
         }
         return this.data.metadata;
     }
@@ -116,15 +128,15 @@ export default class EntityState extends BaseState<Entity> {
         this.data.variants.length = 0;
         this.data.rows.length = 0;
         this.data.valueHelpMetadata = {};
-        const colMetadata = this.data.metadata?.colMetadata;
-        if (colMetadata) {
-            colMetadata.length = 0;
+        const fieldMetadata = this.data.metadata?.fields;
+        if (fieldMetadata) {
+            fieldMetadata.length = 0;
         }
         this.updateModel();
     }
 
     private async _determineValueHelpInfo(fieldName: string): Promise<void> {
-        const fieldMeta = this.data.metadata.colMetadata.find(f => f.name === fieldName);
+        const fieldMeta = this.data.metadata.fields.find(f => f.name === fieldName);
 
         switch (fieldMeta.valueHelpType) {
             case ValueHelpType.CheckTable:

@@ -102,7 +102,7 @@
                         icon="sap-icon://filter">
                         <!-- Create panel for CDS parameters-->
                         <app:SideFilterPanel headerText="{i18n>entity_sideFilterPanel_title}"
-                            availableFilterMetadata="{/metadata/colMetadata}"
+                            availableFilterMetadata="{/metadata/fields}"
                             visibleFilters="{/filters}"/>
                     </app:CustomizationPanel>
                 </app:sideContent>

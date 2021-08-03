@@ -1,4 +1,4 @@
-import { EntityColMetadata } from "../model/ServiceModel";
+import { FieldMetadata } from "../model/ServiceModel";
 
 import ResponsivePopover from "sap/m/ResponsivePopover";
 import Control from "sap/ui/core/Control";
@@ -16,7 +16,7 @@ export interface SelectedField {
     name: string;
     label: string;
     tooltip: string;
-    type: string;
+    fieldMetadata: FieldMetadata;
 }
 
 interface FieldConfig extends SelectedField {
@@ -61,7 +61,7 @@ export default class AddQuickFiltersPopover {
     private _popoverPromise: { resolve: (selectedFields: SelectedField[]) => void };
     private _scroller: ScrollContainer;
 
-    constructor(filterMetadata: EntityColMetadata[]) {
+    constructor(filterMetadata: FieldMetadata[]) {
         this._createModel(filterMetadata);
     }
     /**
@@ -108,7 +108,7 @@ export default class AddQuickFiltersPopover {
     onAfterClose(): void {
         this._popover?.destroy();
     }
-    private _createModel(filterMetadata: EntityColMetadata[]): void {
+    private _createModel(filterMetadata: FieldMetadata[]): void {
         this._modelData = new PopoverModel();
         for (const filterMeta of filterMetadata) {
             this._modelData.fields.push({
@@ -118,7 +118,7 @@ export default class AddQuickFiltersPopover {
                         ? filterMeta.name
                         : `${filterMeta.description} (${filterMeta.name})`,
                 tooltip: filterMeta.fieldText,
-                type: filterMeta.type,
+                fieldMetadata: filterMeta,
                 selected: false
             });
         }

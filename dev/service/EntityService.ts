@@ -5,7 +5,8 @@ import {
     EntityMetadata,
     EntityVariant,
     EntityType,
-    ValueHelpMetadata
+    ValueHelpMetadata,
+    FieldMetadata
 } from "../model/ServiceModel";
 
 const BASE_SRV_URL = "/sap/zqdrtrest/entities";
@@ -28,7 +29,15 @@ export default class EntityService {
                 method: "GET"
             }
         );
-        return response?.data;
+        if (response?.data?.fields) {
+            const metadata: EntityMetadata = {
+                fields: (response.data.fields as Record<string, any>[]).map(f => Object.assign(new FieldMetadata(), f))
+            };
+
+            return metadata;
+        } else {
+            return null;
+        }
     }
 
     /**

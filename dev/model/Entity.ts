@@ -6,7 +6,7 @@ import {
     SortCond,
     ColumnConfig,
     AggregationCond,
-    EntityColMetadata,
+    FieldMetadata,
     EntityVariant,
     ValueHelpMetadata
 } from "./ServiceModel";
@@ -46,7 +46,7 @@ export default class Entity implements ConfigurableEntity {
     /**
      * Metadata of an entity
      */
-    metadata: EntityMetadata = { colMetadata: [] };
+    metadata: EntityMetadata = { fields: [] };
     /**
      * Value help metadata for each field where a value help is defined
      */
@@ -69,10 +69,10 @@ export default class Entity implements ConfigurableEntity {
     /**
      * Returns all visible columns
      */
-    get visibleColMetadata(): EntityColMetadata[] {
+    get visibleFieldMetadata(): FieldMetadata[] {
         const visibleColKeys = this.columnsItems.filter(col => col.visible).map(col => col.columnKey);
         return visibleColKeys.map(visibleColKey =>
-            this.metadata.colMetadata.find(colMeta => colMeta.name === visibleColKey)
+            this.metadata.fields.find(colMeta => colMeta.name === visibleColKey)
         );
     }
 }

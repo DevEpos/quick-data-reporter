@@ -1,6 +1,6 @@
 import models from "../model/models";
 import { ReadOnlyStateData } from "../state/BaseState";
-import { AggregationCond, ColumnConfig, EntityColMetadata, SortCond } from "../model/ServiceModel";
+import { AggregationCond, ColumnConfig, FieldMetadata, SortCond } from "../model/ServiceModel";
 import Entity, { ConfigurableEntity } from "../model/Entity";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import Fragment from "sap/ui/core/Fragment";
@@ -13,8 +13,8 @@ import { P13nConditionOperation } from "sap/m/library";
 import deepClone from "sap/base/util/deepClone";
 
 type SettingsModelData = {
-    columnMetadata: EntityColMetadata[];
-    allColumnsItems: EntityColMetadata[];
+    columnMetadata: FieldMetadata[];
+    allColumnsItems: FieldMetadata[];
     columnsItems: ColumnConfig[];
     sortCond: SortCond[];
     aggregationCond: AggregationCond[];
@@ -190,7 +190,7 @@ export default class EntityTableSettings {
 
     private _updateInternalModel(state: ReadOnlyStateData<Entity>) {
         this._modelCurrentState = {
-            columnMetadata: state.metadata.colMetadata,
+            columnMetadata: state.metadata.fields,
             allColumnsItems: [],
             columnsItems: [...state.columnsItems],
             sortCond: [...state.sortCond] || [],

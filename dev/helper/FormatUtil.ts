@@ -1,4 +1,4 @@
-import { EntityColMetadata } from "../model/ServiceModel";
+import { FieldMetadata } from "../model/ServiceModel";
 
 /**
  * Utility concerning formatting like e.g. getting the width for a
@@ -13,13 +13,12 @@ export default class FormatUtil {
      * @param minWidth The min width (optional, default 3)
      * @returns width of the filter field in em
      */
-    static getWidth(fieldMeta: EntityColMetadata, maxWidth = 30, minWidth = 3): string {
-        let width = "" + fieldMeta.length;
-        let widthNumeric: number;
+    static getWidth(fieldMeta: FieldMetadata, maxWidth = 30, minWidth = 3): string {
+        let width = fieldMeta.maxLength;
 
         // Force set the width to 9em for date fields
         if (fieldMeta.type === "DateTime" || fieldMeta.type === "Date") {
-            width = "9em";
+            width = 9;
         } else if (width) {
             // // Use Max width for description&Id and descriptionOnly use-case to accommodate description texts better on the UI
             // if (
@@ -35,32 +34,25 @@ export default class FormatUtil {
             // if (width === "Max") {
             //     width = maxWidth + "";
             // }
-            widthNumeric = parseInt(width);
-            if (!isNaN(widthNumeric)) {
-                // Add additional .75 em (~12px) to avoid showing ellipsis in some cases!
-                widthNumeric += 0.75;
-                // use a max initial width of 30em (default)
-                if (widthNumeric > maxWidth) {
-                    widthNumeric = maxWidth;
-                } else if (widthNumeric < minWidth) {
-                    // use a min width of 3em (default)
-                    widthNumeric = minWidth;
-                }
-                width = widthNumeric + "em";
-            } else {
-                // if NaN reset the width so min width would be used
-                width = null;
+            // Add additional .75 em (~12px) to avoid showing ellipsis in some cases!
+            width += 0.75;
+            // use a max initial width of 30em (default)
+            if (width > maxWidth) {
+                width = maxWidth;
+            } else if (width < minWidth) {
+                // use a min width of 3em (default)
+                width = minWidth;
             }
         }
         if (!width) {
             // For Boolean fields - Use min width as the fallabck, in case no width could be derived.
             if (fieldMeta.type === "Boolean") {
-                width = minWidth + "em";
+                width = minWidth;
             } else {
                 // use the max width as the fallback width of the column, if no width can be derived
-                width = maxWidth + "em";
+                width = maxWidth;
             }
         }
-        return width;
+        return width + "em";
     }
 }

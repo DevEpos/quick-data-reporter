@@ -2,7 +2,7 @@ import BaseController from "./BaseController";
 import models from "../model/models";
 import { EntityType } from "../model/ServiceModel";
 import EntityTableSettings from "../helper/EntityTableSettings";
-import { EntityColMetadata } from "../model/ServiceModel";
+import { FieldMetadata } from "../model/ServiceModel";
 import EntityState from "../state/EntityState";
 import StateRegistry from "../state/StateRegistry";
 
@@ -16,6 +16,7 @@ import Control from "sap/ui/core/Control";
 import Menu from "sap/m/Menu";
 import MenuItem from "sap/m/MenuItem";
 import CustomData from "sap/ui/core/CustomData";
+import FormatUtil from "../helper/FormatUtil";
 
 /**
  * Controller for a single database entity
@@ -127,7 +128,7 @@ export default class EntityController extends BaseController {
     }
     private _createColumns(): void {
         this._dataPreviewTable.destroyColumns();
-        for (const columnMeta of this._entityState.getData().visibleColMetadata) {
+        for (const columnMeta of this._entityState.getData().visibleFieldMetadata) {
             this._dataPreviewTable.addColumn(this._createColumn(columnMeta));
         }
     }
@@ -137,19 +138,11 @@ export default class EntityController extends BaseController {
      * @param context the context binding of the column
      * @returns the created column
      */
-    private _createColumn(columnMetadataInfo: EntityColMetadata): Column {
-        let width = "5rem";
-        if (columnMetadataInfo.length > 50) {
-            width = "15rem";
-        } else if (columnMetadataInfo.length > 9) {
-            width = "15rem";
-        }
-
-        let template: string | Control = columnMetadataInfo.name;
+    private _createColumn(fieldMetadataInfo: FieldMetadata): Column {
+        let template: string | Control = fieldMetadataInfo.name;
         let hAlign = HorizontalAlign.Begin;
-        switch (columnMetadataInfo.type) {
+        switch (fieldMetadataInfo.type) {
             case "Date":
-                width = "8rem";
                 template = new Text({
                     text: {
                         path: template,
@@ -193,18 +186,18 @@ export default class EntityController extends BaseController {
         }
         return new Column({
             label: new Text({
-                text: columnMetadataInfo.description,
-                tooltip: columnMetadataInfo.name,
+                text: fieldMetadataInfo.description,
+                tooltip: fieldMetadataInfo.name,
                 wrapping: false
             }),
             hAlign,
-            width: width,
+            width: FormatUtil.getWidth(fieldMetadataInfo, 15),
             template,
-            sortProperty: columnMetadataInfo.name,
+            sortProperty: fieldMetadataInfo.name,
             showSortMenuEntry: true,
             customData: new CustomData({
                 key: "columnKey",
-                value: columnMetadataInfo.name
+                value: fieldMetadataInfo.name
             })
         });
     }

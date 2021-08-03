@@ -16,6 +16,7 @@ import Table from "sap/ui/table/Table";
 import Token from "sap/m/Token";
 import DateType from "sap/ui/model/type/Date";
 import Log from "sap/base/Log";
+import { smartfilterbar } from "sap/ui/comp/library";
 
 interface TableColumnConfig {
     label: string;
@@ -170,8 +171,10 @@ export default class ValueHelpDialog extends BaseObject {
             label: this._keyFieldConfig.description,
             type: this._keyFieldConfig.type?.toLowerCase(),
             formatSettings: {
-                maxLength: this._keyFieldConfig.length
-            }
+                maxLength: this._keyFieldConfig.maxLength
+            },
+            precision: this._keyFieldConfig.precision,
+            scale: this._keyFieldConfig.scale
         };
         this._dialog.setRangeKeyFields([rangeKeyField]);
         return new Promise((resolve, reject) => {
@@ -206,6 +209,12 @@ export default class ValueHelpDialog extends BaseObject {
      * Creates the value help dialog
      */
     private _createDialog() {
+        let tokenDisplayBehaviour = "";
+        let descriptionKey = this._vhDialogMetadata.tokenDescriptionField;
+        if (!descriptionKey || descriptionKey === "") {
+            descriptionKey = this._vhDialogMetadata.tokenKeyField;
+            tokenDisplayBehaviour = smartfilterbar.DisplayBehaviour.idOnly;
+        }
         this._dialog = new ValueHelpDialogSAP({
             title: this._dialogTitle,
             supportMultiselect: this._multipleSelection,
@@ -213,8 +222,9 @@ export default class ValueHelpDialog extends BaseObject {
             supportRanges: this._supportRanges,
             supportRangesOnly: this._supportRangesOnly,
             key: this._vhDialogMetadata.tokenKeyField,
-            displayFormat: this._keyFieldConfig?.isCaseSensitive ? "" : "UpperCase",
-            descriptionKey: this._vhDialogMetadata.tokenDescriptionField,
+            displayFormat: this._keyFieldConfig.displayFormat ?? "",
+            descriptionKey,
+            tokenDisplayBehaviour,
             maxExcludeRanges: !this._multipleSelection ? "0" : "-1",
             maxIncludeRanges: !this._multipleSelection ? "1" : "-1",
             ok: (event: Event) => {

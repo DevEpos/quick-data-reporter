@@ -39,7 +39,7 @@
             {
                 "name": "bname",
                 "type": "String",
-                "length": 12,
+                "maxLength": 12,
                 "fieldText": "User Name in User Master Record",
                 "shortDescription": "User",
                 "mediumDescription": "User",
@@ -49,7 +49,7 @@
             {
                 "name": "mc_namelas",
                 "type": "String",
-                "length": 25,
+                "maxLength": 25,
                 "fieldText": "Last Name in Uppercase for Search Help",
                 "shortDescription": "Last name",
                 "mediumDescription": "Last name",
@@ -59,7 +59,7 @@
             {
                 "name": "mc_namefir",
                 "type": "String",
-                "length": 25,
+                "maxLength": 25,
                 "fieldText": "First Name in Uppercase for Search Help",
                 "shortDescription": "First name",
                 "mediumDescription": "First name",
@@ -69,7 +69,7 @@
             {
                 "name": "department",
                 "type": "String",
-                "length": 40,
+                "maxLength": 40,
                 "fieldText": "Department",
                 "shortDescription": "Department",
                 "mediumDescription": "Department",
@@ -78,7 +78,7 @@
             {
                 "name": "building",
                 "type": "String",
-                "length": 10,
+                "maxLength": 10,
                 "fieldText": "Building (number or code)",
                 "shortDescription": "Buildings",
                 "mediumDescription": "Building code",
@@ -87,7 +87,7 @@
             {
                 "name": "roomnumber",
                 "type": "String",
-                "length": 10,
+                "maxLength": 10,
                 "fieldText": "Room or Apartment Number",
                 "shortDescription": "Room",
                 "mediumDescription": "Room Number",
@@ -96,7 +96,7 @@
             {
                 "name": "tel_extens",
                 "type": "String",
-                "length": 20,
+                "maxLength": 20,
                 "fieldText": "First Telephone No.: Extension",
                 "shortDescription": "Extension",
                 "mediumDescription": "Extension",
@@ -106,7 +106,7 @@
             {
                 "name": "kostl",
                 "type": "String",
-                "length": 8,
+                "maxLength": 8,
                 "fieldText": "Cost center",
                 "shortDescription": "Cost ctr",
                 "mediumDescription": "Cost center",
@@ -116,7 +116,7 @@
             {
                 "name": "inhouse_ml",
                 "type": "String",
-                "length": 10,
+                "maxLength": 10,
                 "fieldText": "Internal Mail Postal Code",
                 "shortDescription": "Internal",
                 "mediumDescription": "Internal mail",
@@ -125,7 +125,7 @@
             {
                 "name": "mc_name1",
                 "type": "String",
-                "length": 25,
+                "maxLength": 25,
                 "fieldText": "Name (Field NAME1) in Uppercase for Search Help",
                 "shortDescription": "Name",
                 "mediumDescription": "Name",
@@ -135,7 +135,7 @@
             {
                 "name": "mc_city1",
                 "type": "String",
-                "length": 25,
+                "maxLength": 25,
                 "fieldText": "City name in Uppercase for Search Help",
                 "shortDescription": "City",
                 "mediumDescription": "City",
@@ -145,7 +145,7 @@
             {
                 "name": "company",
                 "type": "String",
-                "length": 42,
+                "maxLength": 42,
                 "fieldText": "Company address, cross-system key",
                 "shortDescription": "Company",
                 "mediumDescription": "Company",
@@ -155,7 +155,7 @@
             {
                 "name": "idadtype",
                 "type": "String",
-                "length": 2,
+                "maxLength": 2,
                 "fieldText": "Address Type of the Identity",
                 "shortDescription": "ID Type",
                 "mediumDescription": "Identity Add. Type",

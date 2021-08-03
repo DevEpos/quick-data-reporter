@@ -1,3 +1,6 @@
+import ODataType from "sap/ui/model/odata/type/ODataType";
+import TypeFactory from "./TypeFactory";
+
 export enum EntityType {
     CdsView = "C",
     Table = "T",
@@ -76,10 +79,11 @@ export interface EntityVariant {
 }
 
 export interface EntityMetadata {
-    colMetadata?: EntityColMetadata[];
+    fields?: FieldMetadata[];
 }
 
-export interface EntityColMetadata {
+export class FieldMetadata {
+    private _typeInstance: ODataType;
     /**
      * The name of the column
      */
@@ -95,7 +99,15 @@ export interface EntityColMetadata {
     /**
      * The max number of characters/digits this column can hold
      */
-    length: number;
+    maxLength?: number;
+    /**
+     * Number of digits a numerical type can hold including decimal places
+     */
+    precision?: number;
+    /**
+     * Maximum number of digits right next to the decimal point
+     */
+    scale?: number;
     /**
      * The data element assigned as column type
      */
@@ -144,6 +156,28 @@ export interface EntityColMetadata {
      * The type of the defined value help if the property "hasValueHelp" is true
      */
     valueHelpType?: ValueHelpType;
+
+    /**
+     * Retrieves the type instance derived from the metadata of the field
+     */
+    get typeInstance(): ODataType {
+        if (!this._typeInstance) {
+            const formatOptions: { displayFormat?: String } = {};
+            const constraints: { precision?: number; scale?: number; maxLength?: number } = {};
+            if (this.displayFormat) {
+                formatOptions.displayFormat = this.displayFormat;
+            }
+            if (this.maxLength) {
+                constraints.maxLength = this.maxLength;
+            }
+            if (this.precision || this.scale) {
+                constraints.precision = this.precision;
+                constraints.scale = this.scale;
+            }
+            this._typeInstance = TypeFactory.getType(this.type, formatOptions, constraints);
+        }
+        return this._typeInstance;
+    }
 }
 
 export type DataRow = Record<string, unknown>;
@@ -161,7 +195,7 @@ export interface DataPreview {
 /**
  * Information about field in a Value Help dialog
  */
-export interface ValueHelpField extends EntityColMetadata {
+export class ValueHelpField extends FieldMetadata {
     isDescription?: boolean;
     visible?: boolean;
     /**

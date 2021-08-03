@@ -65,14 +65,18 @@ export interface QuickFilterSettings extends $ControlSettings {
      * The type of the value help of the column if one is defined
      */
     valueHelpType?: ValueHelpType;
+    /**
+     * Metadata of the reference field which provides additional information
+     */
+    referenceFieldMetadata: FieldMetadata;
 }
 
 const CUSTOM_DATA__IS_CHANGING = "__changing";
 
 /**
- * Quick Filter in {@link devepos.qdrt.control.SideFilterPanel}
+ * Quick Filter in {@link com.devepos.qdrt.control.SideFilterPanel}
  *
- * @namespace devepos.qdrt.control
+ * @namespace com.devepos.qdrt.control
  */
 export default class QuickFilter extends Control {
     metadata = {
@@ -105,7 +109,11 @@ export default class QuickFilter extends Control {
             /**
              * The type of the value help of the column if one is defined
              */
-            valueHelpType: { type: "string", group: "Misc" }
+            valueHelpType: { type: "string", group: "Misc" },
+            /**
+             * Metadata of the reference field which provides additional information
+             */
+            referenceFieldMetadata: { type: "object", group: "Misc" }
         },
         aggregations: {
             /**
@@ -171,6 +179,7 @@ export default class QuickFilter extends Control {
     getRequired?(): boolean;
     getHasValueHelp?(): boolean;
     getValueHelpType?(): ValueHelpType;
+    getReferenceFieldMetadata?(): FieldMetadata;
     //#endregion
 
     init(): void {
