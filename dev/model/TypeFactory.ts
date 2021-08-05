@@ -1,6 +1,7 @@
 import Boolean from "sap/ui/model/odata/type/Boolean";
 import Byte from "sap/ui/model/odata/type/Byte";
 import DateTime from "sap/ui/model/odata/type/DateTime";
+import Date1 from "sap/ui/model/odata/type/Date";
 import DateTimeOffset from "sap/ui/model/odata/type/DateTimeOffset";
 import Decimal from "sap/ui/model/odata/type/Decimal";
 import Double from "sap/ui/model/odata/type/Double";
@@ -17,6 +18,7 @@ import ODataType from "sap/ui/model/odata/type/ODataType";
 const typeMap: Record<string, typeof ODataType> = {
     Boolean,
     Byte,
+    Date: Date1,
     DateTime,
     DateTimeOffset,
     Decimal,

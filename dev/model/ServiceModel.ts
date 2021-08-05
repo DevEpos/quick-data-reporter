@@ -10,6 +10,29 @@ export enum EntityType {
 export enum DisplayFormat {
     UpperCase = "UpperCase"
 }
+
+/**
+ * Operators for the Filter.
+ */
+export enum FilterOperator {
+    /**
+     * Will result in Operator EQ
+     */
+    Auto = "Auto",
+    Contains = "Contains",
+    StartsWith = "StartsWith",
+    EndsWith = "EndsWith",
+    BT = "BT",
+    EQ = "EQ",
+    GE = "GE",
+    GT = "GT",
+    LE = "LE",
+    LT = "LT",
+    NE = "NE",
+    Empty = "Empty",
+    NotEmpty = "NotEmpty"
+}
+
 export enum ValueHelpType {
     DomainFixValues = "DomainFixValues",
     ElementaryDDICSearchHelp = "ElementaryDDICSearchHelp",
@@ -21,9 +44,19 @@ export enum ValueHelpType {
      */
     CdsAnnotation = "CdsAnnotation"
 }
+export interface FieldFilter {
+    value?: string;
+    ranges?: FilterCond[];
+    items?: FilterItem[];
+}
+
+export interface FilterItem {
+    key: string;
+    text: string;
+}
 
 export interface FilterCond {
-    columnKey?: string;
+    keyField?: string;
     operation: string;
     value1?: any;
     value2?: any;

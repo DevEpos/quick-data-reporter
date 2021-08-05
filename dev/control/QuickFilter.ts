@@ -1,8 +1,19 @@
-import { ValueHelpType } from "../model/ServiceModel";
+import {
+    DisplayFormat,
+    FieldFilter,
+    FieldMetadata,
+    FilterCond,
+    FilterItem,
+    ValueHelpType
+} from "../model/ServiceModel";
+import FilterCreator from "../helper/filter/FilterCreator";
 
 import Control, { $ControlSettings } from "sap/ui/core/Control";
 import Button from "sap/m/Button";
+import Input from "sap/m/Input";
 import MultiInput from "sap/m/MultiInput";
+import ComboBox from "sap/m/ComboBox";
+import DatePicker from "sap/m/DatePicker";
 import FlexBox from "sap/m/FlexBox";
 import VerticalLayout from "sap/ui/layout/VerticalLayout";
 import RenderManager from "sap/ui/core/RenderManager";
@@ -11,14 +22,19 @@ import Item from "sap/ui/core/Item";
 import Token from "sap/m/Token";
 import Parameters from "sap/ui/core/theming/Parameters";
 import Label from "sap/m/Label";
-import ComboBox from "sap/m/ComboBox";
-import Input from "sap/m/Input";
 import Event from "sap/ui/base/Event";
 import { ValueState } from "sap/ui/core/library";
-import DatePicker from "sap/m/DatePicker";
+import { PropertyBindingInfo } from "sap/ui/base/ManagedObject";
+import JSONModel from "sap/ui/model/json/JSONModel";
+
+export enum FilterChangeType {
+    NewToken = "NewToken",
+    TokensUpdated = "TokensUpdated",
+    ValueUpdate = "ValueUpdate"
+}
 
 /**
- * Control settings for {@link devepos.qdrt.control.QuickFilter}
+ * Control settings for {@link com.devepos.qdrt.control.QuickFilter}
  */
 export interface QuickFilterSettings extends $ControlSettings {
     /**
@@ -33,6 +49,10 @@ export interface QuickFilterSettings extends $ControlSettings {
      * Data type of the column
      */
     type?: string;
+    /**
+     * Holds the actual entered value/ranges of the filter
+     */
+    filterData?: string;
     /**
      * Gets fired if value help request is triggered on filter control
      */
@@ -95,6 +115,10 @@ export default class QuickFilter extends Control {
              */
             type: { type: "string", group: "Misc" },
             /**
+             * The maximum number of characters this filter control supports
+             */
+            maxLength: { type: "int", group: "Misc", defaultValue: -1 },
+            /**
              * Controls whether only a single value can be entered in the filter
              */
             singleValueOnly: { type: "boolean", group: "Misc", defaultValue: false },
@@ -110,6 +134,10 @@ export default class QuickFilter extends Control {
              * The type of the value help of the column if one is defined
              */
             valueHelpType: { type: "string", group: "Misc" },
+            /**
+             * Holds the actual entered value/ranges of the filter
+             */
+            filterData: { type: "object", group: "Misc" },
             /**
              * Metadata of the reference field which provides additional information
              */
@@ -130,7 +158,8 @@ export default class QuickFilter extends Control {
              * The change event. Will be fired if the focus of the filter field is lost or if the "Enter" key is pressed.
              */
             change: {
-                value: { type: "string" }
+                value: { type: "string" },
+                type: { type: "string" }
             },
             /**
              * Submit event for {@link sap.m.Input} controls
@@ -161,6 +190,7 @@ export default class QuickFilter extends Control {
     private _filterControl: Control;
     private _filterNameUpdateRequired = true;
     private _filterCont: VerticalLayout;
+    private _filterCreator: FilterCreator;
 
     constructor(settings: QuickFilterSettings) {
         super(settings);
@@ -180,6 +210,7 @@ export default class QuickFilter extends Control {
     getHasValueHelp?(): boolean;
     getValueHelpType?(): ValueHelpType;
     getReferenceFieldMetadata?(): FieldMetadata;
+    getFilterData?(): FieldFilter;
     //#endregion
 
     init(): void {
@@ -300,17 +331,31 @@ export default class QuickFilter extends Control {
         this.invalidate();
     }
     private _attachEventHandlers() {
+        const fieldMeta = this.getReferenceFieldMetadata();
         if (this._filterControl instanceof Input) {
+            if (fieldMeta.displayFormat === DisplayFormat.UpperCase) {
+                this._filterControl.attachChange(() => {
+                    const value = (this._filterControl as Input).getValue();
+                    if (value) {
+                        (this._filterControl as Input).setValue(value.toUpperCase());
+                    }
+                }, this);
+            }
             this._filterControl.attachValueHelpRequest(() => {
                 this.fireValueHelpRequest();
             }, this);
-            this._filterControl.attachChange((event: Event) => {
-                if (this._filterControl instanceof MultiInput) {
-                    this._filterControl.data(CUSTOM_DATA__IS_CHANGING, true);
-                }
-                this.fireChange({ value: event.getParameter("value") });
-            }, this);
+            /// IS CHANGE EVENT REALLY NEEDED????
+            // this._filterControl.attachChange((event: Event) => {
+            //     const value = event.getParameter("value");
+            // if (this._filterControl instanceof MultiInput) {
+            // this._handleMultiInputValueChange(value);
+            // } else {
+            // validation needed?
+            // this.fireChange({ value });
+            // }
+            // }, this);
             if (this._filterControl instanceof MultiInput) {
+                // TODO: register token validator
                 this._filterControl.attachSubmit(() => {
                     if (this._filterControl.data(CUSTOM_DATA__IS_CHANGING)) {
                         this._filterControl.data(CUSTOM_DATA__IS_CHANGING, false);
@@ -318,7 +363,38 @@ export default class QuickFilter extends Control {
                     }
                     this.fireSubmit();
                 }, this);
+                this._filterControl.attachTokenUpdate(() => {
+                    // this.fireChange({ value: (this._filterControl as MultiInput).getTokens() });
+                    const currentTokens = (this._filterControl as MultiInput).getTokens();
+                    const ranges: FilterCond[] = [];
+                    const items: FilterItem[] = [];
+                    for (const token of currentTokens) {
+                        const rangeData = token.data("range") as FilterCond;
+                        if (rangeData) {
+                            ranges.push({ ...rangeData });
+                        } else {
+                            items.push({ key: token.getKey(), text: token.getText() });
+                        }
+                    }
+                    // update the ranges of the filter binding
+                    const filterDataBinding = this.getBinding("filterData");
+                    if (filterDataBinding) {
+                        const model = filterDataBinding.getModel() as JSONModel;
+                        model.setProperty(`${filterDataBinding.getPath()}/ranges`, ranges);
+                        model.setProperty(`${filterDataBinding.getPath()}/items`, items);
+                    }
+                }, this);
+                this._filterControl.addValidator(this._validateCurrentToken.bind(this));
             }
+            // attach handlers regarding parsing/validation/formatting
+            this._filterControl.attachParseError(this._handleValidationError.bind(this), this);
+            this._filterControl.attachFormatError(this._handleValidationError.bind(this), this);
+            this._filterControl.attachValidationError(this._handleValidationError.bind(this), this);
+            this._filterControl.attachValidationSuccess(() => {
+                const inputFilterControl = this._filterControl as Input;
+                inputFilterControl.setValueState(ValueState.None);
+                inputFilterControl.setValueStateText("");
+            }, this);
         } else if (this._filterControl instanceof ComboBox) {
             this._filterControl.attachChange(() => {
                 const comboBoxFilter = this._filterControl as ComboBox;
@@ -327,12 +403,50 @@ export default class QuickFilter extends Control {
 
                 if (!selectedKey && value) {
                     comboBoxFilter.setValueState(ValueState.Error);
+                    this.getFilterData().value = null;
                     comboBoxFilter.setValueStateText("Please enter/select a valid entry!");
                 } else {
                     comboBoxFilter.setValueState(ValueState.None);
+                    this.getFilterData().value = selectedKey;
                     this.fireChange({ value: (this._filterControl as ComboBox).getSelectedKey() });
                 }
             }, this);
+        } else if (this._filterControl instanceof DatePicker) {
+            this._filterControl.attachChange((event: Event) => {
+                const isValid = event.getParameter("valid");
+                const datePicker = this._filterControl as DatePicker;
+                if (isValid) {
+                    datePicker.setValueStateText("");
+                    datePicker.setValueState(ValueState.None);
+                } else {
+                    datePicker.setValueState(ValueState.Error);
+                }
+            }, this);
+        }
+    }
+
+    /**
+     * Validation of the current token
+     */
+    private _validateCurrentToken(event: {
+        text: string;
+        suggestedToken?: Token;
+        suggestionObject?: object;
+        asyncCallback?: Function;
+    }): Token {
+        if (!event.text || event.text === "") {
+            return null;
+        }
+        // determine the new token
+        if (!this._filterCreator) {
+            this._filterCreator = new FilterCreator(this.getColumnName(), this.getReferenceFieldMetadata());
+        }
+        this._filterCreator.setValue(event.text);
+        try {
+            const filterCond = this._filterCreator.createFilter();
+            return this._filterCreator.createToken(filterCond, (this._filterControl as MultiInput).getTokens());
+        } catch (error) {
+            return null;
         }
     }
 
@@ -353,6 +467,13 @@ export default class QuickFilter extends Control {
 
     private _createControl(): Control {
         const type = this.getType();
+        const typeInstance = this.getReferenceFieldMetadata().typeInstance;
+        const valueBinding = {
+            path: `${this.getBinding("filterData").getPath()}/value`,
+            type: typeInstance
+        } as PropertyBindingInfo;
+
+        // create appropriate control according to type
         switch (type) {
             case "Boolean":
                 return new ComboBox({
@@ -365,28 +486,37 @@ export default class QuickFilter extends Control {
                         }),
                         new Item({
                             key: "true",
-                            text: "{i18n>booleanType_yes}"
+                            text: typeInstance.formatValue(true, "string")
                         }),
                         new Item({
                             key: "false",
-                            text: "{i18n>booleanType_no}"
+                            text: typeInstance.formatValue(false, "string")
                         })
                     ]
                 });
 
             case "Date":
                 if (this.getSingleValueOnly()) {
-                    return new DatePicker({ width: "100%" });
+                    return new DatePicker({ width: "100%", dateValue: valueBinding });
                 } else {
-                    return new MultiInput({ width: "100%" });
+                    return new MultiInput({ width: "100%", value: valueBinding });
                 }
 
             default:
                 if (this.getSingleValueOnly()) {
-                    return new Input({ width: "100%" });
+                    return new Input({ width: "100%", value: valueBinding });
                 } else {
-                    return new MultiInput({ width: "100%" });
+                    return new MultiInput({ width: "100%", value: valueBinding });
                 }
         }
+    }
+
+    private _handleValidationError(event: Event) {
+        const exception = event.getParameter("exception");
+        const inputFilterControl = this._filterControl as Input;
+        if (exception) {
+            inputFilterControl.setValueStateText(exception.message);
+        }
+        inputFilterControl.setValueState(ValueState.Error);
     }
 }

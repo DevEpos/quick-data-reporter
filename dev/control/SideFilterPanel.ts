@@ -71,7 +71,6 @@ export default class SideFilterPanel extends Panel {
             horizontal: false,
             vertical: true
         });
-
         this.addContent(this._scrollContainer);
     }
     onAfterRendering(event: jQuery.Event): void {
@@ -135,8 +134,8 @@ export default class SideFilterPanel extends Panel {
         const selectedFilters = await addFiltersPopover.showPopover(event.getSource() as Control);
         if (selectedFilters?.length > 0) {
             for (const selectedFilter of selectedFilters) {
+                visibleFilters[selectedFilter.name] = {};
                 this._filterContainer.addContent(this._createQuickFilter(selectedFilter));
-                visibleFilters[selectedFilter.name] = [];
             }
         }
     }
@@ -146,7 +145,9 @@ export default class SideFilterPanel extends Panel {
             label: filter.label,
             type: filter.fieldMetadata.type,
             tooltip: filter.tooltip,
+            // singleValueOnly: true,
             referenceFieldMetadata: filter.fieldMetadata,
+            filterData: `{${this.getBinding("visibleFilters").getPath()}/${filter.name}}`,
             remove: (event: Event) => {
                 delete this.getVisibleFilters()[(event.getSource() as QuickFilter).getColumnName()];
             },

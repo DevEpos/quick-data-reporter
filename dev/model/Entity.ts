@@ -2,13 +2,13 @@ import {
     DataRow,
     EntityType,
     EntityMetadata,
-    FilterCond,
     SortCond,
     ColumnConfig,
     AggregationCond,
     FieldMetadata,
     EntityVariant,
-    ValueHelpMetadata
+    ValueHelpMetadata,
+    FieldFilter
 } from "./ServiceModel";
 
 /**
@@ -29,7 +29,7 @@ export interface ConfigurableEntity {
     aggregationCond: AggregationCond[];
 }
 
-export type TableFilters = Record<string, FilterCond[]>;
+export type TableFilters = Record<string, FieldFilter>;
 
 /**
  * Describes an entity

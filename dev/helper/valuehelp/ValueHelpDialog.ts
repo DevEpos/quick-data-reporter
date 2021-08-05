@@ -330,13 +330,13 @@ export default class ValueHelpDialog extends BaseObject {
                         const splitTab = selection.getId().split("_");
                         if (splitTab.length === 2) {
                             filters.push({
-                                columnKey: splitTab[0],
+                                keyField: splitTab[0],
                                 operation: FilterOperator.Contains,
                                 value1: selection.getValue()
                             });
                         } else {
                             filters.push({
-                                columnKey: selection.getId(),
+                                keyField: selection.getId(),
                                 operation: FilterOperator.Contains,
                                 value1: selection.getValue()
                             });
