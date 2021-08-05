@@ -152,6 +152,13 @@ export default class ValueHelpDialog extends BaseObject {
         });
         this._createDialog();
         this._dialog.setModel(this._vhModel.getModel());
+        // adjust tokens which were created in quick filter
+        for (const token of this._initialTokens) {
+            if (token.data("range")?.__quickFilter) {
+                token.data("range").keyField = this._keyFieldConfig.name;
+                delete token.data("range").__quickFilter;
+            }
+        }
         this._dialog.setTokens(this._initialTokens);
         if (!this._supportRangesOnly) {
             this._createFilterBar();

@@ -157,7 +157,7 @@ export default class FilterCreator {
             return null;
         }
         const token = new Token({
-            // key: this._getTokenKey(existingTokens),
+            key: this._getTokenKey(existingTokens),
             text: this._getTokenText(filterCond)
         });
 
@@ -167,14 +167,15 @@ export default class FilterCreator {
             }
         }
 
-        const { value1, value2, exclude, operation, keyField: keyField } = filterCond;
+        const { value1, value2, exclude, operation, keyField } = filterCond;
 
         token.data("range", {
             value1,
             value2,
             exclude,
             operation,
-            keyField
+            keyField,
+            __quickFilter: true
         });
 
         return token;
@@ -194,10 +195,10 @@ export default class FilterCreator {
 
     private _getTokenKey(existingTokens?: Token[]): string {
         if (!existingTokens || existingTokens.length === 0) {
-            return "range_1";
+            return "range_0";
         } else {
             const keys = existingTokens.map(t => t.getKey());
-            let rangeIndex = 1;
+            let rangeIndex = 0;
             let key = "";
             do {
                 key = `range_${rangeIndex++}`;
