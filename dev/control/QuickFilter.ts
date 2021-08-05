@@ -27,12 +27,6 @@ import { ValueState } from "sap/ui/core/library";
 import { PropertyBindingInfo } from "sap/ui/base/ManagedObject";
 import JSONModel from "sap/ui/model/json/JSONModel";
 
-export enum FilterChangeType {
-    NewToken = "NewToken",
-    TokensUpdated = "TokensUpdated",
-    ValueUpdate = "ValueUpdate"
-}
-
 /**
  * Control settings for {@link com.devepos.qdrt.control.QuickFilter}
  */
@@ -58,14 +52,6 @@ export interface QuickFilterSettings extends $ControlSettings {
      */
     valueHelpRequest?: Function;
     /**
-     * Event handler for the change event
-     */
-    change?: Function;
-    /**
-     * Event handler for the submit event.
-     */
-    submit?: Function;
-    /**
      * Event handler for the remove event.
      */
     remove?: Function;
@@ -90,8 +76,6 @@ export interface QuickFilterSettings extends $ControlSettings {
      */
     referenceFieldMetadata: FieldMetadata;
 }
-
-const CUSTOM_DATA__IS_CHANGING = "__changing";
 
 /**
  * Quick Filter in {@link com.devepos.qdrt.control.SideFilterPanel}
@@ -155,17 +139,6 @@ export default class QuickFilter extends Control {
              */
             valueHelpRequest: {},
             /**
-             * The change event. Will be fired if the focus of the filter field is lost or if the "Enter" key is pressed.
-             */
-            change: {
-                value: { type: "string" },
-                type: { type: "string" }
-            },
-            /**
-             * Submit event for {@link sap.m.Input} controls
-             */
-            submit: {},
-            /**
              * Get's fired if filter is removed
              */
             remove: {}
@@ -201,8 +174,6 @@ export default class QuickFilter extends Control {
     getLabel?(): string;
     getColumnName?(): string;
     fireValueHelpRequest?(): this;
-    fireChange?(parameters?: object): this;
-    fireSubmit?(): this;
     fireRemove?(): this;
     getSingleValueOnly?(): boolean;
     setSingleValueOnly?(singleValueOnly: boolean): this;
@@ -295,8 +266,10 @@ export default class QuickFilter extends Control {
         if (this._filterControl instanceof MultiInput) {
             if (!tokens || tokens.length === 0) {
                 this._filterControl.removeAllTokens();
+                this._deleteAllFilters();
             } else {
                 this._filterControl.setTokens(tokens);
+                this._createFiltersFromTokens(tokens);
             }
         }
         return this;
@@ -344,45 +317,10 @@ export default class QuickFilter extends Control {
             this._filterControl.attachValueHelpRequest(() => {
                 this.fireValueHelpRequest();
             }, this);
-            /// IS CHANGE EVENT REALLY NEEDED????
-            // this._filterControl.attachChange((event: Event) => {
-            //     const value = event.getParameter("value");
-            // if (this._filterControl instanceof MultiInput) {
-            // this._handleMultiInputValueChange(value);
-            // } else {
-            // validation needed?
-            // this.fireChange({ value });
-            // }
-            // }, this);
             if (this._filterControl instanceof MultiInput) {
-                // TODO: register token validator
-                this._filterControl.attachSubmit(() => {
-                    if (this._filterControl.data(CUSTOM_DATA__IS_CHANGING)) {
-                        this._filterControl.data(CUSTOM_DATA__IS_CHANGING, false);
-                        return;
-                    }
-                    this.fireSubmit();
-                }, this);
                 this._filterControl.attachTokenUpdate(() => {
-                    // this.fireChange({ value: (this._filterControl as MultiInput).getTokens() });
                     const currentTokens = (this._filterControl as MultiInput).getTokens();
-                    const ranges: FilterCond[] = [];
-                    const items: FilterItem[] = [];
-                    for (const token of currentTokens) {
-                        const rangeData = token.data("range") as FilterCond;
-                        if (rangeData) {
-                            ranges.push({ ...rangeData });
-                        } else {
-                            items.push({ key: token.getKey(), text: token.getText() });
-                        }
-                    }
-                    // update the ranges of the filter binding
-                    const filterDataBinding = this.getBinding("filterData");
-                    if (filterDataBinding) {
-                        const model = filterDataBinding.getModel() as JSONModel;
-                        model.setProperty(`${filterDataBinding.getPath()}/ranges`, ranges);
-                        model.setProperty(`${filterDataBinding.getPath()}/items`, items);
-                    }
+                    this._createFiltersFromTokens(currentTokens);
                 }, this);
                 this._filterControl.addValidator(this._validateCurrentToken.bind(this));
             }
@@ -408,7 +346,6 @@ export default class QuickFilter extends Control {
                 } else {
                     comboBoxFilter.setValueState(ValueState.None);
                     this.getFilterData().value = selectedKey;
-                    this.fireChange({ value: (this._filterControl as ComboBox).getSelectedKey() });
                 }
             }, this);
         } else if (this._filterControl instanceof DatePicker) {
@@ -422,6 +359,34 @@ export default class QuickFilter extends Control {
                     datePicker.setValueState(ValueState.Error);
                 }
             }, this);
+        }
+    }
+
+    private _createFiltersFromTokens(currentTokens: Token[]) {
+        const ranges: FilterCond[] = [];
+        const items: FilterItem[] = [];
+        for (const token of currentTokens) {
+            const rangeData = token.data("range") as FilterCond;
+            if (rangeData) {
+                ranges.push({ ...rangeData });
+            } else {
+                items.push({ key: token.getKey(), text: token.getText() });
+            }
+        }
+        // update the ranges of the filter binding
+        const filterDataBinding = this.getBinding("filterData");
+        if (filterDataBinding) {
+            const model = filterDataBinding.getModel() as JSONModel;
+            model.setProperty(`${filterDataBinding.getPath()}/ranges`, ranges);
+            model.setProperty(`${filterDataBinding.getPath()}/items`, items);
+        }
+    }
+
+    private _deleteAllFilters() {
+        const filterDataBinding = this.getBinding("filterData");
+        if (filterDataBinding) {
+            const model = filterDataBinding.getModel() as JSONModel;
+            model.setProperty(filterDataBinding.getPath(), {});
         }
     }
 
