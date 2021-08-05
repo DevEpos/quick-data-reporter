@@ -207,16 +207,6 @@ export default class QuickFilter extends Control {
         });
         // this._filterCont.addStyleClass("deveposQdrt-QuickFilter");
         this.setAggregation("filter", this._filterCont);
-
-        this.addEventDelegate({
-            onThemeChanged: () => {
-                /**
-                 * As theme parameters are used the control needs to be re-rendered upon
-                 * theme change.
-                 */
-                this.invalidate();
-            }
-        });
     }
     clear(): this {
         this.setValue("");
@@ -301,6 +291,13 @@ export default class QuickFilter extends Control {
             this._updateFilterName();
             this._filterNameUpdateRequired = false;
         }
+    }
+    onThemeChanged(): void {
+        /**
+         * As theme parameters are used the control needs to be re-rendered upon
+         * theme change.
+         */
+        this.invalidate();
     }
     private _attachEventHandlers() {
         if (this._filterControl instanceof Input) {
