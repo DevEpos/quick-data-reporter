@@ -26,6 +26,7 @@ import Event from "sap/ui/base/Event";
 import { ValueState } from "sap/ui/core/library";
 import { PropertyBindingInfo } from "sap/ui/base/ManagedObject";
 import JSONModel from "sap/ui/model/json/JSONModel";
+import isEmptyObject from "sap/base/util/isEmptyObject";
 
 /**
  * Control settings for {@link com.devepos.qdrt.control.QuickFilter}
@@ -74,7 +75,7 @@ export interface QuickFilterSettings extends $ControlSettings {
     /**
      * Metadata of the reference field which provides additional information
      */
-    referenceFieldMetadata: FieldMetadata;
+    referenceFieldMetadata: FieldMetadata | string;
 }
 
 /**
@@ -287,6 +288,7 @@ export default class QuickFilter extends Control {
     onBeforeRendering(): void {
         if (!this._filterControl) {
             this._filterControl = this._createControl();
+            this._setControlInputFromFilters();
             this._attachEventHandlers();
             this._filterCont.addContent(this._filterControl);
         }
@@ -362,6 +364,31 @@ export default class QuickFilter extends Control {
         }
     }
 
+    /**
+     * Sets the control input from the bound filter information
+     */
+    private _setControlInputFromFilters() {
+        const filterData = this.getFilterData();
+        if (!filterData || isEmptyObject(filterData)) {
+            return;
+        }
+        const filterCreator = this._getFilterCreator();
+        const tokens = [];
+        if (filterData.ranges && filterData.ranges.length > 0) {
+            let rangeIndex = 0;
+            for (const range of filterData.ranges) {
+                tokens.push(filterCreator.createToken(range, null, `range_${rangeIndex++}`));
+            }
+        }
+        if (filterData.items) {
+            for (const item of filterData.items) {
+                tokens.push(new Token({ key: item.key, text: item.text }));
+            }
+        }
+
+        this.setTokens(tokens);
+    }
+
     private _createFiltersFromTokens(currentTokens: Token[]) {
         const ranges: FilterCond[] = [];
         const items: FilterItem[] = [];
@@ -393,23 +420,16 @@ export default class QuickFilter extends Control {
     /**
      * Validation of the current token
      */
-    private _validateCurrentToken(event: {
-        text: string;
-        suggestedToken?: Token;
-        suggestionObject?: object;
-        asyncCallback?: Function;
-    }): Token {
+    private _validateCurrentToken(event: { text: string }): Token {
         if (!event.text || event.text === "") {
             return null;
         }
         // determine the new token
-        if (!this._filterCreator) {
-            this._filterCreator = new FilterCreator(this.getColumnName(), this.getReferenceFieldMetadata());
-        }
-        this._filterCreator.setValue(event.text);
+        const filterCreator = this._getFilterCreator();
+        filterCreator.setValue(event.text);
         try {
-            const filterCond = this._filterCreator.createFilter();
-            return this._filterCreator.createToken(filterCond, (this._filterControl as MultiInput).getTokens());
+            const filterCond = filterCreator.createFilter();
+            return filterCreator.createToken(filterCond, (this._filterControl as MultiInput).getTokens());
         } catch (error) {
             return null;
         }
@@ -483,5 +503,12 @@ export default class QuickFilter extends Control {
             inputFilterControl.setValueStateText(exception.message);
         }
         inputFilterControl.setValueState(ValueState.Error);
+    }
+
+    private _getFilterCreator(): FilterCreator {
+        if (!this._filterCreator) {
+            this._filterCreator = new FilterCreator(this.getColumnName(), this.getReferenceFieldMetadata());
+        }
+        return this._filterCreator;
     }
 }

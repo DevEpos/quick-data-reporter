@@ -1,6 +1,6 @@
 import Log from "sap/base/Log";
 import ValueHelpUtil from "../helper/valuehelp/ValueHelpUtil";
-import Entity, { ConfigurableEntity } from "../model/Entity";
+import Entity, { ConfigurableEntity, TableFilters } from "../model/Entity";
 import {
     EntityType,
     EntityMetadata,
@@ -47,6 +47,10 @@ export default class EntityState extends BaseState<Entity> {
     }
     setRows(rows: DataRow[]): void {
         this.data.rows = rows;
+        this.updateModel();
+    }
+    setFilters(filters: TableFilters): void {
+        this.data.filters = filters;
         this.updateModel();
     }
     async loadData(): Promise<void> {

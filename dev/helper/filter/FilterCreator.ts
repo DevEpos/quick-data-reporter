@@ -149,15 +149,16 @@ export default class FilterCreator {
      * Creates a token for the passed filter condition
      * @param filterCond the filter condition as base for the token
      * @param existingTokens any existing tokens in the multi input control
+     * @param tokenKey optional key for a token - overrides token determination from existingTokens array
      * @returns the created token
      */
-    createToken(filterCond: FilterCond, existingTokens?: Token[]): Token {
+    createToken(filterCond: FilterCond, existingTokens?: Token[], tokenKey?: string): Token {
         // without filter condition no token creation is possible
         if (!filterCond || (!filterCond.value1 && filterCond.operation !== FilterOperator.Empty)) {
             return null;
         }
         const token = new Token({
-            key: this._getTokenKey(existingTokens),
+            key: tokenKey || this._getTokenKey(existingTokens),
             text: this._getTokenText(filterCond)
         });
 
