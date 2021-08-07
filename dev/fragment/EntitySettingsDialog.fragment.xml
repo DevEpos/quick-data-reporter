@@ -10,7 +10,7 @@
         <panels>
             <P13nColumnsPanel id="columnsPanel"
                 changeColumnsItems="onChangeColumnsItems"
-                items="{/allColumnsItems}"
+                items="{/allColumnMetadata}"
                 columnsItems="{/columnsItems}">
                 <items>
                     <P13nItem columnKey="{name}"
@@ -23,7 +23,7 @@
                 </columnsItems>
             </P13nColumnsPanel>
             <P13nSortPanel id="sortPanel"
-                items="{/allColumnsItems}"
+                items="{/allColumnMetadata}"
                 sortItems="{/sortCond}"
                 addSortItem="onSortItemUpdate"
                 updateSortItem="onSortItemUpdate"

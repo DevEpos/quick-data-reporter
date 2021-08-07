@@ -14,7 +14,7 @@ import deepClone from "sap/base/util/deepClone";
 
 type SettingsModelData = {
     columnMetadata: FieldMetadata[];
-    allColumnsItems: FieldMetadata[];
+    allColumnMetadata: FieldMetadata[];
     columnsItems: ColumnConfig[];
     sortCond: SortCond[];
     aggregationCond: AggregationCond[];
@@ -90,13 +90,11 @@ export default class EntityTableSettings {
         this._settingsDialog.close();
     }
     onReset(): void {
-        this._modelCurrentState = {
-            columnMetadata: this._modelCurrentState.columnMetadata,
-            allColumnsItems: [...this._modelCurrentState.columnMetadata],
-            columnsItems: [],
-            sortCond: [],
-            aggregationCond: []
-        };
+        this._modelCurrentState.allColumnMetadata = [...this._modelCurrentState.columnMetadata];
+        this._modelCurrentState.columnsItems.length = 0;
+        this._modelCurrentState.sortCond.length = 0;
+        this._modelCurrentState.aggregationCond.length = 0;
+
         let colIndex = 0;
         for (const column of this._modelCurrentState.columnMetadata) {
             this._modelCurrentState.columnsItems.push({
@@ -171,13 +169,13 @@ export default class EntityTableSettings {
                 index++;
             }
             modelData.columnsItems = updatedColumns;
-            modelData.allColumnsItems = modelData.columnMetadata.filter(colMeta =>
+            modelData.allColumnMetadata = modelData.columnMetadata.filter(colMeta =>
                 groupFieldKeys.includes(colMeta.name)
             );
         } else {
             // remove all dependent information on group items
             modelData.columnsItems.length = 0;
-            modelData.allColumnsItems = [...modelData.columnMetadata];
+            modelData.allColumnMetadata = [...modelData.columnMetadata];
             for (const columnMeta of modelData.columnMetadata) {
                 modelData.columnsItems.push({
                     columnKey: columnMeta.name,
@@ -191,19 +189,26 @@ export default class EntityTableSettings {
     private _updateInternalModel(state: ReadOnlyStateData<Entity>) {
         this._modelCurrentState = {
             columnMetadata: state.metadata.fields,
-            allColumnsItems: [],
+            allColumnMetadata: [],
             columnsItems: [...state.columnsItems],
             sortCond: [...state.sortCond] || [],
             aggregationCond: [...state.aggregationCond] || []
         };
         if (this._modelCurrentState.aggregationCond?.length > 0) {
             const aggrItemKeys = this._modelCurrentState.aggregationCond.map(aggrItem => aggrItem.columnKey);
-            this._modelCurrentState.allColumnsItems = this._modelCurrentState.columnMetadata.filter(colItem =>
+            this._modelCurrentState.allColumnMetadata = this._modelCurrentState.columnMetadata.filter(colItem =>
                 aggrItemKeys.includes(colItem.name)
             );
         } else {
-            this._modelCurrentState.allColumnsItems = [...this._modelCurrentState.columnMetadata];
+            this._modelCurrentState.allColumnMetadata = [...this._modelCurrentState.columnMetadata];
         }
-        this._model.setData(deepClone(this._modelCurrentState));
+
+        this._model.setData({
+            columnMetadata: this._modelCurrentState.columnMetadata.slice(0),
+            allColumnMetadata: this._modelCurrentState.allColumnMetadata.slice(0),
+            columnsItems: deepClone(this._modelCurrentState.columnsItems),
+            sortCond: deepClone(this._modelCurrentState.sortCond),
+            aggregationCond: deepClone(this._modelCurrentState.aggregationCond)
+        });
     }
 }
