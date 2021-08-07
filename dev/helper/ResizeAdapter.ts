@@ -6,13 +6,13 @@ import ResizeHandler from "sap/ui/core/ResizeHandler";
  * @namespace com.devepos.qdrt.helper
  */
 export default class ResizeAdapter {
-    _resizableControl: Control;
-    _parentControl: Control;
-    _parentControlDomSuffix: string;
-    _excludedHeightsControls: Control[];
-    _liveChangeTimer: number;
-    _onAfterRenderingFirstTimeExecuted: boolean;
-    _containerResizeListener: string;
+    private _resizableControl: Control;
+    private _parentControl: Control;
+    private _parentControlDomSuffix: string;
+    private _excludedHeightsControls: Control[];
+    private _liveChangeTimer: number;
+    private _onAfterRenderingFirstTimeExecuted: boolean;
+    private _containerResizeListener: string;
 
     /**
      * Creates new Resize adapter instance
