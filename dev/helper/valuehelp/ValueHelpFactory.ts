@@ -41,17 +41,17 @@ export default class ValueHelpFactory {
         initialTokens?: Token[]
     ): ValueHelpDialog {
         let supportRangesOnly = false;
-        const supportRanges = true;
 
         if (metadata?.type === ValueHelpType.Date || !metadata?.type) {
             supportRangesOnly = true;
         }
+
         const vhDialog = new ValueHelpDialog({
             inputField: inputField,
             loadDataAtOpen: metadata.type === ValueHelpType.DomainFixValues,
             valueHelpMetadata: metadata,
             multipleSelection: multipleSelection,
-            supportRanges: supportRanges,
+            supportRanges: multipleSelection,
             initialFilters: initialFilters,
             initialTokens: initialTokens,
             supportRangesOnly: supportRangesOnly
