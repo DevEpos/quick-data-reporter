@@ -66,10 +66,10 @@ export default class EntityController extends BaseController {
             name: decodeURIComponent(args.name)
         };
         this._entityState.setEntityInfo(entityInfo.name, entityInfo.type as EntityType);
-        this._dataPreviewTable.setBusy(true);
+        this.getView().setBusy(true);
         await Promise.all([this._entityState.loadMetadata(), this._entityState.loadVariants()]);
         this._createColumns();
-        this._dataPreviewTable.setBusy(false);
+        this.getView().setBusy(false);
     }
     /**
      * Handles entity settings event
