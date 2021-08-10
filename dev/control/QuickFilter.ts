@@ -61,6 +61,10 @@ export interface QuickFilterSettings extends $ControlSettings {
      */
     singleValueOnly?: boolean;
     /**
+     * Controls whether the filter can be deleted
+     */
+    deletable?: boolean;
+    /**
      * Controls whether a value is required
      */
     required?: boolean;
@@ -103,6 +107,10 @@ export default class QuickFilter extends Control {
              * The maximum number of characters this filter control supports
              */
             maxLength: { type: "int", group: "Misc", defaultValue: -1 },
+            /**
+             * Controls whether the filter can be removed or not
+             */
+            deletable: { type: "boolean", group: "Misc", defaultValue: true },
             /**
              * Controls whether only a single value can be entered in the filter
              */
@@ -183,33 +191,39 @@ export default class QuickFilter extends Control {
     getValueHelpType?(): ValueHelpType;
     getReferenceFieldMetadata?(): FieldMetadata;
     getFilterData?(): FieldFilter;
+    getDeletable?(): boolean;
     //#endregion
 
-    init(): void {
+    applySettings(settings: object, scope?: object): this {
+        super.applySettings(settings, scope);
         this._filterName = new Label();
+        const titleItems: Control[] = [this._filterName];
+        if (this.getDeletable()) {
+            titleItems.push(
+                new Button({
+                    icon: "sap-icon://decline",
+                    tooltip: "{i18n>entity_quickFilter_delete}",
+                    type: ButtonType.Transparent,
+                    press: () => {
+                        this.fireRemove();
+                        this.destroy();
+                    }
+                })
+            );
+        }
         this._filterCont = new VerticalLayout({
             width: "100%",
             content: [
                 new FlexBox({
                     alignItems: FlexAlignItems.Center,
                     justifyContent: FlexJustifyContent.SpaceBetween,
-                    items: [
-                        this._filterName,
-                        new Button({
-                            icon: "sap-icon://decline",
-                            tooltip: "{i18n>entity_quickFilter_delete}",
-                            type: ButtonType.Transparent,
-                            press: () => {
-                                this.fireRemove();
-                                this.destroy();
-                            }
-                        })
-                    ]
+                    items: titleItems
                 })
             ]
         });
         // this._filterCont.addStyleClass("deveposQdrt-QuickFilter");
         this.setAggregation("filter", this._filterCont);
+        return this;
     }
     clear(): this {
         this.setValue("");
@@ -452,7 +466,8 @@ export default class QuickFilter extends Control {
 
     private _createControl(): Control {
         const type = this.getType();
-        const typeInstance = this.getReferenceFieldMetadata().typeInstance;
+        const refFieldMetadata = this.getReferenceFieldMetadata();
+        const typeInstance = refFieldMetadata.typeInstance;
         const valueBinding = {
             path: `${this.getBinding("filterData").getPath()}/value`,
             type: typeInstance
@@ -489,7 +504,11 @@ export default class QuickFilter extends Control {
 
             default:
                 if (this.getSingleValueOnly()) {
-                    return new Input({ width: "100%", value: valueBinding });
+                    return new Input({
+                        width: "100%",
+                        value: valueBinding,
+                        showValueHelp: refFieldMetadata.hasValueHelp
+                    });
                 } else {
                     return new MultiInput({ width: "100%", value: valueBinding });
                 }

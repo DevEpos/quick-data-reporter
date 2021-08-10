@@ -7,7 +7,6 @@ import {
     AggregationCond,
     FieldMetadata,
     EntityVariant,
-    ValueHelpMetadata,
     FieldFilter
 } from "./ServiceModel";
 
@@ -48,10 +47,6 @@ export default class Entity implements ConfigurableEntity {
      */
     metadata: EntityMetadata = { fields: [] };
     /**
-     * Value help metadata for each field where a value help is defined
-     */
-    valueHelpMetadata: Record<string, ValueHelpMetadata> = {};
-    /**
      * List of variants of the entity
      */
     variants?: EntityVariant[] = [];
@@ -59,6 +54,10 @@ export default class Entity implements ConfigurableEntity {
      * Data rows of an entity
      */
     rows: DataRow[] = [];
+    /**
+     * CDS View parameters
+     */
+    parameters?: TableFilters = {};
     /**
      * All visible filters with their set filter values
      */

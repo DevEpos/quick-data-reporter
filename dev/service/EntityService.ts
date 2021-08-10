@@ -34,6 +34,12 @@ export default class EntityService {
                 fields: (response.data.fields as Record<string, any>[]).map(f => Object.assign(new FieldMetadata(), f))
             };
 
+            if (response.data.parameters) {
+                metadata.parameters = (response.data.parameters as Record<string, any>[]).map(f =>
+                    Object.assign(new FieldMetadata(), f)
+                );
+            }
+
             return metadata;
         } else {
             return null;

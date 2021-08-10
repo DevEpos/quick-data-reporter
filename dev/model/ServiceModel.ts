@@ -112,6 +112,7 @@ export interface EntityVariant {
 }
 
 export interface EntityMetadata {
+    parameters?: FieldMetadata[];
     fields?: FieldMetadata[];
 }
 

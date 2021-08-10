@@ -100,10 +100,22 @@
                     <app:CustomizationPanel visible="{= ${ui>/activeSideContent} === 'filter'}"
                         title="{i18n>entity_customizationPanel_filter_title}"
                         icon="sap-icon://filter">
-                        <!-- Create panel for CDS parameters-->
-                        <app:SideFilterPanel headerText="{i18n>entity_sideFilterPanel_title}"
-                            availableFilterMetadata="{/metadata/fields}"
-                            visibleFilters="{/filters}"/>
+                        <app:EntityFilterPanel>
+                            <app:parameterPanel>
+                                <app:SideFilterPanel headerText="{i18n>entity_sideParamPanel_title}"
+                                    visible="{= ${/metadata/parameters/length} > 0}"
+                                    filterCategory="parameters"
+                                    expandable="true"
+                                    expanded="true"
+                                    availableFilterMetadata="{/metadata/parameters}"
+                                    visibleFilters="{/parameters}" />
+                            </app:parameterPanel>
+                            <app:filterPanel>
+                                <app:SideFilterPanel headerText="{i18n>entity_sideFilterPanel_title}"
+                                    availableFilterMetadata="{/metadata/fields}"
+                                    visibleFilters="{/filters}"/>
+                            </app:filterPanel>
+                        </app:EntityFilterPanel>
                     </app:CustomizationPanel>
                 </app:sideContent>
             </app:ToggleableSideContent>
