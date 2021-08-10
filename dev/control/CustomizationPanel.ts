@@ -44,11 +44,17 @@ export default class CustomizationPanel extends Control {
             rm.renderControl(panel.getHeader());
             rm.close("header");
 
-            // render content aggregation
-            for (const contentItem of panel.getContent() || []) {
-                if (contentItem.getVisible()) {
-                    rm.renderControl(contentItem);
+            const contentItems = panel.getContent();
+            if (contentItems?.length > 0) {
+                rm.openStart("div", panel.getId() + "-content");
+                rm.openEnd();
+                // render content aggregation
+                for (const contentItem of contentItems) {
+                    if (contentItem.getVisible()) {
+                        rm.renderControl(contentItem);
+                    }
                 }
+                rm.close("div");
             }
             rm.close("div");
         }
