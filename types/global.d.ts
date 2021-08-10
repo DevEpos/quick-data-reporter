@@ -12,3 +12,10 @@ interface JSONModelImpl {
     _getObject(path: string, context?: object): any;
     observeData(): void;
 }
+
+interface ResizableControl {
+    setHeight?(height: string): void;
+    getHeight?(): string;
+    setWidth?(width: string): void;
+    getWidth?(): string;
+}
