@@ -17,24 +17,7 @@
                     <Title text="Entity {/name}"></Title>
                 </f:heading>
                 <f:actions>
-                    <SegmentedButton visible="{ui>/sideContentVisible}"
-                        selectedKey="{ui>/activeSideContent}">
-                        <items>
-                            <SegmentedButtonItem icon="sap-icon://filter"
-                                key="filter"
-                                tooltip="{i18n>entity_customizationPanel_filter_title}"/>
-                            <SegmentedButtonItem icon="sap-icon://table-column"
-                                key="column"
-                                visible="false"/>
-                            <SegmentedButtonItem icon="sap-icon://sort"
-                                key="sort"
-                                visible="false"/>
-                            <SegmentedButtonItem icon="sap-icon://group-2"
-                                key="group"
-                                visible="false"/>
-                        </items>
-                    </SegmentedButton>
-                    <ToggleButton icon="sap-icon://customize"
+                    <ToggleButton icon="sap-icon://filter"
                         pressed="{ui>/sideContentVisible}"
                         type="Transparent" />
                 </f:actions>
