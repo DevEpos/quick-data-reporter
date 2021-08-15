@@ -1,0 +1,42 @@
+.deveposQdrt-ColumnsPanel {
+    margin: 0.5rem;
+
+    .sapUiSizeCozy & {
+        height: calc(100% - 9rem);
+    }
+    .sapUiSizeCompact & {
+        height: calc(100% - 8rem);
+    }
+
+    & .deveposQdrt-ColumnsPanel__List {
+        .sapMLIB {
+            margin: 0.3em 0;
+        }
+    }
+
+    .deveposQdrt-ColumnsPanel__List__Item {
+        padding: 0 0.5rem 0 0.5rem;
+        min-height: 2.125rem;
+
+        .sapUiSizeCozy & {
+            min-height: 2.8rem;
+        }
+
+        .deveposQdrt-ColumnsPanel__List__Item__Actions {
+            display: none;
+        }
+
+        &:hover .deveposQdrt-ColumnsPanel__List__Item__Actions {
+            display: flex;
+        }
+
+        .deveposQdrt-ColumnsPanel__List__Item__Title {
+            font-size: 0.875rem;
+            display: flex;
+        }
+
+        &.sapMLIB.sapMLIBSelected {
+            border-bottom: none;
+        }
+    }
+}
