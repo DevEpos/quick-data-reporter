@@ -80,8 +80,7 @@
                     </Panel>
                 </app:content>
                 <app:sideContent>
-                    <app:CustomizationPanel visible="{= ${ui>/activeSideContent} === 'filter'}"
-                        title="{i18n>entity_customizationPanel_filter_title}"
+                    <app:CustomizationPanel title="{i18n>entity_customizationPanel_filter_title}"
                         icon="sap-icon://filter">
                         <app:EntityFilterPanel>
                             <app:parameterPanel>
