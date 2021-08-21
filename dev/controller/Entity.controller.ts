@@ -26,7 +26,7 @@ import FormatUtil from "../helper/FormatUtil";
 export default class EntityController extends BaseController {
     private _uiModel: JSONModel;
     private _entityTableSettings: EntityTableSettings;
-    private _dataPreviewTable: Table;
+    private _queryResultTable: Table;
     private _entityState: EntityState;
     /**
      * Initializes entity controller
@@ -39,14 +39,14 @@ export default class EntityController extends BaseController {
         this._entityState = StateRegistry.getEntityState();
         this._entityTableSettings = new EntityTableSettings(this.getView());
         this._entityState.getData();
-        this._dataPreviewTable = this.getView().byId("dataPreviewTable") as Table;
+        this._queryResultTable = this.getView().byId("queryResultTable") as Table;
         this.getView().setModel(this._uiModel, "ui");
         this.getView().setModel(this._entityState.getModel());
         this.router.getRoute("entity").attachPatternMatched(this._onEntityMatched, this);
         this.router.getRoute("main").attachPatternMatched(this._onMainMatched, this);
 
         const variantManagement = this.byId("variantManagement");
-        // this needs to be done to always the standard variant in the Popover
+        // this needs to be done to always show the standard variant in the Popover
         (variantManagement as any)?.setStandardFavorite(true);
     }
 
@@ -84,9 +84,9 @@ export default class EntityController extends BaseController {
      * Event handler to trigger data update
      */
     async onUpdateData(): Promise<void> {
-        this._dataPreviewTable.setBusy(true);
+        this._queryResultTable.setBusy(true);
         await this._entityState.loadData();
-        this._dataPreviewTable.setBusy(false);
+        this._queryResultTable.setBusy(false);
     }
     onCellContextMenu(event: Event): void {
         const contextMenu = event.getParameter("contextMenu") as Menu;
@@ -102,7 +102,7 @@ export default class EntityController extends BaseController {
     onColumnMove(event: Event): void {
         const movedColumn = event.getParameter("column") as Column;
         const newColIndex = event.getParameter("newPos") as number;
-        const oldColIndex = this._dataPreviewTable.indexOfColumn(movedColumn);
+        const oldColIndex = this._queryResultTable.indexOfColumn(movedColumn);
 
         const visibleColItems = [];
         const hiddenColItems = [];
@@ -126,9 +126,9 @@ export default class EntityController extends BaseController {
         this._entityState.setColumnsItems(sortedItems);
     }
     private _createColumns(): void {
-        this._dataPreviewTable.destroyColumns();
+        this._queryResultTable.destroyColumns();
         for (const columnMeta of this._entityState.getData().visibleFieldMetadata) {
-            this._dataPreviewTable.addColumn(this._createColumn(columnMeta));
+            this._queryResultTable.addColumn(this._createColumn(columnMeta));
         }
     }
     /**

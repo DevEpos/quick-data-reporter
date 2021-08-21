@@ -29,7 +29,7 @@
                 sideContentPosition="End">
                 <app:content>
                     <Panel height="100%">
-                        <table:Table id="dataPreviewTable"
+                        <table:Table id="queryResultTable"
                             rows="{/rows}"
                             columnMove="onColumnMove"
                             beforeOpenContextMenu="onCellContextMenu"

@@ -62,7 +62,7 @@ export default class MockServer {
             },
             {
                 method: "POST",
-                path: /entities\/(.*)\/(.*)\/dataPreview.*/,
+                path: /entities\/(.*)\/(.*)\/queryResult.*/,
                 response: (xhr: SinonFakeXMLHttpRequest) => {
                     this._getMockdata(xhr, "datapreview");
                 }

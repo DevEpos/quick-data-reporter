@@ -1,4 +1,4 @@
-import { DataPreview, ValueHelpRequest } from "../model/ServiceModel";
+import { QueryResult, ValueHelpRequest } from "../model/ServiceModel";
 import ajaxUtil from "./ajaxUtil";
 
 const BASE_URL = `/sap/zqdrtrest/valueHelpData`;
@@ -12,7 +12,7 @@ export default class ValueHelpService {
      * @param valueHelpRequest the request information to fetch value help data
      * @returns promise with metadata result of the found valuehelp
      */
-    async retrieveValueHelpData(valueHelpRequest: ValueHelpRequest): Promise<DataPreview> {
+    async retrieveValueHelpData(valueHelpRequest: ValueHelpRequest): Promise<QueryResult> {
         const csrfToken = await ajaxUtil.fetchCSRF();
         const response = await ajaxUtil.send(`${BASE_URL}`, {
             method: "POST",

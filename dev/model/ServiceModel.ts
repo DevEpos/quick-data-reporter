@@ -219,7 +219,7 @@ export type DataRow = Record<string, unknown>;
 /**
  * Result from data preview service
  */
-export interface DataPreview {
+export interface QueryResult {
     /**
      * The actual retrieved data rows
      */

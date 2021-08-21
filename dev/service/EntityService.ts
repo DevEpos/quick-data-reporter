@@ -1,6 +1,6 @@
 import ajaxUtil from "./ajaxUtil";
 import {
-    DataPreview,
+    QueryResult,
     DbEntity,
     EntityMetadata,
     EntityVariant,
@@ -52,10 +52,10 @@ export default class EntityService {
      * @param entity the name of the entity
      * @returns the object from the response if response was ok
      */
-    async getEntityData(type: string, entity: string): Promise<DataPreview> {
+    async getEntityData(type: string, entity: string): Promise<QueryResult> {
         const csrfToken = await ajaxUtil.fetchCSRF();
         const response = await ajaxUtil.send(
-            `${SUB_ENTITY_SRV_URL.replace("{type}", type).replace("{name}", entity)}/dataPreview`,
+            `${SUB_ENTITY_SRV_URL.replace("{type}", type).replace("{name}", entity)}/queryResult`,
             {
                 method: "POST",
                 csrfToken
