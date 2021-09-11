@@ -1,0 +1,36 @@
+# @name  csrf_fetch
+HEAD {{sap_dev_server}}/sap/zqdrtrest/ HTTP/1.1
+X-CSRF-Token: Fetch
+Authorization: Basic {{sap_dev_user}} {{sap_dev_pwd}}
+
+###
+
+# Test Table with lowercase name
+GET {{sap_dev_server}}/sap/zqdrtrest/entities/T/tadir/metadata HTTP/1.1
+X-CSRF-Token: {{csrf_fetch.response.headers.x-csrf-Token}}
+Authorization: Basic {{sap_dev_user}} {{sap_dev_pwd}}
+Content-Type: application/json
+
+###
+
+# Test CDS view
+GET {{sap_dev_server}}/sap/zqdrtrest/entities/C/ZQDRT_I_DBTABLE/metadata HTTP/1.1
+X-CSRF-Token: {{csrf_fetch.response.headers.x-csrf-Token}}
+Authorization: Basic {{sap_dev_user}} {{sap_dev_pwd}}
+Content-Type: application/json
+
+###
+
+# Test CDS view with parameters
+GET {{sap_dev_server}}/sap/zqdrtrest/entities/C/DEMO_CDS_PARAMETERS/metadata HTTP/1.1
+X-CSRF-Token: {{csrf_fetch.response.headers.x-csrf-Token}}
+Authorization: Basic {{sap_dev_user}} {{sap_dev_pwd}}
+Content-Type: application/json
+
+###
+
+# Test non existent entity
+GET {{sap_dev_server}}/sap/zqdrtrest/entities/C/DEMO_CDS_PARAM/metadata HTTP/1.1
+X-CSRF-Token: {{csrf_fetch.response.headers.x-csrf-Token}}
+Authorization: Basic {{sap_dev_user}} {{sap_dev_pwd}}
+Content-Type: application/json

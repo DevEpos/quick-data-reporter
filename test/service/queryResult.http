@@ -1,0 +1,62 @@
+# @name  csrf_fetch
+HEAD {{sap_dev_server}}/sap/zqdrtrest/ HTTP/1.1
+Authorization: Basic {{sap_dev_user}} {{sap_dev_pwd}}
+X-CSRF-Token: Fetch
+
+###
+
+# @name query_result
+POST {{sap_dev_server}}/sap/zqdrtrest/entities/T/TADIR/queryResult?readMetadata=true HTTP/1.1
+X-CSRF-Token: {{csrf_fetch.response.headers.x-csrf-Token}}
+Authorization: Basic {{sap_dev_user}} {{sap_dev_pwd}}
+Content-Type: application/json
+
+{
+    "filters": [
+        {
+            "fieldName": "object",
+            "ranges": [
+                {
+                    "operation": "EQ",
+                    "value1": "CLAS"
+                }
+            ]
+        },
+        {
+            "fieldName": "created_on",
+            "ranges": [
+                {
+                    "operation": "EQ",
+                    "value1": "2021-09-01"
+                }
+            ]
+        }
+    ],
+    "aggregations": {
+        "aggregationExpressions": [
+            {
+                "columnKey": "object"
+            }
+        ],
+        "havingExpressions": [
+            {
+                "columnKey": "object",
+                "function": "count",
+                "operation": "GE",
+                "value1": "100"
+            }
+        ]
+    },
+    "sortFields": [
+        {
+            "columnKey": "object",
+            "sortDirection": "Ascending"
+        }
+    ],
+    "outputFields": [
+        {
+            "columnKey": "object",
+            "index": 1
+        }
+    ]
+}
