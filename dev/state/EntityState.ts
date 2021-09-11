@@ -68,7 +68,7 @@ export default class EntityState extends BaseState<Entity> {
         } catch (reqError) {
             Log.error(
                 `Data for entity with type: ${this.data.type}, name: ${this.data.name} could not be loaded`,
-                reqError?.statusText ?? ""
+                (reqError as any)?.statusText ?? ""
             );
         }
     }
@@ -80,7 +80,7 @@ export default class EntityState extends BaseState<Entity> {
         } catch (reqError) {
             Log.error(
                 `Variants for entity with type: ${this.data.type}, name: ${this.data.name} could not be loaded`,
-                reqError?.statusText ?? ""
+                (reqError as any)?.statusText ?? ""
             );
         }
     }
@@ -125,7 +125,7 @@ export default class EntityState extends BaseState<Entity> {
         } catch (reqError) {
             Log.error(
                 `Metadata for entity with type: ${this.data.type}, name: ${this.data.name} could not be determined`,
-                reqError?.statusText ?? ""
+                (reqError as any)?.statusText ?? ""
             );
         }
         return this.data.metadata;
