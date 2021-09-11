@@ -152,8 +152,8 @@ export default class EntityState extends BaseState<Entity> {
         this.data.name = null;
         this.data.aggregationCond.length = 0;
         this.data.sortCond.length = 0;
-        this.data.filters = null;
-        this.data.parameters = null;
+        this.data.filters = {};
+        this.data.parameters = {};
         this.data.columnsItems.length = 0;
         this.data.variants.length = 0;
         this.data.rows.length = 0;
