@@ -45,6 +45,7 @@ export enum ValueHelpType {
     CdsAnnotation = "CdsAnnotation"
 }
 export interface FieldFilter {
+    fieldName?: string;
     value?: string;
     ranges?: FilterCond[];
     items?: FilterItem[];
@@ -64,18 +65,18 @@ export interface FilterCond {
 }
 
 export interface SortCond {
-    columnKey: string;
+    fieldName: string;
     sortDirection?: string;
 }
 
 export interface AggregationCond {
-    columnKey: string;
+    fieldName: string;
     operation?: string;
     showIfGrouped?: boolean;
 }
 
 export interface ColumnConfig {
-    columnKey: string;
+    fieldName: string;
     index?: number;
     visible: boolean;
 }

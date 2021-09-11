@@ -98,7 +98,7 @@ export default class EntityTableSettings {
         let colIndex = 0;
         for (const column of this._modelCurrentState.columnMetadata) {
             this._modelCurrentState.columnsItems.push({
-                columnKey: column.name,
+                fieldName: column.name,
                 visible: true,
                 index: colIndex++
             });
@@ -114,7 +114,7 @@ export default class EntityTableSettings {
         modelData.columnsItems = event.getParameter("items");
         if (modelData.aggregationCond?.length > 0) {
             for (const colItem of modelData.columnsItems) {
-                const groupItem = modelData.aggregationCond.find(item => item.columnKey === colItem.columnKey);
+                const groupItem = modelData.aggregationCond.find(item => item.fieldName === colItem.fieldName);
                 if (groupItem) {
                     groupItem.showIfGrouped = colItem.visible;
                 }
@@ -128,7 +128,7 @@ export default class EntityTableSettings {
         modelData.sortCond.length = 0;
         for (const sortCond of sortConditions) {
             modelData.sortCond.push({
-                columnKey: (sortCond as any).keyField,
+                fieldName: (sortCond as any).keyField,
                 sortDirection: (sortCond as any).operation
             });
         }
@@ -146,22 +146,22 @@ export default class EntityTableSettings {
                 let index = 0;
                 const keyField = (groupCondItem as any).keyField;
                 modelData.aggregationCond.push({
-                    columnKey: keyField,
+                    fieldName: keyField,
                     showIfGrouped: (groupCondItem as any).showIfGrouped
                 });
                 modelData.sortCond.push({
-                    columnKey: keyField,
+                    fieldName: keyField,
                     sortDirection: P13nConditionOperation.Ascending
                 });
                 groupFieldKeys.push(keyField);
 
-                const existingColumn = modelData.columnsItems.find(col => col.columnKey === keyField);
+                const existingColumn = modelData.columnsItems.find(col => col.fieldName === keyField);
                 if (existingColumn) {
                     existingColumn.visible = (groupCondItem as any).showIfGrouped;
                     updatedColumns.push(existingColumn);
                 } else {
                     updatedColumns.push({
-                        columnKey: keyField,
+                        fieldName: keyField,
                         visible: (groupCondItem as any).showIfGrouped,
                         index
                     });
@@ -178,7 +178,7 @@ export default class EntityTableSettings {
             modelData.allColumnMetadata = [...modelData.columnMetadata];
             for (const columnMeta of modelData.columnMetadata) {
                 modelData.columnsItems.push({
-                    columnKey: columnMeta.name,
+                    fieldName: columnMeta.name,
                     visible: true
                 });
             }
@@ -195,7 +195,7 @@ export default class EntityTableSettings {
             aggregationCond: [...state.aggregationCond] || []
         };
         if (this._modelCurrentState.aggregationCond?.length > 0) {
-            const aggrItemKeys = this._modelCurrentState.aggregationCond.map(aggrItem => aggrItem.columnKey);
+            const aggrItemKeys = this._modelCurrentState.aggregationCond.map(aggrItem => aggrItem.fieldName);
             this._modelCurrentState.allColumnMetadata = this._modelCurrentState.columnMetadata.filter(colItem =>
                 aggrItemKeys.includes(colItem.name)
             );

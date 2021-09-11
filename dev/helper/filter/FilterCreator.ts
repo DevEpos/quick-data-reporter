@@ -74,11 +74,11 @@ const typeFilterOperationMap: Record<string, string[]> = {
  */
 export default class FilterCreator {
     private _value: string;
-    private _columnKey: string;
+    private _fieldName: string;
     private _fieldMetadata: FieldMetadata;
 
-    constructor(columnKey: string, fieldMetadata: FieldMetadata) {
-        this._columnKey = columnKey;
+    constructor(fieldName: string, fieldMetadata: FieldMetadata) {
+        this._fieldName = fieldName;
         this._fieldMetadata = fieldMetadata;
     }
 
@@ -98,7 +98,7 @@ export default class FilterCreator {
      */
     createFilter(): FilterCond {
         const filterCond = {
-            keyField: this._columnKey,
+            keyField: this._fieldName,
             exclude: false
         } as FilterCond;
         let filterCondConfig: FilterCondConfig;

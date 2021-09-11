@@ -19,6 +19,6 @@
         "global": true,
         "labelReadOnly": true,
         "readOnly": true,
-        "dataString": "{\"columnItems\":[{\"columnKey\":\"clsname\",\"index\":0},{\"columnKey\":\"category\",\"index\":1},{\"columnKey\":\"author\",\"index\":2}],\"sortItems\":[],\"aggregationItems\":[], \"filterItems\":[]}"
+        "dataString": "{\"columnItems\":[{\"fieldName\":\"clsname\",\"index\":0},{\"fieldName\":\"category\",\"index\":1},{\"fieldName\":\"author\",\"index\":2}],\"sortItems\":[],\"aggregationItems\":[], \"filterItems\":[]}"
     }
 ]

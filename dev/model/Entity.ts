@@ -69,7 +69,7 @@ export default class Entity implements ConfigurableEntity {
      * Returns all visible columns
      */
     get visibleFieldMetadata(): FieldMetadata[] {
-        const visibleColKeys = this.columnsItems.filter(col => col.visible).map(col => col.columnKey);
+        const visibleColKeys = this.columnsItems.filter(col => col.visible).map(col => col.fieldName);
         return visibleColKeys.map(visibleColKey =>
             this.metadata.fields.find(colMeta => colMeta.name === visibleColKey)
         );

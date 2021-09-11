@@ -17,7 +17,7 @@
                         text="{description}"/>
                 </items>
                 <columnsItems>
-                    <P13nColumnsItem columnKey="{columnKey}"
+                    <P13nColumnsItem columnKey="{fieldName}"
                         index="{index}"
                         visible="{visible}"/>
                 </columnsItems>
@@ -33,7 +33,7 @@
                         text="{description}"/>
                 </items>
                 <sortItems>
-                    <P13nSortItem columnKey="{columnKey}"
+                    <P13nSortItem columnKey="{fieldName}"
                         operation="{sortDirection}"></P13nSortItem>
                 </sortItems>
             </P13nSortPanel>
@@ -44,7 +44,7 @@
                 removeGroupItem="onGroupItemUpdate"
                 items="{/columnMetadata}">
                 <groupItems>
-                    <P13nGroupItem columnKey="{columnKey}"
+                    <P13nGroupItem columnKey="{fieldName}"
                         showIfGrouped="{showIfGrouped}"></P13nGroupItem>
                 </groupItems>
                 <items>

@@ -102,7 +102,7 @@ export default class EntityState extends BaseState<Entity> {
                     const fieldMeta = entityMetadata.fields[i];
                     fieldMeta.description = getDescription(fieldMeta);
                     this.data.columnsItems.push({
-                        columnKey: fieldMeta.name,
+                        fieldName: fieldMeta.name,
                         visible: true,
                         index: i
                     });
