@@ -103,7 +103,13 @@ export default class EntityTableSettings {
                 index: colIndex++
             });
         }
-        this._model.setData(deepClone(this._modelCurrentState));
+        this._model.setData({
+            columnMetadata: this._modelCurrentState.columnMetadata.slice(0),
+            allColumnMetadata: this._modelCurrentState.allColumnMetadata.slice(0),
+            columnsItems: deepClone(this._modelCurrentState.columnsItems),
+            sortCond: deepClone(this._modelCurrentState.sortCond),
+            aggregationCond: deepClone(this._modelCurrentState.aggregationCond)
+        });
     }
     onOK(): void {
         this._okPayload = this._model.getData();
