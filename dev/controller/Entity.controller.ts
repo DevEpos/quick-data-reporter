@@ -184,11 +184,20 @@ export default class EntityController extends BaseController {
             case "Time":
                 template = new Text({
                     text: {
+                        path: template,
                         type: "sap.ui.model.type.Time",
                         formatOptions: {
                             relative: true,
                             relativeScale: "auto"
                         }
+                    }
+                });
+                break;
+            case "Boolean":
+                template = new Text({
+                    text: {
+                        path: template,
+                        type: "sap.ui.model.odata.type.Boolean"
                     }
                 });
                 break;
