@@ -12,6 +12,13 @@ import Input from "sap/m/Input";
 import SmartVariantManagementUi2 from "sap/ui/comp/smartvariants/SmartVariantManagementUi2";
 import FilterBar from "sap/ui/comp/filterbar/FilterBar";
 
+type ViewModelType = {
+    currentEntity: {
+        name: string;
+    };
+    selectedEntityType: EntityType;
+};
+
 /**
  * Main Page controller
  *
@@ -22,11 +29,13 @@ export default class MainPageController extends BaseController {
     private _viewModel: JSONModel;
     private _nameFilter: Input;
     private _dataModel: JSONModel;
+    private _viewModelData: ViewModelType;
 
     onInit(): void {
         super.onInit();
         this._searchService = new EntityService();
-        this._viewModel = models.createViewModel({ currentEntity: { name: "" } });
+        this._viewModelData = { currentEntity: { name: "" }, selectedEntityType: EntityType.All };
+        this._viewModel = models.createViewModel(this._viewModelData);
         this.getView().setModel(this._viewModel, "ui");
 
         this._dataModel = models.createViewModel({ foundEntities: [] });
@@ -91,7 +100,7 @@ export default class MainPageController extends BaseController {
 
         filterTable.setBusy(true);
 
-        const entities = await this._searchService.findEntities(filterValue);
+        const entities = await this._searchService.findEntities(filterValue, this._viewModelData.selectedEntityType);
         filterTable.setBusy(false);
 
         if (entities) {

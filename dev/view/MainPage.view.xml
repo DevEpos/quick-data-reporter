@@ -42,6 +42,25 @@
                                     </Select>
                                 </fb:control>
                             </fb:FilterGroupItem>
+                            <fb:FilterGroupItem name="typeSelection"
+                                groupName="_MISC"
+                                visibleInFilterBar="true"
+                                label="{i18n>dbEntities_filterbar_entityTypeFilter_label}">
+                                <fb:control>
+                                    <Select selectedKey="{ui>/selectedEntityType}">
+                                        <items>
+                                            <c:Item key="all"
+                                                text="{i18n>dbEntities_filterbar_entityTypeFilter_all}" />
+                                            <c:Item key="T"
+                                                text="{i18n>dbEntity_type_table}" />
+                                            <c:Item key="V"
+                                                text="{i18n>dbEntity_type_view}" />
+                                            <c:Item key="C"
+                                                text="{i18n>dbEntity_type_cds}" />
+                                        </items>
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
                             <fb:FilterGroupItem name="nameFilter"
                                 groupName="_MISC"
                                 visibleInFilterBar="true"

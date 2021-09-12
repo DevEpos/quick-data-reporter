@@ -3,6 +3,7 @@ import I18nUtil from "../helper/I18nUtil";
 import TypeFactory from "./TypeFactory";
 
 export enum EntityType {
+    All = "all",
     CdsView = "C",
     Table = "T",
     View = "V"

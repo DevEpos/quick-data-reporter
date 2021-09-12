@@ -102,10 +102,15 @@ export default class EntityService {
     /**
      * Searches for DB entities
      * @param filterValue filter value to search entities
+     * @param entityType the type of entities to be searched
      * @returns Promise with response result
      */
-    async findEntities(filterValue: string): Promise<DbEntity[]> {
-        const response = await ajaxUtil.send(`${BASE_SRV_URL}?$top=200&$filter=${filterValue}`);
+    async findEntities(filterValue: string, entityType?: EntityType): Promise<DbEntity[]> {
+        let requestURL = `${BASE_SRV_URL}?$top=200&$filter=${filterValue}`;
+        if (entityType && entityType !== EntityType.All) {
+            requestURL = `${requestURL}&entityType=${entityType}`;
+        }
+        const response = await ajaxUtil.send(requestURL);
         return response?.data;
     }
 }
