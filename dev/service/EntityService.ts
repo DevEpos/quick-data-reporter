@@ -105,7 +105,7 @@ export default class EntityService {
      * @returns Promise with response result
      */
     async findEntities(filterValue: string): Promise<DbEntity[]> {
-        const response = await ajaxUtil.send(`${BASE_SRV_URL}?$top=50&filter=${filterValue}`);
+        const response = await ajaxUtil.send(`${BASE_SRV_URL}?$top=200&$filter=${filterValue}`);
         return response?.data;
     }
 }
