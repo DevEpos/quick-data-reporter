@@ -78,7 +78,7 @@ class AjaxUtil {
         return new Promise((fnResolve, fnReject) => {
             jQuery.ajax({
                 url: url,
-                headers: options?.headers,
+                headers: headers,
                 method: options.method,
                 username: options.username,
                 dataType: options.dataType ?? "json",
@@ -111,7 +111,7 @@ class AjaxUtil {
         this._addCSRFToRequestData(headers, options?.csrfToken);
         jQuery.ajax({
             url: url,
-            headers: options?.headers,
+            headers: headers,
             method: options.method,
             username: options.username,
             dataType: options.dataType ?? "json",
