@@ -25,6 +25,9 @@ export default class EntityState extends BaseState<Entity> {
         super(new Entity());
         this._entityService = new EntityService();
     }
+    exists(): boolean {
+        return this.data.metadata?.fields?.length > 0;
+    }
     setConfiguration(newSettings: ConfigurableEntity): void {
         this.data.columnsItems = newSettings?.columnsItems;
         this.data.aggregationCond = newSettings?.aggregationCond;
@@ -123,6 +126,7 @@ export default class EntityState extends BaseState<Entity> {
             this.noModelUpdates = false;
             this.updateModel();
         } catch (reqError) {
+            this.reset();
             Log.error(
                 `Metadata for entity with type: ${this.data.type}, name: ${this.data.name} could not be determined`,
                 (reqError as any)?.statusText ?? ""

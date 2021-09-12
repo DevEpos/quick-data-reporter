@@ -17,6 +17,7 @@ import Menu from "sap/m/Menu";
 import MenuItem from "sap/m/MenuItem";
 import CustomData from "sap/ui/core/CustomData";
 import FormatUtil from "../helper/FormatUtil";
+import MessageBox from "sap/m/MessageBox";
 
 /**
  * Controller for a single database entity
@@ -28,6 +29,7 @@ export default class EntityController extends BaseController {
     private _entityTableSettings: EntityTableSettings;
     private _queryResultTable: Table;
     private _entityState: EntityState;
+    private _stateResetTimeout: number;
     /**
      * Initializes entity controller
      */
@@ -53,12 +55,17 @@ export default class EntityController extends BaseController {
     private _onMainMatched() {
         this._entityTableSettings?.destroyDialog();
         if (this._entityState) {
-            setTimeout(() => {
+            this._stateResetTimeout = setTimeout(() => {
                 this._entityState.reset();
+                this._stateResetTimeout = 0;
             }, 1000);
         }
     }
     private async _onEntityMatched(event: Event) {
+        if (this._stateResetTimeout) {
+            clearTimeout(this._stateResetTimeout);
+            this._entityState.reset();
+        }
         const args = event.getParameter("arguments");
         const entityInfo = {
             type: decodeURIComponent(args.type),
@@ -67,7 +74,15 @@ export default class EntityController extends BaseController {
         this._entityState.setEntityInfo(entityInfo.name, entityInfo.type as EntityType);
         this.getView().setBusy(true);
         await Promise.all([this._entityState.loadMetadata(), this._entityState.loadVariants()]);
-        this._createColumns();
+        if (!this._entityState.exists()) {
+            MessageBox.error(`Entity with name ${entityInfo.name} does not exist`, {
+                onClose: () => {
+                    this.getOwnerComponent().getRouter().navTo("main");
+                }
+            });
+        } else {
+            this._createColumns();
+        }
         this.getView().setBusy(false);
     }
     /**
