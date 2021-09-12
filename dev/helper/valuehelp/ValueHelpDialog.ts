@@ -316,7 +316,7 @@ export default class ValueHelpDialog extends BaseObject {
             showClearOnFB: false,
             basicSearch: new SearchField({
                 showSearchButton: true,
-                placeholder: "Search",
+                placeholder: "{i18n>vhDialog_searchField_placeholder}",
                 search: (event: Event) => {
                     const filters = [];
                     if (event.getParameter("query") && event.getParameter("query").length > 0) {
@@ -375,7 +375,7 @@ export default class ValueHelpDialog extends BaseObject {
         try {
             await this._vhModel.fetchData(params);
         } catch (error) {
-            Log.error("Value help data could not be loaded", error?.statusText ?? error);
+            Log.error("Value help data could not be loaded", (error as any)?.statusText ?? error);
         }
         // Was the dialog closed in the meantime?
         if (this._dialog) {

@@ -1,4 +1,5 @@
 import { FieldMetadata, ValueHelpField, ValueHelpMetadata, ValueHelpType } from "../../model/ServiceModel";
+import I18nUtil from "../I18nUtil";
 
 /**
  * Utility object for value helps
@@ -40,7 +41,7 @@ export default class ValueHelpUtil {
                     maxLength: 40,
                     type: "String",
                     name: "description",
-                    description: "Description"
+                    description: I18nUtil.getText("vhDialog_domainSH_descriptionCol_text")
                 } as ValueHelpField)
             ],
             outputFields: ["fixValue", "description"]
