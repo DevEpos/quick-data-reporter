@@ -89,13 +89,25 @@ export default class EntityState extends BaseState<Entity> {
     }
     async loadMetadata(): Promise<EntityMetadata> {
         const getDescription = (fieldMeta: FieldMetadata): string => {
-            return (
-                fieldMeta.mediumDescription ||
-                (fieldMeta.longDescription?.length <= 20 && fieldMeta.longDescription) ||
-                (fieldMeta.fieldText?.length <= 20 && fieldMeta.fieldText) ||
-                fieldMeta.shortDescription ||
-                fieldMeta.name
-            );
+            if (fieldMeta.mediumDescription) {
+                return fieldMeta.mediumDescription;
+            } else if (fieldMeta.shortDescription) {
+                return fieldMeta.shortDescription;
+            } else if (fieldMeta.longDescription) {
+                if (fieldMeta.longDescription.length <= 25) {
+                    return fieldMeta.longDescription;
+                } else {
+                    return `${fieldMeta.longDescription.substring(0, 22)}...`;
+                }
+            } else if (fieldMeta.fieldText) {
+                if (fieldMeta.fieldText.length <= 25) {
+                    return fieldMeta.fieldText;
+                } else {
+                    return `${fieldMeta.fieldText.substring(0, 22)}...`;
+                }
+            } else {
+                return fieldMeta.name;
+            }
         };
         try {
             const entityMetadata = await this._entityService.getMetadata(this.data.type, this.data.name);

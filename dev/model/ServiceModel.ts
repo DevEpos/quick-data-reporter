@@ -1,4 +1,5 @@
 import ODataType from "sap/ui/model/odata/type/ODataType";
+import I18nUtil from "../helper/I18nUtil";
 import TypeFactory from "./TypeFactory";
 
 export enum EntityType {
@@ -119,6 +120,7 @@ export interface EntityMetadata {
 
 export class FieldMetadata {
     private _typeInstance: ODataType;
+    private _tooltip: string;
     /**
      * The name of the column
      */
@@ -159,6 +161,17 @@ export class FieldMetadata {
      * The long description for the column
      */
     longDescription?: string;
+    /**
+     * The tooltip for the column
+     */
+    get tooltip(): string {
+        if (!this._tooltip) {
+            this._tooltip =
+                `${I18nUtil.getText("entity_field_description")}: ${this.fieldText}\n` +
+                `${I18nUtil.getText("entity_field_technicalName")}: ${this.name}`;
+        }
+        return this._tooltip;
+    }
     /**
      * The DDIC description for the column
      */

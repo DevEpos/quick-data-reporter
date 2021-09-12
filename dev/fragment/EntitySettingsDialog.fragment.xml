@@ -14,7 +14,8 @@
                 columnsItems="{/columnsItems}">
                 <items>
                     <P13nItem columnKey="{name}"
-                        text="{description}"/>
+                        text="{description}"
+                        tooltip="{tooltip}"/>
                 </items>
                 <columnsItems>
                     <P13nColumnsItem columnKey="{fieldName}"
@@ -30,7 +31,8 @@
                 removeSortItem="onSortItemUpdate">
                 <items>
                     <P13nItem columnKey="{name}"
-                        text="{description}"/>
+                        text="{description}"
+                        tooltip="{tooltip}"/>
                 </items>
                 <sortItems>
                     <P13nSortItem columnKey="{fieldName}"
@@ -43,14 +45,15 @@
                 updateGroupItem="onGroupItemUpdate"
                 removeGroupItem="onGroupItemUpdate"
                 items="{/columnMetadata}">
+                <items>
+                    <P13nItem columnKey="{name}"
+                        text="{description}"
+                        tooltip="{tooltip}"/>
+                </items>
                 <groupItems>
                     <P13nGroupItem columnKey="{fieldName}"
                         showIfGrouped="{showIfGrouped}"></P13nGroupItem>
                 </groupItems>
-                <items>
-                    <P13nItem columnKey="{name}"
-                        text="{description}"/>
-                </items>
             </P13nGroupPanel>
         </panels>
     </P13nDialog>

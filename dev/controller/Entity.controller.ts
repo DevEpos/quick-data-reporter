@@ -201,7 +201,7 @@ export default class EntityController extends BaseController {
         return new Column({
             label: new Text({
                 text: fieldMetadataInfo.description,
-                tooltip: fieldMetadataInfo.name,
+                tooltip: fieldMetadataInfo.tooltip,
                 wrapping: false
             }),
             hAlign,

@@ -117,7 +117,7 @@ export default class AddQuickFiltersPopover {
                     filterMeta.description === filterMeta.name
                         ? filterMeta.name
                         : `${filterMeta.description} (${filterMeta.name})`,
-                tooltip: filterMeta.fieldText,
+                tooltip: filterMeta.tooltip,
                 fieldMetadata: filterMeta,
                 selected: false
             });

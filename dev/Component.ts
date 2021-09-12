@@ -2,6 +2,7 @@ import UIComponent from "sap/ui/core/UIComponent";
 import models from "com/devepos/qdrt/model/models";
 import ResourceBundle from "sap/base/i18n/ResourceBundle";
 import ResourceModel from "sap/ui/model/resource/ResourceModel";
+import { setResourceBundle } from "./helper/I18nUtil";
 
 /**
  * Component for the Quick Data Reporter
@@ -21,6 +22,8 @@ export default class QdrtComponent extends UIComponent {
         this.setModel(models.createDeviceModel(), "device");
         // create the views based on the url/hash
         this.getRouter().initialize();
+        // globally register the resource bundle of the application
+        setResourceBundle(this.getResourceBundle());
     }
 
     /**

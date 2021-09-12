@@ -190,7 +190,7 @@ export default class SideFilterPanel extends Panel {
                     fieldMetadata.description === fieldMetadata.name
                         ? fieldMetadata.name
                         : `${fieldMetadata.description} (${fieldMetadata.name})`,
-                tooltip: fieldMetadata.fieldText,
+                tooltip: fieldMetadata.tooltip,
                 fieldMetadata: fieldMetadata
             });
             this._filterContainer.addContent(quickFilter);
