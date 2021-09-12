@@ -68,8 +68,8 @@ export default class EntityController extends BaseController {
         }
         const args = event.getParameter("arguments");
         const entityInfo = {
-            type: decodeURIComponent(args.type),
-            name: decodeURIComponent(args.name)
+            type: decodeURIComponent(args.type).toUpperCase(),
+            name: decodeURIComponent(args.name).toUpperCase()
         };
         this._entityState.setEntityInfo(entityInfo.name, entityInfo.type as EntityType);
         this.getView().setBusy(true);
