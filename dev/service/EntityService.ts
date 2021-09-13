@@ -109,7 +109,10 @@ export default class EntityService {
      * @returns Promise with response result
      */
     async findEntities(filterValue: string, entityType?: EntityType): Promise<DbEntity[]> {
-        let requestURL = `${BASE_SRV_URL}?$top=200&$filter=${filterValue}`;
+        let requestURL = `${BASE_SRV_URL}?$top=200`;
+        if (filterValue) {
+            requestURL = `${requestURL}&$filter=${filterValue}`;
+        }
         if (entityType && entityType !== EntityType.All) {
             requestURL = `${requestURL}&entityType=${entityType}`;
         }

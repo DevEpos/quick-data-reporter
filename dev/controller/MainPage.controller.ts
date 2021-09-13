@@ -92,9 +92,6 @@ export default class MainPageController extends BaseController {
 
     async onSearch(): Promise<void> {
         const filterValue = this._nameFilter.getValue();
-        if (!filterValue) {
-            return;
-        }
 
         const filterTable = this.getView().byId("foundEntitiesTable") as Table;
 
