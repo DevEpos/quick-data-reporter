@@ -22,8 +22,7 @@ import Token from "sap/m/Token";
 import isEmptyObject from "sap/base/util/isEmptyObject";
 import Log from "sap/base/Log";
 
-const EXPANDED_HEIGHT = "40%";
-const NON_EXPANDABLE_HEIGHT = "100%";
+const PANEL_HEIGHT = "100%";
 
 enum FilterCategory {
     Filters = "filters",
@@ -76,9 +75,9 @@ export default class SideFilterPanel extends Panel {
     applySettings(settings: object, scope?: object): this {
         super.applySettings(settings, scope);
         if (!this.getExpandable()) {
-            this.setHeight(NON_EXPANDABLE_HEIGHT);
+            this.setHeight(PANEL_HEIGHT);
         } else {
-            this.setHeight(this.getExpanded() ? EXPANDED_HEIGHT : "");
+            this._setHeightForExpandablePanel(this.getExpanded());
         }
         return this;
     }
@@ -99,7 +98,7 @@ export default class SideFilterPanel extends Panel {
     }
     setExpanded(expanded: boolean): this {
         super.setExpanded(expanded);
-        this.setHeight(expanded ? EXPANDED_HEIGHT : "");
+        this._setHeightForExpandablePanel(expanded);
         return this;
     }
     setVisibleFilters(filters: TableFilters): this {
@@ -113,6 +112,16 @@ export default class SideFilterPanel extends Panel {
     }
     exit(): void {
         Panel.prototype.exit.call(this);
+    }
+
+    private _setHeightForExpandablePanel(expanded: boolean) {
+        this.setHeight(expanded ? PANEL_HEIGHT : "");
+        /*
+         * Forcefully overwrite only the panel height via applying a style class
+         * Panel#setHeight() also adjusts the height of the panel-content div with the same height which
+         * is results in a too small height for the container on som UI5 releases (e.g. 1.71)
+         */
+        this.toggleStyleClass("deveposQdrt-SideFilterPanel--reducedHeight", this.getExpanded());
     }
 
     private _createPanelContent() {
