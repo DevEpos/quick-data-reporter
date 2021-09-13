@@ -185,7 +185,7 @@ export default class EntityController extends BaseController {
                 template = new Text({
                     text: {
                         path: template,
-                        type: "sap.ui.model.type.Time",
+                        type: "sap.ui.model.odata.type.Time",
                         formatOptions: {
                             relative: true,
                             relativeScale: "auto"
