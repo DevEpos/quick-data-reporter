@@ -24,7 +24,7 @@ export default class EntityService {
      */
     async getMetadata(type: string, name: string): Promise<EntityMetadata> {
         const response = await ajaxUtil.send(
-            `${SUB_ENTITY_SRV_URL.replace("{type}", type).replace("{name}", name)}/metadata`,
+            `${SUB_ENTITY_SRV_URL.replace("{type}", type).replace("{name}", encodeURIComponent(name))}/metadata`,
             {
                 method: "GET"
             }
@@ -55,7 +55,7 @@ export default class EntityService {
     async getEntityData(type: string, entity: string): Promise<QueryResult> {
         const csrfToken = await ajaxUtil.fetchCSRF();
         const response = await ajaxUtil.send(
-            `${SUB_ENTITY_SRV_URL.replace("{type}", type).replace("{name}", entity)}/queryResult`,
+            `${SUB_ENTITY_SRV_URL.replace("{type}", type).replace("{name}", encodeURIComponent(entity))}/queryResult`,
             {
                 method: "POST",
                 csrfToken
@@ -74,7 +74,10 @@ export default class EntityService {
      */
     async getValueHelpMetadata(entityName: string, entityType: EntityType, field: string): Promise<ValueHelpMetadata> {
         const response = await ajaxUtil.send(
-            `${SUB_ENTITY_SRV_URL.replace("{type}", entityType).replace("{name}", entityName)}/valueHelpMetadata`,
+            `${SUB_ENTITY_SRV_URL.replace("{type}", entityType).replace(
+                "{name}",
+                encodeURIComponent(entityName)
+            )}/valueHelpMetadata`,
             {
                 method: "GET",
                 data: { field }
@@ -91,7 +94,7 @@ export default class EntityService {
      */
     async getVariants(type: string, name: string): Promise<EntityVariant[]> {
         const response = await ajaxUtil.send(
-            `${SUB_ENTITY_SRV_URL.replace("{type}", type).replace("{name}", name)}/variants`,
+            `${SUB_ENTITY_SRV_URL.replace("{type}", type).replace("{name}", encodeURIComponent(name))}/variants`,
             {
                 method: "GET"
             }
