@@ -167,8 +167,9 @@ export class FieldMetadata {
      */
     get tooltip(): string {
         if (!this._tooltip) {
+            const description = this.fieldText || (this.description && this.description !== this.name) || "-";
             this._tooltip =
-                `${I18nUtil.getText("entity_field_description")}: ${this.fieldText}\n` +
+                `${I18nUtil.getText("entity_field_description")}: ${description}\n` +
                 `${I18nUtil.getText("entity_field_technicalName")}: ${this.name}`;
         }
         return this._tooltip;
