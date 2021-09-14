@@ -170,13 +170,19 @@ export default class EntityController extends BaseController {
                     }
                 });
                 break;
+            case "DateTimeOffset":
+                // TODO: create custom type for ABAP type TIMSTAMPL
+                break;
             case "DateTime":
                 template = new Text({
                     text: {
                         path: template,
                         type: "sap.ui.model.type.DateTime",
                         formatOptions: {
-                            style: "long"
+                            style: "medium",
+                            source: {
+                                pattern: "yyyy-MM-ddHHmmss"
+                            }
                         }
                     }
                 });
@@ -185,10 +191,11 @@ export default class EntityController extends BaseController {
                 template = new Text({
                     text: {
                         path: template,
-                        type: "sap.ui.model.odata.type.Time",
+                        type: "sap.ui.model.type.Time",
                         formatOptions: {
-                            relative: true,
-                            relativeScale: "auto"
+                            source: {
+                                pattern: "HH:mm:ss"
+                            }
                         }
                     }
                 });

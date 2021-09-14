@@ -16,8 +16,10 @@ export default class FormatUtil {
     static getWidth(fieldMeta: FieldMetadata, maxWidth = 30, minWidth = 3): string {
         let width = fieldMeta.maxLength;
 
-        // Force set the width to 9em for date fields
-        if (fieldMeta.type === "DateTime" || fieldMeta.type === "Date") {
+        if (fieldMeta.type === "DateTime" || fieldMeta.type === "DateTimeOffset") {
+            width = 12;
+        } else if (fieldMeta.type === "Date") {
+            // Force set the width to 9em for date fields
             width = 9;
         } else if (width) {
             // // Use Max width for description&Id and descriptionOnly use-case to accommodate description texts better on the UI
