@@ -21,6 +21,7 @@ export interface SelectedField {
 
 interface FieldConfig extends SelectedField {
     selected: boolean;
+    hasValueHelp: boolean;
 }
 
 class PopoverModel {
@@ -119,7 +120,8 @@ export default class AddQuickFiltersPopover {
                         : `${filterMeta.description} (${filterMeta.name})`,
                 tooltip: filterMeta.tooltip,
                 fieldMetadata: filterMeta,
-                selected: false
+                selected: false,
+                hasValueHelp: !!filterMeta.valueHelpType
             });
         }
         this._model = new JSONModel(this._modelData);

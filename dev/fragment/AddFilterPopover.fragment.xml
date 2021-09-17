@@ -43,11 +43,18 @@
                     mode="{= ${/multiSelect} ? 'MultiSelect' : 'None' }"
                     selectionChange="onFieldSelectionChange">
                     <items>
-                        <StandardListItem title="{label}"
-                            selected="{selected}"
+                        <CustomListItem selected="{selected}"
+                            class="deveposQdrt-EntityFilterPopover__ListItem"
                             tooltip="{tooltip}"
                             type="Active"
-                            press="onFieldPress" />
+                            press="onFieldPress">
+                            <FlexBox justifyContent="SpaceBetween">
+                                <Text text="{label}" />
+                                <core:Icon src="sap-icon://value-help"
+                                    tooltip="{i18n>entity_addFilterPopover_hasValueHelpIcon_tooltip}"
+                                    visible="{hasValueHelp}" />
+                            </FlexBox>
+                        </CustomListItem>
                     </items>
                 </List>
             </ScrollContainer>
