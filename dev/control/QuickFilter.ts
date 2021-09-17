@@ -246,6 +246,20 @@ export default class QuickFilter extends Control {
         return null;
     }
     /**
+     * @returns <code>true</code> if the filter has active values
+     */
+    hasValues(): boolean {
+        const filterData = this.getFilterData();
+        if (!filterData || isEmptyObject(filterData)) {
+            return false;
+        }
+        return (
+            ((this.getSingleValueOnly() || this.getType() === "Boolean") && !!filterData?.value) ||
+            filterData?.ranges?.length > 0 ||
+            filterData?.ranges?.length > 0
+        );
+    }
+    /**
      * Returns the filter control of this quick filter
      * @returns the filter control
      */
