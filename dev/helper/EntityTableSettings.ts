@@ -117,7 +117,13 @@ export default class EntityTableSettings {
     }
     onChangeColumnsItems(event: Event): void {
         const modelData = this._model.getData() as SettingsModelData;
-        modelData.columnsItems = event.getParameter("items");
+        modelData.columnsItems = (event.getParameter("items") as any[])?.map(p13nColItem => {
+            return {
+                fieldName: p13nColItem.columnKey,
+                index: p13nColItem.index,
+                visible: p13nColItem.visible
+            };
+        });
         if (modelData.aggregationCond?.length > 0) {
             for (const colItem of modelData.columnsItems) {
                 const groupItem = modelData.aggregationCond.find(item => item.fieldName === colItem.fieldName);
