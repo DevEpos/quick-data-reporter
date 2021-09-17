@@ -182,7 +182,7 @@ export default class EntityState extends BaseState<Entity> {
         if (parameterMetadata) {
             parameterMetadata.length = 0;
         }
-        this.updateModel();
+        this.updateModel(true);
     }
 
     private async _determineValueHelpInfo(
