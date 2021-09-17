@@ -54,36 +54,29 @@ export default class EntityController extends BaseController {
 
     private _onMainMatched() {
         this._entityTableSettings?.destroyDialog();
-        if (this._entityState) {
-            this._stateResetTimeout = setTimeout(() => {
-                this._entityState.reset();
-                this._stateResetTimeout = 0;
-            }, 1000);
-        }
     }
     private async _onEntityMatched(event: Event) {
-        if (this._stateResetTimeout) {
-            clearTimeout(this._stateResetTimeout);
-            this._entityState.reset();
-        }
         const args = event.getParameter("arguments");
-        const entityInfo = {
-            type: decodeURIComponent(args.type).toUpperCase(),
-            name: decodeURIComponent(args.name).toUpperCase()
-        };
-        this._entityState.setEntityInfo(entityInfo.name, entityInfo.type as EntityType);
         this.getView().setBusy(true);
-        await Promise.all([this._entityState.loadMetadata(), this._entityState.loadVariants()]);
-        if (!this._entityState.exists()) {
-            MessageBox.error(`Entity with name ${entityInfo.name} does not exist`, {
-                onClose: () => {
-                    this.getOwnerComponent().getRouter().navTo("main");
-                }
-            });
-        } else {
-            this._createColumns();
-        }
-        this.getView().setBusy(false);
+        setTimeout(async () => {
+            this._entityState.reset();
+            const entityInfo = {
+                type: decodeURIComponent(args.type).toUpperCase(),
+                name: decodeURIComponent(args.name).toUpperCase()
+            };
+            this._entityState.setEntityInfo(entityInfo.name, entityInfo.type as EntityType);
+            await Promise.all([this._entityState.loadMetadata(), this._entityState.loadVariants()]);
+            if (!this._entityState.exists()) {
+                MessageBox.error(this.getResourceBundle().getText("entity_not_exists_msg", [entityInfo.name]), {
+                    onClose: () => {
+                        this.getOwnerComponent().getRouter().navTo("main");
+                    }
+                });
+            } else {
+                this._createColumns();
+            }
+            this.getView().setBusy(false);
+        }, 100);
     }
     /**
      * Handles entity settings event
