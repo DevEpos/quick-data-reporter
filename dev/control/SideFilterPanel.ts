@@ -84,6 +84,9 @@ export default class SideFilterPanel extends Panel {
     onAfterRendering(event: jQuery.Event): void {
         Panel.prototype.onAfterRendering.call(this, event);
         // do custom afterRendering
+        if (!this.getExpandable()) {
+            this._updateDomHeight();
+        }
     }
     onBeforeRendering(event: jQuery.Event): void {
         // do custom beforeRendering
@@ -110,8 +113,20 @@ export default class SideFilterPanel extends Panel {
         this._updateFilters(filters);
         return this;
     }
+
     exit(): void {
         Panel.prototype.exit.call(this);
+    }
+
+    private _updateDomHeight(): void {
+        const domRef = this.getDomRef() as HTMLElement;
+        if (domRef) {
+            const currentHeight = this.$().css("height");
+            const newHeight = `calc(${PANEL_HEIGHT} - ${(domRef as HTMLElement).offsetTop}px)`;
+            if (currentHeight !== newHeight) {
+                this.$().css("height", newHeight);
+            }
+        }
     }
 
     private _setHeightForExpandablePanel(expanded: boolean) {
@@ -121,7 +136,7 @@ export default class SideFilterPanel extends Panel {
          * Panel#setHeight() also adjusts the height of the panel-content div with the same height which
          * is results in a too small height for the container on som UI5 releases (e.g. 1.71)
          */
-        this.toggleStyleClass("deveposQdrt-SideFilterPanel--reducedHeight", this.getExpanded());
+        this.toggleStyleClass("deveposQdrt-SideFilterPanel--reducedHeight", expanded);
     }
 
     private _createPanelContent() {

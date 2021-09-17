@@ -22,7 +22,7 @@ export default class EntityFilterPanel extends Control {
             parameterPanel: {
                 type: "com.devepos.qdrt.control.SideFilterPanel",
                 multiple: false,
-                singularName: "filterPanel"
+                singularName: "parameterPanel"
             }
         }
     };
@@ -62,7 +62,7 @@ export default class EntityFilterPanel extends Control {
 
     onBeforeRendering(): void {
         if (!this._resizeAdapter && this.getParameterPanel()) {
-            this._resizeAdapter = new ResizeAdapter(this.getFilterPanel(), this.getParameterPanel(), null, null, true);
+            this._resizeAdapter = new ResizeAdapter(this.getParameterPanel(), this._onParamPanelResize.bind(this));
         }
     }
     onAfterRendering(): void {
@@ -73,6 +73,19 @@ export default class EntityFilterPanel extends Control {
     exit(): void {
         if (this._resizeAdapter) {
             this._resizeAdapter.destroy();
+        }
+    }
+    private _onParamPanelResize() {
+        const domRef = this.getFilterPanel()?.getDomRef() as HTMLElement;
+        if (!domRef) {
+            return;
+        }
+        const oldCSSHeight = domRef.style.height;
+
+        const newCSSHeight = `calc(${this.getFilterPanel().getHeight()} - ${domRef.offsetTop}px)`;
+
+        if (newCSSHeight !== oldCSSHeight) {
+            domRef.style.height = newCSSHeight;
         }
     }
 }
