@@ -102,6 +102,12 @@ export default class AddQuickFiltersPopover {
         this._popover.close();
         this._popoverPromise.resolve([selectedFieldConfig]);
     }
+    onSelectAll(): void {
+        for (const field of this._modelData.fields) {
+            field.selected = true;
+        }
+        this._model.updateBindings(false);
+    }
     onAcceptSelection(): void {
         this._popover.close();
         this._popoverPromise.resolve(this._modelData.selectedFields);
