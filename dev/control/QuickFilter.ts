@@ -348,8 +348,20 @@ export default class QuickFilter extends Control {
                 this.fireValueHelpRequest();
             }, this);
             if (this._filterControl instanceof MultiInput) {
-                this._filterControl.attachTokenUpdate(() => {
-                    const currentTokens = (this._filterControl as MultiInput).getTokens();
+                this._filterControl.attachTokenUpdate((evt: Event) => {
+                    let currentTokens = (this._filterControl as MultiInput).getTokens();
+                    const deletedTokens = evt.getParameter("removedTokens") as Token[];
+                    if (deletedTokens?.length) {
+                        const remainingTokens = [];
+                        for (const token of currentTokens) {
+                            if (
+                                deletedTokens.findIndex(deletedToken => deletedToken.getKey() === token.getKey()) === -1
+                            ) {
+                                remainingTokens.push(token);
+                            }
+                        }
+                        currentTokens = remainingTokens;
+                    }
                     this._createFiltersFromTokens(currentTokens);
                 }, this);
                 this._filterControl.addValidator(this._validateCurrentToken.bind(this));
