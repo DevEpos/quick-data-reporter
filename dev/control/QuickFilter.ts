@@ -7,6 +7,7 @@ import {
     ValueHelpType
 } from "../model/ServiceModel";
 import FilterCreator from "../helper/filter/FilterCreator";
+import I18nUtil from "../helper/I18nUtil";
 
 import Control, { $ControlSettings } from "sap/ui/core/Control";
 import Button from "sap/m/Button";
@@ -384,7 +385,7 @@ export default class QuickFilter extends Control {
                 if (!selectedKey && value) {
                     comboBoxFilter.setValueState(ValueState.Error);
                     this.getFilterData().value = null;
-                    comboBoxFilter.setValueStateText("Please enter/select a valid entry!");
+                    comboBoxFilter.setValueStateText(I18nUtil.getText("validation_msg_invalidKey"));
                 } else {
                     comboBoxFilter.setValueState(ValueState.None);
                     this.getFilterData().value = selectedKey;
