@@ -131,6 +131,33 @@ Content-Type: application/json
 
 ###
 
+# Table Query Request with offset
+POST {{sap_dev_server}}/sap/zqdrtrest/entities/T/TADIR/queryResult HTTP/1.1
+X-CSRF-Token: {{csrf_fetch.response.headers.x-csrf-Token}}
+Authorization: Basic {{sap_dev_user}} {{sap_dev_pwd}}
+Content-Type: application/json
+
+{
+    "settings": {
+        "maxRows": 10,
+        "offset": 5000,
+        "determineMaxRows": true
+    },
+    "filters": [
+        {
+            "fieldName": "object",
+            "ranges": [
+                {
+                    "operation": "EQ",
+                    "value1": "CLAS"
+                }
+            ]
+        }
+    ]
+}
+
+###
+
 # CDS Query request with parameters and filters
 POST {{sap_dev_server}}/sap/zqdrtrest/entities/c/demo_cds_parameters/queryResult HTTP/1.1
 X-CSRF-Token: {{csrf_fetch.response.headers.x-csrf-Token}}
