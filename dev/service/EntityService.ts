@@ -32,6 +32,7 @@ export default class EntityService {
         );
         if (response?.data?.fields) {
             const metadata: EntityMetadata = {
+                entity: response.data.entity,
                 fields: (response.data.fields as Record<string, any>[]).map(f => Object.assign(new FieldMetadata(), f))
             };
 

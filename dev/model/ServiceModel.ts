@@ -114,7 +114,14 @@ export interface EntityVariant {
     data: EntityVariantData;
 }
 
+export interface EntityInfo {
+    name?: string;
+    rawName?: string;
+    description?: string;
+}
+
 export interface EntityMetadata {
+    entity: EntityInfo;
     parameters?: FieldMetadata[];
     fields?: FieldMetadata[];
 }

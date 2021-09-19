@@ -46,7 +46,7 @@ export default class Entity implements ConfigurableEntity {
     /**
      * Metadata of an entity
      */
-    metadata: EntityMetadata = { fields: [] };
+    metadata: EntityMetadata = { entity: {}, fields: [] };
     /**
      * List of variants of the entity
      */

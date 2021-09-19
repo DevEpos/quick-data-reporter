@@ -142,7 +142,11 @@ export default class EntityState extends BaseState<Entity> {
                 }
                 this.data.parameters = initialParamFilters;
             }
-            this.setMetadata({ fields: entityMetadata?.fields || [], parameters: entityMetadata?.parameters || [] });
+            this.setMetadata({
+                entity: entityMetadata.entity,
+                fields: entityMetadata?.fields || [],
+                parameters: entityMetadata?.parameters || []
+            });
             this.noModelUpdates = false;
             this.updateModel();
         } catch (reqError) {

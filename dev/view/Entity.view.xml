@@ -14,7 +14,15 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <Title text="Entity {/name}"></Title>
+                    <FlexBox>
+                        <core:Icon src="{ path: '/type', formatter: '.entityTypeIconFormatter' }"
+                            tooltip="{ path: '/type', formatter: '.entityTypeTooltipFormatter' }"
+                            class="sapUiSmallMarginEnd"/>
+                        <Title text="{= ${/metadata/entity/rawName} || ${/name}}"
+                            class="sapUiSmallMarginEnd"/>
+                        <Title text="({/metadata/entity/description})"
+                            visible="{= !!${/metadata/entity/description}}" />
+                    </FlexBox>
                 </f:heading>
                 <f:actions>
                     <ToggleButton icon="sap-icon://filter"

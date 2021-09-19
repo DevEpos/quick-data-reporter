@@ -5,6 +5,8 @@ import EntityTableSettings from "../helper/EntityTableSettings";
 import { FieldMetadata } from "../model/ServiceModel";
 import EntityState from "../state/EntityState";
 import StateRegistry from "../state/StateRegistry";
+import FormatUtil from "../helper/FormatUtil";
+import { entityTypeIconFormatter, entityTypeTooltipFormatter } from "../model/formatter";
 
 import Column from "sap/ui/table/Column";
 import Text from "sap/m/Text";
@@ -16,7 +18,6 @@ import Control from "sap/ui/core/Control";
 import Menu from "sap/m/Menu";
 import MenuItem from "sap/m/MenuItem";
 import CustomData from "sap/ui/core/CustomData";
-import FormatUtil from "../helper/FormatUtil";
 import MessageBox from "sap/m/MessageBox";
 import KeyCodes from "sap/ui/events/KeyCodes";
 
@@ -26,6 +27,8 @@ import KeyCodes from "sap/ui/events/KeyCodes";
  * @alias com.devepos.qdrt.controller.Entity
  */
 export default class EntityController extends BaseController {
+    entityTypeIconFormatter = entityTypeIconFormatter;
+    entityTypeTooltipFormatter = entityTypeTooltipFormatter;
     private _uiModel: JSONModel;
     private _entityTableSettings: EntityTableSettings;
     private _queryResultTable: Table;
