@@ -66,7 +66,8 @@
                                 visibleInFilterBar="true"
                                 label="{i18n>dbEntities_filterbar_entityNameFilter_label}">
                                 <fb:control>
-                                    <Input id="nameFilterCtrl"/>
+                                    <Input value="{ui>/nameFilter}"
+                                        submit="onSearch"/>
                                 </fb:control>
                             </fb:FilterGroupItem>
                         </fb:filterGroupItems>

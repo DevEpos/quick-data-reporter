@@ -9,14 +9,11 @@ import JSONModel from "sap/ui/model/json/JSONModel";
 import Event from "sap/ui/base/Event";
 import Table from "sap/m/Table";
 import Control from "sap/ui/core/Control";
-import Input from "sap/m/Input";
 import SmartVariantManagementUi2 from "sap/ui/comp/smartvariants/SmartVariantManagementUi2";
 import FilterBar from "sap/ui/comp/filterbar/FilterBar";
 
 type ViewModelType = {
-    currentEntity: {
-        name: string;
-    };
+    nameFilter: string;
     selectedEntityType: EntityType;
     selectedSearchScope: EntitySearchScope;
 };
@@ -31,7 +28,6 @@ export default class MainPageController extends BaseController {
     entityTypeTooltipFormatter = entityTypeTooltipFormatter;
     private _entityService: EntityService;
     private _viewModel: JSONModel;
-    private _nameFilter: Input;
     private _dataModel: JSONModel;
     private _viewModelData: ViewModelType;
 
@@ -39,7 +35,7 @@ export default class MainPageController extends BaseController {
         super.onInit();
         this._entityService = new EntityService();
         this._viewModelData = {
-            currentEntity: { name: "" },
+            nameFilter: "",
             selectedEntityType: EntityType.All,
             selectedSearchScope: EntitySearchScope.All
         };
@@ -53,23 +49,6 @@ export default class MainPageController extends BaseController {
             this.byId("filterbar") as FilterBar,
             this.byId("variantManagement") as SmartVariantManagementUi2
         ).connectFilterBar();
-
-        // get controls from filter bar
-        this._nameFilter = this.byId("nameFilterCtrl") as Input;
-        this._nameFilter.attachChange(
-            null,
-            () => {
-                this.onSearch();
-            },
-            this
-        );
-        this._nameFilter.attachSubmit(
-            null,
-            () => {
-                this.onSearch();
-            },
-            this
-        );
     }
 
     /**
@@ -108,7 +87,7 @@ export default class MainPageController extends BaseController {
         const filterTable = this.getView().byId("foundEntitiesTable") as Table;
         filterTable.setBusy(true);
         const entities = await this._entityService.findEntities(
-            this._nameFilter.getValue(),
+            this._viewModelData.nameFilter,
             this._viewModelData.selectedEntityType,
             this._viewModelData.selectedSearchScope
         );
