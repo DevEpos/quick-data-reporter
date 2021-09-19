@@ -18,6 +18,7 @@ import MenuItem from "sap/m/MenuItem";
 import CustomData from "sap/ui/core/CustomData";
 import FormatUtil from "../helper/FormatUtil";
 import MessageBox from "sap/m/MessageBox";
+import KeyCodes from "sap/ui/events/KeyCodes";
 
 /**
  * Controller for a single database entity
@@ -29,7 +30,6 @@ export default class EntityController extends BaseController {
     private _entityTableSettings: EntityTableSettings;
     private _queryResultTable: Table;
     private _entityState: EntityState;
-    private _stateResetTimeout: number;
     /**
      * Initializes entity controller
      */
@@ -50,6 +50,18 @@ export default class EntityController extends BaseController {
         const variantManagement = this.byId("variantManagement");
         // this needs to be done to always show the standard variant in the Popover
         (variantManagement as any)?.setStandardFavorite(true);
+
+        // attach key event for quick data refresh
+        this.getView().attachBrowserEvent(
+            "keydown",
+            (event: jQuery.Event) => {
+                if (event.which === parseInt(KeyCodes.ENTER) && event.ctrlKey) {
+                    this.onUpdateData();
+                    event.preventDefault();
+                }
+            },
+            this
+        );
     }
 
     private _onMainMatched() {
