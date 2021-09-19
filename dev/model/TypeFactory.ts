@@ -12,7 +12,7 @@ import Int32 from "sap/ui/model/odata/type/Int32";
 import Int64 from "sap/ui/model/odata/type/Int64";
 import SByte from "sap/ui/model/odata/type/SByte";
 import String from "sap/ui/model/odata/type/String";
-import Time from "sap/ui/model/odata/type/Time";
+import TimeOfDay from "sap/ui/model/odata/type/TimeOfDay";
 import ODataType from "sap/ui/model/odata/type/ODataType";
 
 const typeMap: Record<string, typeof ODataType> = {
@@ -31,7 +31,7 @@ const typeMap: Record<string, typeof ODataType> = {
     Int64,
     SByte,
     String,
-    Time
+    Time: TimeOfDay
 };
 
 const numericTypes = ["Byte", "Single", "Double", "Int16", "Int32", "Int64", "SByte"];

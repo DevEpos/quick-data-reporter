@@ -7,7 +7,8 @@ import {
     AggregationCond,
     FieldMetadata,
     EntityVariant,
-    FieldFilter
+    FieldFilter,
+    FilterCond
 } from "./ServiceModel";
 
 /**
@@ -65,6 +66,7 @@ export default class Entity implements ConfigurableEntity {
     sortCond: SortCond[] = [];
     columnsItems: ColumnConfig[] = [];
     aggregationCond: AggregationCond[] = [];
+    maxRows = 200;
     /**
      * Returns all visible columns
      */
@@ -73,5 +75,54 @@ export default class Entity implements ConfigurableEntity {
         return visibleColKeys.map(visibleColKey =>
             this.metadata.fields.find(colMeta => colMeta.name === visibleColKey)
         );
+    }
+    getFilledFilters(): FieldFilter[] {
+        const filters = [] as FieldFilter[];
+        for (const filterName of Object.keys(this.filters)) {
+            const filter = this.filters[filterName];
+            if (filter.value || filter?.items?.length > 0 || filter?.ranges?.length > 0) {
+                const reducedFilter = { fieldName: filterName } as FieldFilter;
+                if (filter.value) {
+                    reducedFilter.value = filter.value;
+                }
+                if (filter.ranges?.length > 0) {
+                    reducedFilter.ranges = [];
+                }
+                for (const range of filter.ranges) {
+                    const reducedRange = { operation: range.operation } as FilterCond;
+                    if (range.value1) {
+                        reducedRange.value1 = range.value1;
+                    }
+                    if (range.value2) {
+                        reducedRange.value2 = range.value2;
+                    }
+                    if (range.exclude) {
+                        reducedRange.exclude = true;
+                    }
+                    reducedFilter.ranges.push(reducedRange);
+                }
+                if (filter.items?.length > 0) {
+                    reducedFilter.items = filter.items.map(item => {
+                        return {
+                            key: item.key
+                        };
+                    });
+                }
+
+                filters.push(reducedFilter);
+            }
+        }
+
+        return filters;
+    }
+    getParameters(): FieldFilter[] {
+        const params = [] as FieldFilter[];
+        for (const paramName of Object.keys(this.parameters)) {
+            const param = this.parameters[paramName];
+            if (param.value) {
+                params.push({ fieldName: paramName, value: param.value });
+            }
+        }
+        return params;
     }
 }

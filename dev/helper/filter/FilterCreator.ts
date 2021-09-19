@@ -63,10 +63,29 @@ const conditionMap: { [operator: string]: FilterCondConfig } = {
     }
 };
 
+/**
+ * Map of possible operators by data type
+ */
 const typeFilterOperationMap: Record<string, string[]> = {
-    Date: Object.keys(conditionMap).filter(
-        key => key !== FilterOperator.Contains && key !== FilterOperator.StartsWith && key !== FilterOperator.EndsWith
-    )
+    Date: [
+        FilterOperator.EQ,
+        FilterOperator.BT,
+        FilterOperator.LT,
+        FilterOperator.LE,
+        FilterOperator.GT,
+        FilterOperator.GE,
+        FilterOperator.Empty,
+        FilterOperator.NE,
+        FilterOperator.NotEmpty
+    ],
+    Time: [
+        FilterOperator.EQ,
+        FilterOperator.BT,
+        FilterOperator.LT,
+        FilterOperator.LE,
+        FilterOperator.GT,
+        FilterOperator.GE
+    ]
 };
 
 /**

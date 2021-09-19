@@ -59,7 +59,7 @@
                                     <ToolbarSpacer />
                                     <Label text="{i18n>entity_table_tb_maxRows}"
                                         labelFor="maxRowsInput"/>
-                                    <Input value="200"
+                                    <Input value="{/maxRows}"
                                         id="maxRowsInput"
                                         width="5rem">
                                     </Input>

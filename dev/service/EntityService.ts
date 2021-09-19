@@ -6,7 +6,8 @@ import {
     EntityVariant,
     EntityType,
     ValueHelpMetadata,
-    FieldMetadata
+    FieldMetadata,
+    QueryRequest as QueryRequestData
 } from "../model/ServiceModel";
 
 const BASE_SRV_URL = "/sap/zqdrtrest/entities";
@@ -50,15 +51,17 @@ export default class EntityService {
      * Retrieves entity data
      * @param type type of the entity
      * @param entity the name of the entity
+     * @param queryRequestData the data to be passed in the data request
      * @returns the object from the response if response was ok
      */
-    async getEntityData(type: string, entity: string): Promise<QueryResult> {
+    async getEntityData(type: string, entity: string, queryRequest?: QueryRequestData): Promise<QueryResult> {
         const csrfToken = await ajaxUtil.fetchCSRF();
         const response = await ajaxUtil.send(
             `${SUB_ENTITY_SRV_URL.replace("{type}", type).replace("{name}", encodeURIComponent(entity))}/queryResult`,
             {
                 method: "POST",
-                csrfToken
+                csrfToken,
+                data: queryRequest ? JSON.stringify(queryRequest) : undefined
             }
         );
         return response?.data;

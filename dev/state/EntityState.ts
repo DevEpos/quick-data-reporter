@@ -8,7 +8,8 @@ import {
     ColumnConfig,
     ValueHelpMetadata,
     ValueHelpType,
-    FieldMetadata
+    FieldMetadata,
+    QueryRequest
 } from "../model/ServiceModel";
 import EntityService from "../service/EntityService";
 import BaseState from "./BaseState";
@@ -64,7 +65,14 @@ export default class EntityState extends BaseState<Entity> {
     }
     async loadData(): Promise<void> {
         try {
-            const selectionData = await this._entityService.getEntityData(this.data.type, this.data.name);
+            const queryRequest = {
+                settings: {
+                    maxRows: this.data.maxRows
+                },
+                parameters: this.data.getParameters(),
+                filters: this.data.getFilledFilters()
+            } as QueryRequest;
+            const selectionData = await this._entityService.getEntityData(this.data.type, this.data.name, queryRequest);
             if (selectionData) {
                 this.setRows(selectionData?.rows);
             }

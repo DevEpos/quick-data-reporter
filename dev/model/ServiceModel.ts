@@ -55,7 +55,7 @@ export interface FieldFilter {
 
 export interface FilterItem {
     key: string;
-    text: string;
+    text?: string;
 }
 
 export interface FilterCond {
@@ -312,4 +312,40 @@ export interface ValueHelpRequest extends ValueHelpInfo {
      * The maximum number of rows to retrieve
      */
     maxRows?: number;
+}
+
+export interface QuerySettings {
+    maxRows?: number;
+    offset?: number;
+    determineMaxRows?: boolean;
+    reducedMemory?: boolean;
+}
+
+export interface OutputField extends ColumnConfig {
+    function?: "MIN" | "MAX" | "AVG" | "SUM";
+}
+
+export interface AggregationExpression {
+    fieldName: string;
+}
+
+export interface HavingExpression {
+    fieldName: string;
+    function: "COUNT" | "MIN" | "MAX" | "AVG" | "SUM";
+    operation: string;
+    value1: any;
+    value2?: any;
+}
+
+export interface AggregationConfig {
+    aggregationExpressions: AggregationExpression[];
+    havingExpressions?: HavingExpression[];
+}
+
+export interface QueryRequest {
+    settings?: QuerySettings;
+    outputFields?: ColumnConfig[];
+    filters?: FieldFilter[];
+    parameters?: FieldFilter[];
+    aggregations?: AggregationConfig;
 }
