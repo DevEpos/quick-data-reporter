@@ -87,19 +87,20 @@ export default class Entity implements ConfigurableEntity {
                 }
                 if (filter.ranges?.length > 0) {
                     reducedFilter.ranges = [];
-                }
-                for (const range of filter.ranges) {
-                    const reducedRange = { operation: range.operation } as FilterCond;
-                    if (range.value1) {
-                        reducedRange.value1 = range.value1;
+
+                    for (const range of filter.ranges) {
+                        const reducedRange = { operation: range.operation } as FilterCond;
+                        if (range.value1) {
+                            reducedRange.value1 = range.value1;
+                        }
+                        if (range.value2) {
+                            reducedRange.value2 = range.value2;
+                        }
+                        if (range.exclude) {
+                            reducedRange.exclude = true;
+                        }
+                        reducedFilter.ranges.push(reducedRange);
                     }
-                    if (range.value2) {
-                        reducedRange.value2 = range.value2;
-                    }
-                    if (range.exclude) {
-                        reducedRange.exclude = true;
-                    }
-                    reducedFilter.ranges.push(reducedRange);
                 }
                 if (filter.items?.length > 0) {
                     reducedFilter.items = filter.items.map(item => {
