@@ -69,6 +69,7 @@
                                         labelFor="maxRowsInput"/>
                                     <Input value="{/maxRows}"
                                         id="maxRowsInput"
+                                        submit="onUpdateData"
                                         width="5rem">
                                     </Input>
                                     <ToolbarSeparator />
