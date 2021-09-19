@@ -2,6 +2,8 @@
 
 UI5 App for analyzing content of ABAP Database tables/Database views or CDS Views
 
+![Entity Page for Table DD03L](img/entity_page_sample.png)
+
 ## Installation
 
 ```sh
