@@ -16,7 +16,7 @@ export default class BaseState<T> {
 
     constructor(stateData: T, observeModelChanges?: boolean) {
         this._observeModelChanges = observeModelChanges;
-        this.data = stateData;
+        this.setStateData(stateData);
     }
 
     turnOffModelUpdate(): void {
@@ -57,6 +57,19 @@ export default class BaseState<T> {
         if (this._model) {
             this._model.updateBindings(forceUpdate);
             this.data = this._model.getData();
+        }
+    }
+
+    /**
+     * Complete update of the state object
+     * @param stateData the new data for the object
+     */
+    protected setStateData(stateData: T): void {
+        this.data = stateData;
+        if (this._model) {
+            this._model.setData(this.data as any);
+        } else {
+            this.getModel();
         }
     }
 }

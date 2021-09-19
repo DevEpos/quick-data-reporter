@@ -176,24 +176,8 @@ export default class EntityState extends BaseState<Entity> {
         return this._valueHelpMetadataMap[mappedFieldName];
     }
     reset(): void {
-        this.data.type = null;
-        this.data.name = null;
-        this.data.aggregationCond.length = 0;
-        this.data.sortCond.length = 0;
-        this.data.filters = {};
-        this.data.parameters = {};
-        this.data.columnsItems.length = 0;
-        this.data.variants.length = 0;
-        this.data.rows.length = 0;
         this._valueHelpMetadataMap = {};
-        const fieldMetadata = this.data.metadata?.fields;
-        if (fieldMetadata) {
-            fieldMetadata.length = 0;
-        }
-        const parameterMetadata = this.data.metadata?.parameters;
-        if (parameterMetadata) {
-            parameterMetadata.length = 0;
-        }
+        this.setStateData(new Entity());
         this.updateModel(true);
     }
 
