@@ -107,8 +107,8 @@
                     <ColumnListItem type="Active"
                         press="onOpenEntity">
                         <cells>
-                            <c:Icon src="{typeIcon}"
-                                tooltip="{typeTooltip}" />
+                            <c:Icon src="{path: 'type', formatter: '.entityTypeIconFormatter'}"
+                                tooltip="{path: 'type', formatter: '.entityTypeTooltipFormatter'}" />
                             <c:Icon src="{= ${isFavorite} ? 'sap-icon://favorite' : 'sap-icon://unfavorite'}"
                                 tooltip="{= ${isFavorite} ? ${i18n>dbEntities_table_act_unmarkAsFavorite} : ${i18n>dbEntities_table_act_markAsFavorite}}"
                                 class="sapUICompVarMngmtFavColor"

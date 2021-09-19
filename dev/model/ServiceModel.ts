@@ -89,9 +89,6 @@ export interface DbEntity {
     description?: string;
     packageName?: string;
     isFavorite?: boolean;
-    // additional properties for ui
-    typeIcon?: string;
-    typeTooltip?: string;
 }
 
 export interface EntityVariantData {

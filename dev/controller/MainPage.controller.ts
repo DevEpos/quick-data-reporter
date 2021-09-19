@@ -3,6 +3,7 @@ import BaseController from "./BaseController";
 import EntityService from "../service/EntityService";
 import { EntityType } from "../model/ServiceModel";
 import SmartVariantManagementConnector from "../helper/variants/SmartVariantManagementConnector";
+import { entityTypeIconFormatter, entityTypeTooltipFormatter } from "../model/formatter";
 
 import JSONModel from "sap/ui/model/json/JSONModel";
 import Event from "sap/ui/base/Event";
@@ -25,6 +26,8 @@ type ViewModelType = {
  * @namespace com.devepos.qdrt.controller
  */
 export default class MainPageController extends BaseController {
+    entityTypeIconFormatter = entityTypeIconFormatter;
+    entityTypeTooltipFormatter = entityTypeTooltipFormatter;
     private _searchService: EntityService;
     private _viewModel: JSONModel;
     private _nameFilter: Input;
@@ -91,38 +94,13 @@ export default class MainPageController extends BaseController {
     }
 
     async onSearch(): Promise<void> {
-        const filterValue = this._nameFilter.getValue();
-
         const filterTable = this.getView().byId("foundEntitiesTable") as Table;
-
         filterTable.setBusy(true);
-
-        const entities = await this._searchService.findEntities(filterValue, this._viewModelData.selectedEntityType);
+        const entities = await this._searchService.findEntities(
+            this._nameFilter.getValue(),
+            this._viewModelData.selectedEntityType
+        );
         filterTable.setBusy(false);
-
-        if (entities) {
-            const bundle = this.getResourceBundle();
-            for (const entity of entities) {
-                if (entity.type) {
-                    switch (entity.type) {
-                        case EntityType.CdsView:
-                            entity.typeIcon = "sap-icon://customer-view";
-                            entity.typeTooltip = bundle.getText("dbEntity_type_cds");
-                            break;
-                        case EntityType.Table:
-                            entity.typeIcon = "sap-icon://grid";
-                            entity.typeTooltip = bundle.getText("dbEntity_type_table");
-                            break;
-                        case EntityType.View:
-                            entity.typeIcon = "sap-icon://table-view";
-                            entity.typeTooltip = bundle.getText("dbEntity_type_view");
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-        }
         this._dataModel.setProperty("/foundEntities", entities?.length > 0 ? entities : 0);
     }
 }
