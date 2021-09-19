@@ -69,22 +69,24 @@ const conditionMap: { [operator: string]: FilterCondConfig } = {
 const typeFilterOperationMap: Record<string, string[]> = {
     Date: [
         FilterOperator.EQ,
-        FilterOperator.BT,
-        FilterOperator.LT,
-        FilterOperator.LE,
-        FilterOperator.GT,
-        FilterOperator.GE,
-        FilterOperator.Empty,
         FilterOperator.NE,
-        FilterOperator.NotEmpty
+        FilterOperator.GE,
+        FilterOperator.GT,
+        FilterOperator.LE,
+        FilterOperator.Empty,
+        FilterOperator.LT,
+        FilterOperator.BT,
+        FilterOperator.NotEmpty,
+        FilterOperator.Auto
     ],
     Time: [
         FilterOperator.EQ,
-        FilterOperator.BT,
-        FilterOperator.LT,
-        FilterOperator.LE,
+        FilterOperator.GE,
         FilterOperator.GT,
-        FilterOperator.GE
+        FilterOperator.LE,
+        FilterOperator.LT,
+        FilterOperator.BT,
+        FilterOperator.Auto
     ]
 };
 
