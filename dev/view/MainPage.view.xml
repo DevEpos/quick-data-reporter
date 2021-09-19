@@ -32,7 +32,7 @@
                                 visibleInFilterBar="true"
                                 label="{i18n>dbEntities_filterbar_scopeFilter_label}">
                                 <fb:control>
-                                    <Select>
+                                    <Select selectedKey="{ui>/selectedSearchScope}">
                                         <items>
                                             <c:Item key="all"
                                                 text="{i18n>dbEntities_filterbar_scopeFilter_all}" />

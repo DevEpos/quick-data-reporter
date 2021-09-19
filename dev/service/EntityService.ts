@@ -7,11 +7,19 @@ import {
     EntityType,
     ValueHelpMetadata,
     FieldMetadata,
-    QueryRequest as QueryRequestData
+    QueryRequest as QueryRequestData,
+    EntitySearchScope
 } from "../model/ServiceModel";
 
 const BASE_SRV_URL = "/sap/zqdrtrest/entities";
 const SUB_ENTITY_SRV_URL = `${BASE_SRV_URL}/{type}/{name}`;
+
+type EntitiesSearchReqParams = {
+    $top: number;
+    $filter?: string;
+    entityType?: EntityType;
+    scope?: EntitySearchScope;
+};
 
 /**
  * Service to get meta data information about database entities
@@ -110,17 +118,64 @@ export default class EntityService {
      * Searches for DB entities
      * @param filterValue filter value to search entities
      * @param entityType the type of entities to be searched
+     * @param scope search scope for the db entities
      * @returns Promise with response result
      */
-    async findEntities(filterValue: string, entityType?: EntityType): Promise<DbEntity[]> {
-        let requestURL = `${BASE_SRV_URL}?$top=200`;
+    async findEntities(filterValue: string, entityType?: EntityType, scope?: EntitySearchScope): Promise<DbEntity[]> {
+        const reqParams = {
+            $top: 200
+        } as EntitiesSearchReqParams;
         if (filterValue) {
-            requestURL = `${requestURL}&$filter=${filterValue}`;
+            reqParams.$filter = filterValue;
         }
         if (entityType && entityType !== EntityType.All) {
-            requestURL = `${requestURL}&entityType=${entityType}`;
+            reqParams.entityType = entityType;
         }
-        const response = await ajaxUtil.send(requestURL);
+        if (scope && scope !== EntitySearchScope.All) {
+            reqParams.scope = scope;
+        }
+        const response = await ajaxUtil.send(BASE_SRV_URL, {
+            method: "GET",
+            data: reqParams
+        });
         return response?.data;
+    }
+
+    /**
+     * Marks the given entity as favorite for the current user
+     * @param entityName the name of an entity
+     * @param entityType the type of an entity
+     */
+    async createFavorite(entityName: string, entityType?: EntityType): Promise<void> {
+        const csrfToken = await ajaxUtil.fetchCSRF();
+        ajaxUtil.send(
+            `${SUB_ENTITY_SRV_URL.replace("{type}", entityType).replace(
+                "{name}",
+                encodeURIComponent(entityName)
+            )}/favorite`,
+            {
+                method: "POST",
+                csrfToken
+            }
+        );
+    }
+
+    /**
+     * Delete the given entity favorite for the current user
+     * @param entityName the name of an entity
+     * @param entityType the type of an entity
+     */
+    async deleteFavorite(entityName: string, entityType?: EntityType): Promise<void> {
+        const csrfToken = await ajaxUtil.fetchCSRF();
+        ajaxUtil.send(
+            `${SUB_ENTITY_SRV_URL.replace("{type}", entityType).replace(
+                "{name}",
+                encodeURIComponent(entityName)
+            )}/favorite`,
+            {
+                method: "DELETE",
+                csrfToken
+            }
+        );
     }
 }

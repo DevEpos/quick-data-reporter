@@ -9,6 +9,11 @@ export enum EntityType {
     View = "V"
 }
 
+export enum EntitySearchScope {
+    All = "all",
+    Favorite = "favorites"
+}
+
 export enum DisplayFormat {
     UpperCase = "UpperCase"
 }

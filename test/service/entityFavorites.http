@@ -1,0 +1,18 @@
+# @name  csrf_fetch
+HEAD {{sap_dev_server}}/sap/zqdrtrest/ HTTP/1.1
+X-CSRF-Token: Fetch
+Authorization: Basic {{sap_dev_user}} {{sap_dev_pwd}}
+
+###
+
+# Create favorite for TADIR
+POST {{sap_dev_server}}/sap/zqdrtrest/entities/T/tadir/favorite HTTP/1.1
+X-CSRF-Token: {{csrf_fetch.response.headers.x-csrf-Token}}
+Authorization: Basic {{sap_dev_user}} {{sap_dev_pwd}}
+
+###
+
+# Delete favorite for TADIR
+DELETE {{sap_dev_server}}/sap/zqdrtrest/entities/T/tadir/favorite HTTP/1.1
+X-CSRF-Token: {{csrf_fetch.response.headers.x-csrf-Token}}
+Authorization: Basic {{sap_dev_user}} {{sap_dev_pwd}}

@@ -1,7 +1,7 @@
 import models from "../model/models";
 import BaseController from "./BaseController";
 import EntityService from "../service/EntityService";
-import { EntityType } from "../model/ServiceModel";
+import { DbEntity, EntitySearchScope, EntityType } from "../model/ServiceModel";
 import SmartVariantManagementConnector from "../helper/variants/SmartVariantManagementConnector";
 import { entityTypeIconFormatter, entityTypeTooltipFormatter } from "../model/formatter";
 
@@ -18,6 +18,7 @@ type ViewModelType = {
         name: string;
     };
     selectedEntityType: EntityType;
+    selectedSearchScope: EntitySearchScope;
 };
 
 /**
@@ -28,7 +29,7 @@ type ViewModelType = {
 export default class MainPageController extends BaseController {
     entityTypeIconFormatter = entityTypeIconFormatter;
     entityTypeTooltipFormatter = entityTypeTooltipFormatter;
-    private _searchService: EntityService;
+    private _entityService: EntityService;
     private _viewModel: JSONModel;
     private _nameFilter: Input;
     private _dataModel: JSONModel;
@@ -36,8 +37,12 @@ export default class MainPageController extends BaseController {
 
     onInit(): void {
         super.onInit();
-        this._searchService = new EntityService();
-        this._viewModelData = { currentEntity: { name: "" }, selectedEntityType: EntityType.All };
+        this._entityService = new EntityService();
+        this._viewModelData = {
+            currentEntity: { name: "" },
+            selectedEntityType: EntityType.All,
+            selectedSearchScope: EntitySearchScope.All
+        };
         this._viewModel = models.createViewModel(this._viewModelData);
         this.getView().setModel(this._viewModel, "ui");
 
@@ -80,25 +85,32 @@ export default class MainPageController extends BaseController {
             });
         }
     }
-    onToggleFavorite(event: Event): void {
+    async onToggleFavorite(event: Event): Promise<void> {
         const selectedPath = (event.getSource() as Control)?.getBindingContext()?.getPath();
-        const selectedEntity = this._dataModel.getObject(selectedPath);
+        const selectedEntity = this._dataModel.getObject(selectedPath) as DbEntity;
         if (selectedEntity) {
-            if (selectedEntity?.isFavorite) {
-                selectedEntity.isFavorite = false;
-            } else {
-                selectedEntity.isFavorite = true;
+            try {
+                if (selectedEntity?.isFavorite) {
+                    await this._entityService.deleteFavorite(selectedEntity.name, selectedEntity.type);
+                    selectedEntity.isFavorite = false;
+                } else {
+                    await this._entityService.createFavorite(selectedEntity.name, selectedEntity.type);
+                    selectedEntity.isFavorite = true;
+                }
+                this._dataModel.setProperty(`${selectedPath}/isFavorite`, selectedEntity.isFavorite);
+            } catch (reqError) {
+                //
             }
-            this._dataModel.setProperty(`${selectedPath}/isFavorite`, selectedEntity.isFavorite);
         }
     }
 
     async onSearch(): Promise<void> {
         const filterTable = this.getView().byId("foundEntitiesTable") as Table;
         filterTable.setBusy(true);
-        const entities = await this._searchService.findEntities(
+        const entities = await this._entityService.findEntities(
             this._nameFilter.getValue(),
-            this._viewModelData.selectedEntityType
+            this._viewModelData.selectedEntityType,
+            this._viewModelData.selectedSearchScope
         );
         filterTable.setBusy(false);
         this._dataModel.setProperty("/foundEntities", entities?.length > 0 ? entities : 0);
