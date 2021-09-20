@@ -2,6 +2,8 @@ import models from "../model/models";
 import { ReadOnlyStateData } from "../state/BaseState";
 import { AggregationCond, ColumnConfig, FieldMetadata, SortCond } from "../model/ServiceModel";
 import Entity, { ConfigurableEntity } from "../model/Entity";
+import { DEFAULT_VISIBLE_COL_COUNT } from "../model/globalConsts";
+
 import JSONModel from "sap/ui/model/json/JSONModel";
 import Fragment from "sap/ui/core/Fragment";
 import View from "sap/ui/core/mvc/View";
@@ -97,6 +99,9 @@ export default class EntityTableSettings {
 
         let colIndex = 0;
         for (const column of this._modelCurrentState.columnMetadata) {
+            if (colIndex === DEFAULT_VISIBLE_COL_COUNT) {
+                break;
+            }
             this._modelCurrentState.columnsItems.push({
                 fieldName: column.name,
                 visible: true,

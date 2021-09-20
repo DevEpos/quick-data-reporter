@@ -1,6 +1,8 @@
 import Log from "sap/base/Log";
+
 import ValueHelpUtil from "../helper/valuehelp/ValueHelpUtil";
 import Entity, { ConfigurableEntity, TableFilters } from "../model/Entity";
+import { DEFAULT_VISIBLE_COL_COUNT } from "../model/globalConsts";
 import {
     EntityType,
     EntityMetadata,
@@ -124,11 +126,13 @@ export default class EntityState extends BaseState<Entity> {
                 for (let i = 0; i < entityMetadata.fields.length; i++) {
                     const fieldMeta = entityMetadata.fields[i];
                     fieldMeta.description = getDescription(fieldMeta);
-                    this.data.columnsItems.push({
-                        fieldName: fieldMeta.name,
-                        visible: true,
-                        index: i
-                    });
+                    if (i < DEFAULT_VISIBLE_COL_COUNT) {
+                        this.data.columnsItems.push({
+                            fieldName: fieldMeta.name,
+                            visible: true,
+                            index: i
+                        });
+                    }
                 }
             }
             if (entityMetadata?.parameters) {
