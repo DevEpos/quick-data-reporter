@@ -22,7 +22,7 @@
                 <f:content>
                     <fb:FilterBar id="filterbar"
                         showFilterConfiguration="false"
-                        search="onSearch"
+                        search="_onSearch"
                         useToolbar="false"
                         persistencyKey="DevEposQdrt_MainPage_PersCont"
                         showGoOnFB="true">
@@ -67,7 +67,7 @@
                                 label="{i18n>dbEntities_filterbar_entityNameFilter_label}">
                                 <fb:control>
                                     <Input value="{ui>/nameFilter}"
-                                        submit="onSearch"/>
+                                        submit="_onSearch"/>
                                 </fb:control>
                             </fb:FilterGroupItem>
                         </fb:filterGroupItems>
@@ -106,14 +106,14 @@
                 </columns>
                 <items>
                     <ColumnListItem type="Active"
-                        press="onOpenEntity">
+                        press="_onEntityNavPress">
                         <cells>
                             <c:Icon src="{path: 'type', formatter: '.entityTypeIconFormatter'}"
                                 tooltip="{path: 'type', formatter: '.entityTypeTooltipFormatter'}" />
                             <c:Icon src="{= ${isFavorite} ? 'sap-icon://favorite' : 'sap-icon://unfavorite'}"
                                 tooltip="{= ${isFavorite} ? ${i18n>dbEntities_table_act_unmarkAsFavorite} : ${i18n>dbEntities_table_act_markAsFavorite}}"
                                 class="sapUICompVarMngmtFavColor"
-                                press="onToggleFavorite"/>
+                                press="_onToggleFavorite"/>
                             <Text text="{name}" />
                             <Text text="{description}" />
                             <Text text="{packageName}" />

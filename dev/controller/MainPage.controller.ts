@@ -51,20 +51,12 @@ export default class MainPageController extends BaseController {
         ).connectFilterBar();
     }
 
-    /**
-     * Event handler for click on database entity
-     * @param {Object} event event object
-     */
-    onOpenEntity(event: Event): void {
+    _onEntityNavPress(event: Event): void {
         const selectedEntity = this._dataModel.getObject((event.getSource() as Control).getBindingContext().getPath());
-        if (selectedEntity) {
-            this.router.navTo("entity", {
-                type: encodeURIComponent(selectedEntity.type),
-                name: encodeURIComponent(selectedEntity.name)
-            });
-        }
+        this._navToEntity(selectedEntity);
     }
-    async onToggleFavorite(event: Event): Promise<void> {
+
+    async _onToggleFavorite(event: Event): Promise<void> {
         const selectedPath = (event.getSource() as Control)?.getBindingContext()?.getPath();
         const selectedEntity = this._dataModel.getObject(selectedPath) as DbEntity;
         if (selectedEntity) {
@@ -83,7 +75,7 @@ export default class MainPageController extends BaseController {
         }
     }
 
-    async onSearch(): Promise<void> {
+    async _onSearch(): Promise<void> {
         const filterTable = this.getView().byId("foundEntitiesTable") as Table;
         filterTable.setBusy(true);
         const entities = await this._entityService.findEntities(
@@ -93,5 +85,14 @@ export default class MainPageController extends BaseController {
         );
         filterTable.setBusy(false);
         this._dataModel.setProperty("/foundEntities", entities?.length > 0 ? entities : 0);
+    }
+
+    private _navToEntity(entity: DbEntity) {
+        if (entity) {
+            this.router.navTo("entity", {
+                type: encodeURIComponent(entity.type),
+                name: encodeURIComponent(entity.name)
+            });
+        }
     }
 }
