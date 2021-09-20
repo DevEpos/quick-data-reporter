@@ -176,7 +176,7 @@ export default class EntityController extends BaseController {
                         formatOptions: {
                             style: "medium",
                             source: {
-                                pattern: "yyyy-MM-ddHHmmss"
+                                pattern: "yyyyMMddHHmmss"
                             }
                         }
                     }
