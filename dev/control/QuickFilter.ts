@@ -433,10 +433,18 @@ export default class QuickFilter extends Control {
     private _createFiltersFromTokens(currentTokens: Token[]) {
         const ranges: FilterCond[] = [];
         const items: FilterItem[] = [];
+        const fieldMetadata = this.getReferenceFieldMetadata();
         for (const token of currentTokens) {
             const rangeData = token.data("range") as FilterCond;
             if (rangeData) {
-                ranges.push({ ...rangeData });
+                const newRange = { ...rangeData };
+                if (newRange.value1 && typeof newRange.value1 === "object") {
+                    newRange.value1 = fieldMetadata.typeInstance.parseValue(newRange.value1, "object");
+                }
+                if (newRange.value2 && typeof newRange.value2 === "object") {
+                    newRange.value1 = fieldMetadata.typeInstance.parseValue(newRange.value2, "object");
+                }
+                ranges.push(newRange);
             } else {
                 items.push({ key: token.getKey(), text: token.getText() });
             }
