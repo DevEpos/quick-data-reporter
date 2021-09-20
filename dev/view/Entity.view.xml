@@ -14,7 +14,7 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <FlexBox>
+                    <FlexBox alignItems="Center">
                         <core:Icon src="{ path: '/type', formatter: '.entityTypeIconFormatter' }"
                             tooltip="{ path: '/type', formatter: '.entityTypeTooltipFormatter' }"
                             class="sapUiSmallMarginEnd"/>
@@ -52,6 +52,7 @@
                                         showShare="true"
                                         showSetAsDefault="true"
                                         showExecuteOnSelection="true"
+                                        standardItemText="Standard"
                                         variantItems="{/variants}">
                                         <vm:variantItems>
                                             <vm:VariantItem author="{author}"
