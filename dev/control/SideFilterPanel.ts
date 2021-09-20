@@ -29,7 +29,7 @@ const PANEL_HEIGHT = "100%";
 
 enum FilterCategory {
     Filters = "filters",
-    Paramters = "parameters"
+    Parameters = "parameters"
 }
 
 type UIModelData = {
@@ -274,9 +274,9 @@ export default class SideFilterPanel extends Panel {
             label: filter.label,
             type: filter.fieldMetadata.type,
             tooltip: filter.tooltip,
-            required: filterCategory === FilterCategory.Paramters,
+            required: filterCategory === FilterCategory.Parameters,
             deletable: filterCategory === FilterCategory.Filters,
-            singleValueOnly: filterCategory === FilterCategory.Paramters,
+            singleValueOnly: filterCategory === FilterCategory.Parameters,
             referenceFieldMetadata: filter.fieldMetadata,
             filterData: `{${this.getBinding("visibleFilters").getPath()}/${filter.name}}`,
             remove: (event: Event) => {
@@ -306,7 +306,7 @@ export default class SideFilterPanel extends Panel {
         quickFilter.setBusy(true);
         const vhMetadata = await entityState.getFieldValueHelpInfo(
             quickFilter.getColumnName(),
-            this.getFilterCategory() === FilterCategory.Paramters
+            this.getFilterCategory() === FilterCategory.Parameters
         );
         quickFilter.setBusy(false);
         const vhDialog = ValueHelpFactory.getInstance().createValueHelpDialog(
