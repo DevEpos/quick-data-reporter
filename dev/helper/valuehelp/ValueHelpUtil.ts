@@ -33,6 +33,7 @@ export default class ValueHelpUtil {
             fields: [
                 Object.assign(new ValueHelpField(), {
                     maxLength: fieldMeta.maxLength,
+                    displayFormat: fieldMeta.displayFormat,
                     type: "String",
                     name: "fixValue",
                     description: fieldMeta.description
