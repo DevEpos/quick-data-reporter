@@ -15,7 +15,7 @@ export function entityTypeIconFormatter(type: EntityType): string {
         case EntityType.View:
             return "sap-icon://table-view";
         default:
-            return "";
+            return null; // an empty string will raise an error in an Icon control
     }
 }
 /**
