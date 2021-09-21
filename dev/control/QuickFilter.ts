@@ -442,7 +442,7 @@ export default class QuickFilter extends Control {
                     newRange.value1 = fieldMetadata.typeInstance.parseValue(newRange.value1, "object");
                 }
                 if (newRange.value2 && typeof newRange.value2 === "object") {
-                    newRange.value1 = fieldMetadata.typeInstance.parseValue(newRange.value2, "object");
+                    newRange.value2 = fieldMetadata.typeInstance.parseValue(newRange.value2, "object");
                 }
                 ranges.push(newRange);
             } else {
