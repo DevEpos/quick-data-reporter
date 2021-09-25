@@ -43,6 +43,7 @@ export default class EntityTableSettings {
     constructor(view: View) {
         this._view = view;
         this._model = models.createViewModel();
+        this._model.setSizeLimit(1000);
     }
     destroyDialog(): void {
         if (this._settingsDialog) {
