@@ -42,7 +42,6 @@ export default class EntityController extends BaseController {
         });
         this._entityState = StateRegistry.getEntityState();
         this._entityTableSettings = new EntityTableSettings(this.getView());
-        this._entityState.getData();
         this._queryResultTable = this.getView().byId("queryResultTable") as Table;
         this.getView().setModel(this._uiModel, "ui");
         this.getView().setModel(this._entityState.getModel());
@@ -55,30 +54,29 @@ export default class EntityController extends BaseController {
     }
 
     private _onMainMatched() {
+        this._queryResultTable?.getColumns()?.forEach(col => col.setVisible(false));
         this._entityTableSettings?.destroyDialog();
     }
     private async _onEntityMatched(event: Event) {
         const args = event.getParameter("arguments");
         this.getView().setBusy(true);
-        setTimeout(async () => {
-            this._entityState.reset();
-            const entityInfo = {
-                type: decodeURIComponent(args.type).toUpperCase(),
-                name: decodeURIComponent(args.name).toUpperCase()
-            };
-            this._entityState.setEntityInfo(entityInfo.name, entityInfo.type as EntityType);
-            await Promise.all([this._entityState.loadMetadata(), this._entityState.loadVariants()]);
-            if (!this._entityState.exists()) {
-                MessageBox.error(this.getResourceBundle().getText("entity_not_exists_msg", [entityInfo.name]), {
-                    onClose: () => {
-                        this.getOwnerComponent().getRouter().navTo("main");
-                    }
-                });
-            } else {
-                this._createColumns();
-            }
-            this.getView().setBusy(false);
-        }, 100);
+        this._entityState.reset();
+        const entityInfo = {
+            type: decodeURIComponent(args.type).toUpperCase(),
+            name: decodeURIComponent(args.name).toUpperCase()
+        };
+        this._entityState.setEntityInfo(entityInfo.name, entityInfo.type as EntityType);
+        await Promise.all([this._entityState.loadMetadata(), this._entityState.loadVariants()]);
+        if (!this._entityState.exists()) {
+            MessageBox.error(this.getResourceBundle().getText("entity_not_exists_msg", [entityInfo.name]), {
+                onClose: () => {
+                    this.router.navTo("main");
+                }
+            });
+        } else {
+            this._createColumns();
+        }
+        this.getView().setBusy(false);
     }
     /**
      * Handles entity settings event
@@ -86,8 +84,10 @@ export default class EntityController extends BaseController {
     async onTableSettings(): Promise<void> {
         const newSettings = await this._entityTableSettings.showSettingsDialog(this._entityState.getData());
         if (newSettings) {
+            this.getView().setBusy(true);
             this._entityState.setConfiguration(newSettings);
             this._createColumns();
+            this.getView().setBusy(false);
         }
     }
     /**
