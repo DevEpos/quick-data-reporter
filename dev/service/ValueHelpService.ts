@@ -1,4 +1,4 @@
-import { QueryResult, ValueHelpRequest } from "../model/ServiceModel";
+import { QueryResult, ValueHelpMetadata, ValueHelpRequest, ValueHelpType } from "../model/ServiceModel";
 import ajaxUtil from "./ajaxUtil";
 
 const BASE_URL = `/sap/zqdrtrest/valueHelpData`;
@@ -18,6 +18,20 @@ export default class ValueHelpService {
             method: "POST",
             data: JSON.stringify(valueHelpRequest),
             csrfToken
+        });
+        return response?.data;
+    }
+
+    /**
+     * Retrieves metadata of a named value help
+     *
+     * @param name the name of the value help
+     * @param valueHelpType the type of the value help
+     * @returns promise with metadata result of the found valuehelp
+     */
+    async getValueHelpMetadata(name: string, valueHelpType: ValueHelpType): Promise<ValueHelpMetadata> {
+        const response = await ajaxUtil.send(`/sap/zqdrtrest/vh/${valueHelpType}/${encodeURIComponent(name)}`, {
+            method: "GET"
         });
         return response?.data;
     }

@@ -8,7 +8,9 @@ import {
     ValueHelpMetadata,
     FieldMetadata,
     QueryRequest as QueryRequestData,
-    EntitySearchScope
+    EntitySearchScope,
+    FieldType,
+    ValueHelpType
 } from "../model/ServiceModel";
 
 const BASE_SRV_URL = "/sap/zqdrtrest/entities";
@@ -81,18 +83,26 @@ export default class EntityService {
      *
      * @param entityName the name of an entity (DB table/DB view/CDS view)
      * @param entityType the type of the entity
+     * @param valueHelpType the type of the value help for the entity field
      * @param field the name of the field for which the value help metatdata should be retrieved
+     * @param fieldType the type of the field
      * @returns promise with metadata result of the found valuehelp
      */
-    async getValueHelpMetadata(entityName: string, entityType: EntityType, field: string): Promise<ValueHelpMetadata> {
+    async getValueHelpMetadataForField(
+        entityName: string,
+        entityType: EntityType,
+        valueHelpType: ValueHelpType,
+        field: string,
+        fieldType: FieldType
+    ): Promise<ValueHelpMetadata> {
         const response = await ajaxUtil.send(
             `${SUB_ENTITY_SRV_URL.replace("{type}", entityType).replace(
                 "{name}",
                 encodeURIComponent(entityName)
-            )}/valueHelpMetadata`,
+            )}/vhMetadata`,
             {
                 method: "GET",
-                data: { field }
+                data: { valueHelpType, field, fieldType }
             }
         );
         return response?.data;

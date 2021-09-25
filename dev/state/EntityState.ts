@@ -1,4 +1,5 @@
 import Log from "sap/base/Log";
+import MessageBox from "sap/m/MessageBox";
 
 import ValueHelpUtil from "../helper/valuehelp/ValueHelpUtil";
 import Entity, { ConfigurableEntity, TableFilters } from "../model/Entity";
@@ -11,7 +12,8 @@ import {
     ValueHelpMetadata,
     ValueHelpType,
     FieldMetadata,
-    QueryRequest
+    QueryRequest,
+    FieldType
 } from "../model/ServiceModel";
 import EntityService from "../service/EntityService";
 import BaseState from "./BaseState";
@@ -79,10 +81,15 @@ export default class EntityState extends BaseState<Entity> {
                 this.setRows(selectionData?.rows);
             }
         } catch (reqError) {
+            const errorMessage = (reqError as any).error?.message;
             Log.error(
                 `Data for entity with type: ${this.data.type}, name: ${this.data.name} could not be loaded`,
-                (reqError as any)?.statusText ?? ""
+                errorMessage
             );
+            // temporary solution to display the error to the user
+            if (errorMessage) {
+                MessageBox.error(errorMessage);
+            }
         }
     }
     async loadVariants(): Promise<void> {
@@ -91,9 +98,10 @@ export default class EntityState extends BaseState<Entity> {
             this.data.variants = [...variantData] || [];
             this.updateModel();
         } catch (reqError) {
+            const errorMessage = (reqError as any).error?.message;
             Log.error(
                 `Variants for entity with type: ${this.data.type}, name: ${this.data.name} could not be loaded`,
-                (reqError as any)?.statusText ?? ""
+                errorMessage
             );
         }
     }
@@ -154,10 +162,11 @@ export default class EntityState extends BaseState<Entity> {
             this.noModelUpdates = false;
             this.updateModel();
         } catch (reqError) {
+            const errorMessage = (reqError as any).error?.message;
             this.reset();
             Log.error(
                 `Metadata for entity with type: ${this.data.type}, name: ${this.data.name} could not be determined`,
-                (reqError as any)?.statusText ?? ""
+                errorMessage
             );
         }
         return this.data.metadata;
@@ -171,11 +180,7 @@ export default class EntityState extends BaseState<Entity> {
     async getFieldValueHelpInfo(fieldName: string, isParam?: boolean): Promise<ValueHelpMetadata> {
         const mappedFieldName = isParam ? `@param:${fieldName}` : fieldName;
         if (!this._valueHelpMetadataMap.hasOwnProperty(mappedFieldName)) {
-            this._valueHelpMetadataMap[mappedFieldName] = await this._determineValueHelpInfo(
-                fieldName,
-                mappedFieldName,
-                isParam
-            );
+            this._valueHelpMetadataMap[mappedFieldName] = await this._determineValueHelpInfo(fieldName, isParam);
         }
         return this._valueHelpMetadataMap[mappedFieldName];
     }
@@ -185,25 +190,27 @@ export default class EntityState extends BaseState<Entity> {
         this.updateModel(true);
     }
 
-    private async _determineValueHelpInfo(
-        fieldName: string,
-        mappedFieldName: string,
-        isParam: boolean
-    ): Promise<ValueHelpMetadata> {
+    private async _determineValueHelpInfo(fieldName: string, isParam: boolean): Promise<ValueHelpMetadata> {
         const source = isParam ? "parameters" : "fields";
         const fieldMeta = this.data.metadata[source].find(f => f.name === fieldName);
 
         switch (fieldMeta.valueHelpType) {
             case ValueHelpType.CheckTable:
+            case ValueHelpType.DDICSearchHelp:
             case ValueHelpType.ElementaryDDICSearchHelp:
             case ValueHelpType.CollectiveDDICSearchHelp:
             case ValueHelpType.CdsAnnotation:
                 try {
-                    const vhMetadataForField = await this._entityService.getValueHelpMetadata(
+                    const vhMetadataForField = await this._entityService.getValueHelpMetadataForField(
                         this.data.name,
                         this.data.type,
-                        mappedFieldName
+                        fieldMeta.valueHelpType,
+                        fieldName,
+                        isParam ? FieldType.Parameter : FieldType.Normal
                     );
+                    if (fieldMeta.valueHelpType === ValueHelpType.DDICSearchHelp) {
+                        fieldMeta.valueHelpType = vhMetadataForField.type;
+                    }
                     return vhMetadataForField;
                 } catch (error) {
                     Log.error(

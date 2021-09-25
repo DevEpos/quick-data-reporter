@@ -88,7 +88,7 @@ class AjaxUtil {
                     fnResolve({ data, status: jqXHR.status, request: jqXHR });
                 },
                 error: (jqXHR, status, error) => {
-                    fnReject({ status: jqXHR.status, statusText: error });
+                    fnReject({ status: jqXHR.status, error: jqXHR.responseJSON || jqXHR.responseText || error });
                 }
             });
         });
@@ -122,7 +122,7 @@ class AjaxUtil {
                 response = { data, status: jqXHR.status };
             },
             error: (jqXHR, statusText, error) => {
-                response = { error, status: jqXHR.status };
+                response = { status: jqXHR.status, error: jqXHR.responseJSON || jqXHR.responseText || error };
             }
         });
 

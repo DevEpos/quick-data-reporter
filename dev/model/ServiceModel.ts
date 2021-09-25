@@ -9,6 +9,11 @@ export enum EntityType {
     View = "V"
 }
 
+export enum FieldType {
+    Normal = "normal",
+    Parameter = "param"
+}
+
 export enum EntitySearchScope {
     All = "all",
     Favorite = "favorites"
@@ -42,6 +47,7 @@ export enum FilterOperator {
 
 export enum ValueHelpType {
     DomainFixValues = "DomainFixValues",
+    DDICSearchHelp = "DDICSearchHelp",
     ElementaryDDICSearchHelp = "ElementaryDDICSearchHelp",
     CollectiveDDICSearchHelp = "CollectiveDDICSearchHelp",
     CheckTable = "CheckTable",
@@ -269,14 +275,11 @@ interface ValueHelpInfo {
      * this can be either a domain, a check table or the name of DDIC search help
      */
     valueHelpName: string;
+    description?: string;
     /**
      * The type of the value help
      */
     type: ValueHelpType;
-    /**
-     * Field metadata for Table/Filters in value help dialog
-     */
-    fields?: ValueHelpField[];
 }
 
 /**
@@ -296,6 +299,10 @@ export interface ValueHelpMetadata extends ValueHelpInfo {
      */
     tokenDescriptionField?: string;
     /**
+     * Field metadata for Table/Filters in value help dialog
+     */
+    fields?: ValueHelpField[];
+    /**
      * Ids of filter fields
      */
     filterFields?: string[];
@@ -303,6 +310,10 @@ export interface ValueHelpMetadata extends ValueHelpInfo {
      * Ids of output fields
      */
     outputFields?: string[];
+    /**
+     * Included value helps
+     */
+    includedValueHelps?: ValueHelpMetadata[];
 }
 
 /**

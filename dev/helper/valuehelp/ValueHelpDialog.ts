@@ -1,7 +1,9 @@
-import { FilterCond, ValueHelpField, ValueHelpMetadata } from "../../model/ServiceModel";
+import { FilterCond, ValueHelpField, ValueHelpMetadata, ValueHelpType } from "../../model/ServiceModel";
 import ValueHelpModel from "./ValueHelpModel";
 import { SimpleBindingParams } from "../../model/types";
 import FormatUtil from "../FormatUtil";
+import { ValueHelpDialogImpl } from "types/global";
+import I18nUtil from "../I18nUtil";
 
 import BaseObject from "sap/ui/base/Object";
 import ValueHelpDialogSAP from "sap/ui/comp/valuehelpdialog/ValueHelpDialog";
@@ -17,6 +19,10 @@ import Token from "sap/m/Token";
 import DateType from "sap/ui/model/type/Date";
 import Log from "sap/base/Log";
 import { smartfilterbar } from "sap/ui/comp/library";
+import List from "sap/m/List";
+import { ListMode, PlacementType } from "sap/m/library";
+import ResponsivePopover from "sap/m/ResponsivePopover";
+import StandardListItem from "sap/m/StandardListItem";
 
 interface TableColumnConfig {
     label: string;
@@ -78,6 +84,9 @@ export interface ValueHelpDialogSettings {
      */
     initialTokens?: Token[];
 }
+
+export type ValueHelpMetadataLoader = (vhName: string, vhType: ValueHelpType) => Promise<ValueHelpMetadata>;
+
 /**
  * Util for calling a value help dialog
  *
@@ -88,7 +97,8 @@ export default class ValueHelpDialog extends BaseObject {
     private _filterBar: FilterBar;
     private _table: Table;
     private _inputControl: Input;
-    private _vhDialogMetadata: ValueHelpMetadata;
+    private _currentVhMetadata: ValueHelpMetadata;
+    private _vhMetadata: ValueHelpMetadata;
     private _keyFieldConfig: ValueHelpField;
     private _fields: { key: string; label?: string }[] = [];
     private _dialogTitle: string;
@@ -106,6 +116,8 @@ export default class ValueHelpDialog extends BaseObject {
     private _supportRangesOnly: boolean;
     private _columnsConfig: TableColumnConfig[] = [];
     private _filterItems: FilterGroupItem[] = [];
+    private _collectiveVhPopover: ResponsivePopover;
+    private _valueHelpMetadataLoader: ValueHelpMetadataLoader;
     //#endregion
 
     /**
@@ -115,12 +127,13 @@ export default class ValueHelpDialog extends BaseObject {
     constructor(settings: ValueHelpDialogSettings) {
         super();
         this._inputControl = settings.inputField;
-        this._vhDialogMetadata = settings.valueHelpMetadata;
-        this._keyFieldConfig = this._vhDialogMetadata.fields.find(
-            fc => fc.name === this._vhDialogMetadata.tokenKeyField
+        this._vhMetadata = settings.valueHelpMetadata;
+        this._updateCurrentVhMetadata();
+        this._keyFieldConfig = this._currentVhMetadata.fields.find(
+            fc => fc.name === this._currentVhMetadata.tokenKeyField
         );
         if (!this._keyFieldConfig) {
-            throw Error(`No keyfield found with name '${this._vhDialogMetadata.tokenKeyField}`);
+            throw Error(`No keyfield found with name '${this._currentVhMetadata.tokenKeyField}`);
         }
         this._dialogTitle =
             this._keyFieldConfig.description ||
@@ -135,7 +148,15 @@ export default class ValueHelpDialog extends BaseObject {
         this._loadDataAtOpen = settings.loadDataAtOpen || false;
         this._supportRanges = settings.supportRanges || false;
         this._supportRangesOnly = settings.supportRangesOnly || false;
-        this._vhModel = new ValueHelpModel(this._vhDialogMetadata);
+        this._vhModel = new ValueHelpModel(this._currentVhMetadata.valueHelpName, this._currentVhMetadata.type);
+    }
+
+    /**
+     * Sets the callback function for loading value help metadata
+     * @param metadataLoader callback function for loading value help metadata
+     */
+    setValueHelpMetadataLoader(metadataLoader: ValueHelpMetadataLoader): void {
+        this._valueHelpMetadataLoader = metadataLoader;
     }
 
     /**
@@ -152,6 +173,8 @@ export default class ValueHelpDialog extends BaseObject {
         });
         this._createDialog();
         this._dialog.setModel(this._vhModel.getModel());
+        this._dialog.setModel(this._columnModel, "columns");
+
         // adjust tokens which were created in quick filter
         for (const token of this._initialTokens) {
             if (token.data("range")?.__quickFilter) {
@@ -162,12 +185,8 @@ export default class ValueHelpDialog extends BaseObject {
         this._dialog.setTokens(this._initialTokens);
         if (!this._supportRangesOnly) {
             this._createFilterBar();
-            if (this._filterBar && this._filterBar.attachInitialized) {
-                this._filterBar.attachInitialized(this._onFilterBarInitialized, this);
-            }
             this._table = await this._dialog.getTableAsync();
             this._table.bindRows({ path: this._vhModel.getBindingPath() });
-            this._table.setModel(this._columnModel, "columns");
             if (this._loadDataAtOpen) {
                 this._loadData();
             }
@@ -184,6 +203,7 @@ export default class ValueHelpDialog extends BaseObject {
             scale: this._keyFieldConfig.scale
         };
         this._dialog.setRangeKeyFields([rangeKeyField]);
+        this._createControlsForCollectiveSearch();
         return new Promise((resolve, reject) => {
             // store promise callback functions
             this._dialogPromise = { resolve, reject };
@@ -192,6 +212,128 @@ export default class ValueHelpDialog extends BaseObject {
         });
     }
 
+    private _updateCurrentVhMetadata() {
+        if (this._vhMetadata.type === ValueHelpType.CollectiveDDICSearchHelp) {
+            this._currentVhMetadata = this._vhMetadata.includedValueHelps[0];
+            this._currentVhMetadata.tokenKeyField = this._vhMetadata.tokenKeyField;
+        } else {
+            this._currentVhMetadata = this._vhMetadata;
+        }
+    }
+
+    /**
+     * Creates popover control to choose from a list of all included
+     * search helps in a collective search help
+     */
+    private _createControlsForCollectiveSearch() {
+        if (this._vhMetadata.type !== ValueHelpType.CollectiveDDICSearchHelp) {
+            return;
+        }
+        const DATA_CHILD_VH = "_childVh";
+        const vhDialog = this._dialog as any as ValueHelpDialogImpl;
+
+        let childVhItem: StandardListItem = null;
+
+        // Selection Controls
+        const childVhList = new List({
+            mode: ListMode.SingleSelectMaster,
+            selectionChange: (evt: Event) => {
+                const selectedChildVh = evt.getParameter("listItem");
+                this._collectiveVhPopover.close();
+                if (selectedChildVh) {
+                    this._triggerChildVhChange(selectedChildVh.data(DATA_CHILD_VH));
+                }
+            }
+        });
+
+        this._collectiveVhPopover = new ResponsivePopover({
+            placement: PlacementType.Bottom,
+            showHeader: true,
+            contentHeight: "30rem",
+            title: I18nUtil.getText("vhDialog_collectiveSH_popover_title"),
+            content: [childVhList],
+            afterClose: () => {
+                vhDialog._rotateSelectionButtonIcon(false);
+            }
+        });
+
+        childVhItem = new StandardListItem({
+            title: this._currentVhMetadata.description
+        });
+        childVhItem.data(DATA_CHILD_VH, this._currentVhMetadata);
+        childVhList.addItem(childVhItem);
+        childVhList.setSelectedItem(childVhItem);
+
+        vhDialog.oSelectionTitle.setText(this._currentVhMetadata.description);
+        vhDialog.oSelectionTitle.setTooltip(this._currentVhMetadata.description);
+        for (const childVh of this._vhMetadata.includedValueHelps) {
+            if (childVh.valueHelpName === this._currentVhMetadata.valueHelpName) {
+                continue;
+            }
+            childVhItem = new StandardListItem({
+                title: childVh.description
+            });
+            childVhItem.data(DATA_CHILD_VH, childVh);
+            childVhList.addItem(childVhItem);
+        }
+        vhDialog.oSelectionButton.setVisible(true);
+        vhDialog.oSelectionTitle.setVisible(true);
+        vhDialog.oSelectionButton.attachPress(() => {
+            if (!this._collectiveVhPopover.isOpen()) {
+                vhDialog._rotateSelectionButtonIcon(true);
+                this._collectiveVhPopover.openBy(vhDialog.oSelectionButton);
+            } else {
+                this._collectiveVhPopover.close();
+            }
+        });
+    }
+    private async _triggerChildVhChange(childVh: ValueHelpMetadata) {
+        if (!childVh) {
+            return;
+        }
+        const vhDialog = this._dialog as any as ValueHelpDialogImpl;
+        vhDialog.oSelectionTitle.setText(childVh.description);
+        vhDialog.oSelectionTitle.setTooltip(childVh.description);
+        vhDialog.resetTableState();
+        this._dialog.setBusy(true);
+        // if full metadata of vh is not yet loaded do so now
+        if (!childVh.fields?.length && this._valueHelpMetadataLoader) {
+            try {
+                const vhMetadata = await this._valueHelpMetadataLoader(childVh.valueHelpName, childVh.type);
+                childVh.fields = vhMetadata?.fields;
+                childVh.outputFields = vhMetadata?.outputFields;
+                childVh.filterFields = vhMetadata?.filterFields;
+            } catch (reqError) {
+                // TODO: handle error correctly
+                Log.error(
+                    `VH metadata for '${childVh.valueHelpName}' could not be loaded`,
+                    (reqError as any)?.error?.message || reqError
+                );
+            }
+        }
+        this._currentVhMetadata = childVh;
+        this._vhModel.updateValueHelpInfo(this._currentVhMetadata.valueHelpName, this._currentVhMetadata.type);
+        this._updateControlsForCollectiveSearch();
+        this._dialog.setBusy(false);
+    }
+
+    private _updateControlsForCollectiveSearch() {
+        // clear current configuration
+        this._fields.length = 0;
+        this._columnsConfig.length = 0;
+        this._filterItems.length = 0;
+
+        if (this._filterBar) {
+            (this._filterBar as any)._setCollectiveSearch(null);
+            this._filterBar.destroy();
+            this._filterBar = null;
+        }
+
+        this._processFieldConfiguration();
+        this._createFilterBar();
+        this._dialog.setFilterBar(this._filterBar);
+        this._dialog.update();
+    }
     /**
      * Event Handler for when the Filter Bar was successfully initialized
      */
@@ -217,9 +359,9 @@ export default class ValueHelpDialog extends BaseObject {
      */
     private _createDialog() {
         let tokenDisplayBehaviour = "";
-        let descriptionKey = this._vhDialogMetadata.tokenDescriptionField;
+        let descriptionKey = this._currentVhMetadata.tokenDescriptionField;
         if (!descriptionKey || descriptionKey === "") {
-            descriptionKey = this._vhDialogMetadata.tokenKeyField;
+            descriptionKey = this._currentVhMetadata.tokenKeyField;
             tokenDisplayBehaviour = smartfilterbar.DisplayBehaviour.idOnly;
         }
         this._dialog = new ValueHelpDialogSAP({
@@ -228,7 +370,7 @@ export default class ValueHelpDialog extends BaseObject {
             basicSearchText: this._basicSearchEnabled && this._inputControl ? this._inputControl.getValue() : "",
             supportRanges: this._supportRanges,
             supportRangesOnly: this._supportRangesOnly,
-            key: this._vhDialogMetadata.tokenKeyField,
+            key: this._currentVhMetadata.tokenKeyField,
             displayFormat: this._keyFieldConfig.displayFormat ?? "",
             descriptionKey,
             tokenDisplayBehaviour,
@@ -246,6 +388,8 @@ export default class ValueHelpDialog extends BaseObject {
             afterClose: () => {
                 this._dialog.destroy();
                 this._dialog = null;
+                this._collectiveVhPopover?.destroy();
+                this._collectiveVhPopover = null;
             }
         });
     }
@@ -256,7 +400,7 @@ export default class ValueHelpDialog extends BaseObject {
      */
     private _processFieldConfiguration() {
         const fieldsMap: Record<string, ValueHelpField> = {};
-        for (const fieldConfig of this._vhDialogMetadata.fields) {
+        for (const fieldConfig of this._currentVhMetadata.fields) {
             if (!fieldConfig.description) {
                 fieldConfig.description =
                     fieldConfig.mediumDescription || fieldConfig.longDescription || fieldConfig.name;
@@ -265,12 +409,12 @@ export default class ValueHelpDialog extends BaseObject {
         }
 
         // 1) consider fields for filterbar
-        for (const filterField of this._vhDialogMetadata?.filterFields ?? []) {
+        for (const filterField of this._currentVhMetadata?.filterFields ?? []) {
             this._addFilterField(fieldsMap[filterField]);
         }
 
         // 2) consider output fields for table
-        for (const outputField of this._vhDialogMetadata.outputFields) {
+        for (const outputField of this._currentVhMetadata.outputFields) {
             const fieldConfig = fieldsMap[outputField];
             const columnConfig = <TableColumnConfig>{
                 label: fieldConfig.description,
@@ -351,7 +495,8 @@ export default class ValueHelpDialog extends BaseObject {
                     }
                 }
                 this._loadData({ filters: filters });
-            }
+            },
+            initialized: this._onFilterBarInitialized.bind(this)
         });
     }
 
@@ -374,8 +519,8 @@ export default class ValueHelpDialog extends BaseObject {
         setBusy(true, useOverlay);
         try {
             await this._vhModel.fetchData(params);
-        } catch (error) {
-            Log.error("Value help data could not be loaded", (error as any)?.statusText ?? error);
+        } catch (reqError) {
+            Log.error("Value help data could not be loaded", (reqError as any)?.error?.message ?? reqError);
         }
         // Was the dialog closed in the meantime?
         if (this._dialog) {
