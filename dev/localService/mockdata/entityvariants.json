@@ -17,8 +17,8 @@
         "executeOnSelection": false,
         "favorite": false,
         "global": true,
-        "labelReadOnly": true,
-        "readOnly": true,
+        "labelReadOnly": false,
+        "readOnly": false,
         "dataString": "{\"columnItems\":[{\"fieldName\":\"clsname\",\"index\":0},{\"fieldName\":\"category\",\"index\":1},{\"fieldName\":\"author\",\"index\":2}],\"sortItems\":[],\"aggregationItems\":[], \"filterItems\":[]}"
     }
 ]

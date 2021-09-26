@@ -1,4 +1,8 @@
 {
+    "entity": {
+        "name": "SEOCLASSDF",
+        "description": "Definition of Class/Interface"
+    },
     "fields": [
         {
             "name": "clsname",

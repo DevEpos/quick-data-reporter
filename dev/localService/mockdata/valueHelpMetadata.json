@@ -2,7 +2,6 @@
     "author": {
         "targetField": "author",
         "tokenKeyField": "bname",
-        "tokenDescriptionField": "",
         "valueHelpName": "USER_ADDR",
         "type": "ElementaryDDICSearchHelp",
         "filterFields": [

@@ -18,8 +18,10 @@ const MOCK_SERVER_URL = "/sap/zqdrtrest/";
 export default class MockServer {
     private _mockServer: _MockServer;
     private _mockData: Record<string, unknown> = {};
-    private _modelFormatter: DateFormat;
+    private _dateFormatter: DateFormat;
     private _randomSeed: Record<string, number> = {};
+    private _dateTimeFormatter: DateFormat;
+    private _timeFormatter: DateFormat;
     /**
      * Initializes the mock server.
      * You can configure the delay with the URL parameter "serverDelay".
@@ -32,11 +34,23 @@ export default class MockServer {
         this._mockServer = new _MockServer({
             rootUri: MOCK_SERVER_URL
         });
-        this._modelFormatter = DateFormat.getDateInstance({
+        this._dateFormatter = DateFormat.getDateInstance({
             calendarType: CalendarType.Gregorian,
             pattern: "yyyy-MM-dd",
             strictParsing: true,
             UTC: true
+        });
+        this._dateTimeFormatter = DateFormat.getDateTimeInstance({
+            calendarType: CalendarType.Gregorian,
+            pattern: "yyyyMMddHHmmss",
+            strictParsing: true,
+            UTC: false
+        });
+        this._timeFormatter = DateFormat.getTimeInstance({
+            calendarType: CalendarType.Gregorian,
+            pattern: "HH:mm:ss",
+            strictParsing: true,
+            UTC: false
         });
         this._randomSeed = {};
         // configure mock server with a delay of 1s
@@ -83,7 +97,7 @@ export default class MockServer {
             },
             {
                 method: "GET",
-                path: /entities\/(.*)\/(.*)\/valueHelpMetadata.*/,
+                path: /entities\/(.*)\/(.*)\/vhMetadata.*/,
                 response: (xhr: SinonFakeXMLHttpRequest) => {
                     const response = this._getCachedMockdata("valueHelpMetadata");
                     if (!response) {
@@ -189,14 +203,14 @@ export default class MockServer {
                 date.setDate(Math.floor(this._getPseudoRandomNumber("DateTime") * 30));
                 date.setMonth(Math.floor(this._getPseudoRandomNumber("DateTime") * 12));
                 date.setMilliseconds(0);
-                return "/Date(" + date.getTime() + ")/";
+                return this._dateTimeFormatter.format(date);
             case "Date":
                 date = new Date();
                 date.setFullYear(2000 + Math.floor(this._getPseudoRandomNumber("DateTime") * 20));
                 date.setDate(Math.floor(this._getPseudoRandomNumber("DateTime") * 30));
                 date.setMonth(Math.floor(this._getPseudoRandomNumber("DateTime") * 12));
                 date.setMilliseconds(0);
-                return this._modelFormatter.format(date);
+                return this._dateFormatter.format(date);
             case "Int":
             case "Int16":
             case "Int32":
@@ -215,15 +229,10 @@ export default class MockServer {
             case "SByte":
                 return Math.floor(this._getPseudoRandomNumber("SByte") * 10);
             case "Time":
-                // ODataModel expects ISO8601 duration format
                 return (
-                    "PT" +
-                    Math.floor(this._getPseudoRandomNumber("Time") * 23) +
-                    "H" +
-                    Math.floor(this._getPseudoRandomNumber("Time") * 59) +
-                    "M" +
-                    Math.floor(this._getPseudoRandomNumber("Time") * 59) +
-                    "S"
+                    `${Math.floor(this._getPseudoRandomNumber("Time") * 23)}:` +
+                    `${Math.floor(this._getPseudoRandomNumber("Time") * 59)}:` +
+                    `${Math.floor(this._getPseudoRandomNumber("Time") * 59)}`
                 );
             case "Guid":
                 return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
