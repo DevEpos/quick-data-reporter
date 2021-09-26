@@ -83,7 +83,7 @@ export default class Entity implements ConfigurableEntity {
             if (filter.value || filter?.items?.length > 0 || filter?.ranges?.length > 0) {
                 const reducedFilter = { fieldName: filterName } as FieldFilter;
                 if (filter.value) {
-                    reducedFilter.value = filter.value;
+                    reducedFilter.value = encodeURIComponent(filter.value);
                 }
                 if (filter.ranges?.length > 0) {
                     reducedFilter.ranges = [];
@@ -91,10 +91,10 @@ export default class Entity implements ConfigurableEntity {
                     for (const range of filter.ranges) {
                         const reducedRange = { operation: range.operation } as FilterCond;
                         if (range.value1) {
-                            reducedRange.value1 = range.value1;
+                            reducedRange.value1 = encodeURIComponent(range.value1);
                         }
                         if (range.value2) {
-                            reducedRange.value2 = range.value2;
+                            reducedRange.value2 = encodeURIComponent(range.value2);
                         }
                         if (range.exclude) {
                             reducedRange.exclude = true;
@@ -105,7 +105,7 @@ export default class Entity implements ConfigurableEntity {
                 if (filter.items?.length > 0) {
                     reducedFilter.items = filter.items.map(item => {
                         return {
-                            key: item.key
+                            key: encodeURIComponent(item.key)
                         };
                     });
                 }
@@ -121,7 +121,7 @@ export default class Entity implements ConfigurableEntity {
         for (const paramName of Object.keys(this.parameters)) {
             const param = this.parameters[paramName];
             if (param.value) {
-                params.push({ fieldName: paramName, value: param.value });
+                params.push({ fieldName: paramName, value: encodeURIComponent(param.value) });
             }
         }
         return params;

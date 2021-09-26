@@ -396,6 +396,17 @@ export default class ValueHelpDialog extends BaseObject {
                 this._collectiveVhPopover = null;
             }
         });
+
+        /* implement fix for token creation.
+         * This is needed if the key column has values which are invalid URI components i.e. values which would
+         *  throw an error if <code>decodeURIComponent</code> would be called for them
+         */
+        const _addRemoveTokenByKey = (this._dialog as any)._addRemoveTokenByKey;
+        if (_addRemoveTokenByKey) {
+            (this._dialog as any)._addRemoveTokenByKey = (key: string, row: any, add: boolean) => {
+                _addRemoveTokenByKey.call(this._dialog, encodeURIComponent(key), row, add);
+            };
+        }
     }
 
     /**
