@@ -18,7 +18,8 @@ const SUB_ENTITY_SRV_URL = `${BASE_SRV_URL}/{type}/{name}`;
 
 type EntitiesSearchReqParams = {
     $top: number;
-    $filter?: string;
+    name?: string;
+    description?: string;
     entityType?: EntityType;
     scope?: EntitySearchScope;
 };
@@ -126,17 +127,26 @@ export default class EntityService {
 
     /**
      * Searches for DB entities
-     * @param filterValue filter value to search entities
+     * @param nameFilter name filter value to search entities
+     * @param descriptionFilter description filter value
      * @param entityType the type of entities to be searched
      * @param scope search scope for the db entities
      * @returns Promise with response result
      */
-    async findEntities(filterValue: string, entityType?: EntityType, scope?: EntitySearchScope): Promise<DbEntity[]> {
+    async findEntities(
+        nameFilter: string,
+        descriptionFilter?: string,
+        entityType?: EntityType,
+        scope?: EntitySearchScope
+    ): Promise<DbEntity[]> {
         const reqParams = {
             $top: 200
         } as EntitiesSearchReqParams;
-        if (filterValue) {
-            reqParams.$filter = filterValue;
+        if (nameFilter) {
+            reqParams.name = nameFilter;
+        }
+        if (descriptionFilter) {
+            reqParams.description = descriptionFilter;
         }
         if (entityType && entityType !== EntityType.All) {
             reqParams.entityType = entityType;

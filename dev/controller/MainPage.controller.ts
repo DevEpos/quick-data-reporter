@@ -11,9 +11,11 @@ import Table from "sap/m/Table";
 import Control from "sap/ui/core/Control";
 import SmartVariantManagementUi2 from "sap/ui/comp/smartvariants/SmartVariantManagementUi2";
 import FilterBar from "sap/ui/comp/filterbar/FilterBar";
+import Log from "sap/base/Log";
 
 type ViewModelType = {
     nameFilter: string;
+    descriptionFilter: string;
     selectedEntityType: EntityType;
     selectedSearchScope: EntitySearchScope;
 };
@@ -30,12 +32,14 @@ export default class MainPageController extends BaseController {
     private _viewModel: JSONModel;
     private _dataModel: JSONModel;
     private _viewModelData: ViewModelType;
+    private _variantMgmnt: SmartVariantManagementUi2;
 
     onInit(): void {
         super.onInit();
         this._entityService = new EntityService();
         this._viewModelData = {
             nameFilter: "",
+            descriptionFilter: "",
             selectedEntityType: EntityType.All,
             selectedSearchScope: EntitySearchScope.All
         };
@@ -45,15 +49,20 @@ export default class MainPageController extends BaseController {
         this._dataModel = models.createViewModel({ foundEntities: [] });
         this.getView().setModel(this._dataModel);
 
-        new SmartVariantManagementConnector(
-            this.byId("filterbar") as FilterBar,
-            this.byId("variantManagement") as SmartVariantManagementUi2
-        ).connectFilterBar();
+        this._variantMgmnt = this.byId("variantManagement") as SmartVariantManagementUi2;
+        new SmartVariantManagementConnector(this.byId("filterbar") as FilterBar, this._variantMgmnt).connectFilterBar();
     }
 
     _onEntityNavPress(event: Event): void {
         const selectedEntity = this._dataModel.getObject((event.getSource() as Control).getBindingContext().getPath());
         this._navToEntity(selectedEntity);
+    }
+
+    /**
+     * Set variant to modified if a filter changes
+     */
+    _onFilterChange(): void {
+        this._variantMgmnt?.currentVariantSetModified(true);
     }
 
     async _onToggleFavorite(event: Event): Promise<void> {
@@ -68,9 +77,9 @@ export default class MainPageController extends BaseController {
                     await this._entityService.createFavorite(selectedEntity.name, selectedEntity.type);
                     selectedEntity.isFavorite = true;
                 }
-                this._dataModel.setProperty(`${selectedPath}/isFavorite`, selectedEntity.isFavorite);
+                this._dataModel.updateBindings(false);
             } catch (reqError) {
-                //
+                Log.error(`Error during favorite handling`, (reqError as any).error?.message || reqError);
             }
         }
     }
@@ -80,6 +89,7 @@ export default class MainPageController extends BaseController {
         filterTable.setBusy(true);
         const entities = await this._entityService.findEntities(
             this._viewModelData.nameFilter,
+            this._viewModelData.descriptionFilter,
             this._viewModelData.selectedEntityType,
             this._viewModelData.selectedSearchScope
         );

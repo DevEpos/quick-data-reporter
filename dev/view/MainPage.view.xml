@@ -32,7 +32,8 @@
                                 visibleInFilterBar="true"
                                 label="{i18n>dbEntities_filterbar_scopeFilter_label}">
                                 <fb:control>
-                                    <Select selectedKey="{ui>/selectedSearchScope}">
+                                    <Select selectedKey="{ui>/selectedSearchScope}"
+                                        change="_onFilterChange">
                                         <items>
                                             <c:Item key="all"
                                                 text="{i18n>dbEntities_filterbar_scopeFilter_all}" />
@@ -47,7 +48,8 @@
                                 visibleInFilterBar="true"
                                 label="{i18n>dbEntities_filterbar_entityTypeFilter_label}">
                                 <fb:control>
-                                    <Select selectedKey="{ui>/selectedEntityType}">
+                                    <Select selectedKey="{ui>/selectedEntityType}"
+                                        change="_onFilterChange">
                                         <items>
                                             <c:Item key="all"
                                                 text="{i18n>dbEntities_filterbar_entityTypeFilter_all}" />
@@ -67,7 +69,20 @@
                                 label="{i18n>dbEntities_filterbar_entityNameFilter_label}">
                                 <fb:control>
                                     <Input value="{ui>/nameFilter}"
-                                        submit="_onSearch"/>
+                                        maxLength="30"
+                                        submit="_onSearch"
+                                        change="_onFilterChange"/>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem name="desscriptionFilter"
+                                groupName="_MISC"
+                                visibleInFilterBar="true"
+                                label="{i18n>dbEntities_filterbar_entityDescrFilter_label}">
+                                <fb:control>
+                                    <Input value="{ui>/descriptionFilter}"
+                                        maxLength="40"
+                                        submit="_onSearch"
+                                        change="_onFilterChange"/>
                                 </fb:control>
                             </fb:FilterGroupItem>
                         </fb:filterGroupItems>
