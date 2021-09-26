@@ -1,10 +1,11 @@
 import QuickFilter from "./QuickFilter";
 import StateRegistry from "../state/StateRegistry";
-import AddQuickFiltersPopover, { SelectedField } from "../helper/AddQuickFilterPopover";
+import AddQuickFiltersPopover, { SelectedField } from "../helper/filter/AddQuickFilterPopover";
 import ValueHelpFactory from "../helper/valuehelp/ValueHelpFactory";
 import { FieldMetadata, ValueHelpType } from "../model/ServiceModel";
 import { TableFilters } from "../model/Entity";
 import models from "../model/models";
+import ValueHelpService from "../service/ValueHelpService";
 
 import Panel from "sap/m/Panel";
 import ScrollContainer from "sap/m/ScrollContainer";
@@ -24,7 +25,6 @@ import isEmptyObject from "sap/base/util/isEmptyObject";
 import Log from "sap/base/Log";
 import ToggleButton from "sap/m/ToggleButton";
 import JSONModel from "sap/ui/model/json/JSONModel";
-import ValueHelpService from "../service/ValueHelpService";
 
 const PANEL_HEIGHT = "100%";
 

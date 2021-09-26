@@ -1,4 +1,4 @@
-import { FieldMetadata } from "../model/ServiceModel";
+import { FieldMetadata } from "../../model/ServiceModel";
 
 import ResponsivePopover from "sap/m/ResponsivePopover";
 import Control from "sap/ui/core/Control";
