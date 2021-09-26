@@ -1,40 +1,45 @@
 import ValueHelpService from "../../service/ValueHelpService";
-import { ValueHelpType } from "../../model/ServiceModel";
+import { ValueHelpMetadata } from "../../model/ServiceModel";
 import models from "../../model/models";
 import { SimpleBindingParams } from "../../model/types";
 
 import JSONModel from "sap/ui/model/json/JSONModel";
+import { AggregationBindingInfo } from "sap/ui/base/ManagedObject";
 
 /**
  * Model for ValueHelpDialog. It handles the necessary service
  * calls for retrieving the value help data
  */
 export default class ValueHelpModel {
-    private _vhName: string;
-    private _vhType: ValueHelpType;
+    private _vhMetadata: ValueHelpMetadata;
     private _model = models.createViewModel([]);
     private _service: ValueHelpService = new ValueHelpService();
 
-    constructor(name: string, type: ValueHelpType) {
-        this.updateValueHelpInfo(name, type);
+    constructor(vhMetadata: ValueHelpMetadata) {
+        this.setVhMetadata(vhMetadata);
     }
-    updateValueHelpInfo(name: string, type: ValueHelpType): void {
-        this._vhName = name;
-        this._vhType = type;
+    setVhMetadata(vhMetadata: ValueHelpMetadata): void {
+        this._vhMetadata = vhMetadata;
         this._model?.setProperty("/", null);
     }
     getModel(): JSONModel {
         return this._model;
     }
-
-    getBindingPath(): string {
-        return "/";
+    /**
+     * Returns binding info for VH result
+     * @returns binding info for VH result
+     */
+    getVhResultBindingInfo(): AggregationBindingInfo {
+        return {
+            path: "/"
+        };
     }
-
     async fetchData(params?: SimpleBindingParams): Promise<void> {
         const valueHelpData = await this._service.retrieveValueHelpData({
-            type: this._vhType,
-            valueHelpName: this._vhName,
+            type: this._vhMetadata.type,
+            valueHelpName: this._vhMetadata.valueHelpName,
+            sourceTab: this._vhMetadata.sourceTab,
+            sourceField: this._vhMetadata.sourceField,
             filters: params?.filters,
             maxRows: 200
         });

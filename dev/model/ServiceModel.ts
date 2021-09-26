@@ -280,6 +280,14 @@ interface ValueHelpInfo {
      * The type of the value help
      */
     type: ValueHelpType;
+    /**
+     * The source table where the value help was detected
+     */
+    sourceTab?: string;
+    /**
+     * The source field where the value help was detected
+     */
+    sourceField?: string;
 }
 
 /**

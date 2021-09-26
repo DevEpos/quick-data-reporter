@@ -148,7 +148,7 @@ export default class ValueHelpDialog extends BaseObject {
         this._loadDataAtOpen = settings.loadDataAtOpen || false;
         this._supportRanges = settings.supportRanges || false;
         this._supportRangesOnly = settings.supportRangesOnly || false;
-        this._vhModel = new ValueHelpModel(this._currentVhMetadata.valueHelpName, this._currentVhMetadata.type);
+        this._vhModel = new ValueHelpModel(this._currentVhMetadata);
     }
 
     /**
@@ -186,7 +186,7 @@ export default class ValueHelpDialog extends BaseObject {
         if (!this._supportRangesOnly) {
             this._createFilterBar();
             this._table = await this._dialog.getTableAsync();
-            this._table.bindRows({ path: this._vhModel.getBindingPath() });
+            this._table.bindRows(this._vhModel.getVhResultBindingInfo());
             if (this._loadDataAtOpen) {
                 this._loadData();
             }
@@ -312,7 +312,7 @@ export default class ValueHelpDialog extends BaseObject {
             }
         }
         this._currentVhMetadata = childVh;
-        this._vhModel.updateValueHelpInfo(this._currentVhMetadata.valueHelpName, this._currentVhMetadata.type);
+        this._vhModel.setVhMetadata(this._currentVhMetadata);
         this._updateControlsForCollectiveSearch();
         this._dialog.setBusy(false);
     }
@@ -332,6 +332,10 @@ export default class ValueHelpDialog extends BaseObject {
         this._processFieldConfiguration();
         this._createFilterBar();
         this._dialog.setFilterBar(this._filterBar);
+
+        // update bindings and ui after columns were updated
+        this._columnModel.updateBindings(false);
+        this._table.bindRows(this._vhModel.getVhResultBindingInfo());
         this._dialog.update();
     }
     /**
