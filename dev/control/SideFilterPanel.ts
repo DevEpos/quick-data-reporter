@@ -250,9 +250,15 @@ export default class SideFilterPanel extends Panel {
         );
         const selectedFilters = await addFiltersPopover.showPopover(event.getSource() as Control);
         if (selectedFilters?.length > 0) {
+            let newQuickFilterFocused = false;
             for (const selectedFilter of selectedFilters) {
                 visibleFilters[selectedFilter.name] = {};
-                this._filterContainer.addContent(this._createQuickFilter(selectedFilter));
+                const newQuickFilter = this._createQuickFilter(selectedFilter);
+                if (!newQuickFilterFocused) {
+                    newQuickFilterFocused = true;
+                    newQuickFilter.triggerFocus();
+                }
+                this._filterContainer.addContent(newQuickFilter);
             }
         }
     }

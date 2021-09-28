@@ -174,6 +174,7 @@ export default class QuickFilter extends Control {
     private _filterNameUpdateRequired = true;
     private _filterCont: VerticalLayout;
     private _filterCreator: FilterCreator;
+    private _focusRequested: boolean;
 
     constructor(settings: QuickFilterSettings) {
         super(settings);
@@ -224,6 +225,14 @@ export default class QuickFilter extends Control {
         });
         // this._filterCont.addStyleClass("deveposQdrt-QuickFilter");
         this.setAggregation("filter", this._filterCont);
+        return this;
+    }
+    triggerFocus(): this {
+        if (this._filterControl) {
+            this._filterControl.focus();
+        } else {
+            this._focusRequested = true;
+        }
         return this;
     }
     clear(): this {
@@ -325,6 +334,12 @@ export default class QuickFilter extends Control {
         if (this._filterNameUpdateRequired) {
             this._updateFilterName();
             this._filterNameUpdateRequired = false;
+        }
+    }
+    onAfterRendering(): void {
+        if (this._focusRequested) {
+            this._focusRequested = false;
+            this._filterControl?.focus();
         }
     }
     onThemeChanged(): void {
