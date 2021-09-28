@@ -42,7 +42,7 @@ export default class ValueHelpFactory {
     ): ValueHelpDialog {
         let supportRangesOnly = false;
 
-        if (metadata?.type === ValueHelpType.Date || !metadata?.type) {
+        if (!metadata?.type) {
             supportRangesOnly = true;
         }
 

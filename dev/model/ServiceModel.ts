@@ -51,7 +51,6 @@ export enum ValueHelpType {
     ElementaryDDICSearchHelp = "ElementaryDDICSearchHelp",
     CollectiveDDICSearchHelp = "CollectiveDDICSearchHelp",
     CheckTable = "CheckTable",
-    Date = "Date",
     /**
      * For future implementations
      */
