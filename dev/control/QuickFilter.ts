@@ -266,7 +266,7 @@ export default class QuickFilter extends Control {
         return (
             ((this.getSingleValueOnly() || this.getType() === "Boolean") && !!filterData?.value) ||
             filterData?.ranges?.length > 0 ||
-            filterData?.ranges?.length > 0
+            filterData?.items?.length > 0
         );
     }
     /**
