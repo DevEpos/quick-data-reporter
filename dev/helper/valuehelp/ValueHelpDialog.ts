@@ -2,7 +2,6 @@ import { FilterCond, ValueHelpField, ValueHelpMetadata, ValueHelpType } from "..
 import ValueHelpModel from "./ValueHelpModel";
 import { SimpleBindingParams } from "../../model/types";
 import FormatUtil from "../FormatUtil";
-import { ValueHelpDialogImpl } from "types/global";
 import I18nUtil from "../I18nUtil";
 
 import BaseObject from "sap/ui/base/Object";
@@ -230,7 +229,6 @@ export default class ValueHelpDialog extends BaseObject {
             return;
         }
         const DATA_CHILD_VH = "_childVh";
-        const vhDialog = this._dialog as any as ValueHelpDialogImpl;
 
         let childVhItem: StandardListItem = null;
 
@@ -253,7 +251,7 @@ export default class ValueHelpDialog extends BaseObject {
             title: I18nUtil.getText("vhDialog_collectiveSH_popover_title"),
             content: [childVhList],
             afterClose: () => {
-                vhDialog._rotateSelectionButtonIcon(false);
+                this._dialog._rotateSelectionButtonIcon(false);
             }
         });
 
@@ -264,8 +262,8 @@ export default class ValueHelpDialog extends BaseObject {
         childVhList.addItem(childVhItem);
         childVhList.setSelectedItem(childVhItem);
 
-        vhDialog.oSelectionTitle.setText(this._currentVhMetadata.description);
-        vhDialog.oSelectionTitle.setTooltip(this._currentVhMetadata.description);
+        this._dialog.oSelectionTitle.setText(this._currentVhMetadata.description);
+        this._dialog.oSelectionTitle.setTooltip(this._currentVhMetadata.description);
         for (const childVh of this._vhMetadata.includedValueHelps) {
             if (childVh.valueHelpName === this._currentVhMetadata.valueHelpName) {
                 continue;
@@ -276,12 +274,12 @@ export default class ValueHelpDialog extends BaseObject {
             childVhItem.data(DATA_CHILD_VH, childVh);
             childVhList.addItem(childVhItem);
         }
-        vhDialog.oSelectionButton.setVisible(true);
-        vhDialog.oSelectionTitle.setVisible(true);
-        vhDialog.oSelectionButton.attachPress(() => {
+        this._dialog.oSelectionButton.setVisible(true);
+        this._dialog.oSelectionTitle.setVisible(true);
+        this._dialog.oSelectionButton.attachPress(() => {
             if (!this._collectiveVhPopover.isOpen()) {
-                vhDialog._rotateSelectionButtonIcon(true);
-                this._collectiveVhPopover.openBy(vhDialog.oSelectionButton);
+                this._dialog._rotateSelectionButtonIcon(true);
+                this._collectiveVhPopover.openBy(this._dialog.oSelectionButton);
             } else {
                 this._collectiveVhPopover.close();
             }
