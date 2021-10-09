@@ -33,18 +33,6 @@ UI5_TASK_NWABAP_DEPLOYER__SERVER=<server>
 UI5_TASK_NWABAP_DEPLOYER__CLIENT=<client>
 ```
 
-### Settings template for service tests in `/test/service` for REST Client Extension
-
-```json
-  "rest-client.environmentVariables": {
-    "$shared": {
-      "sap_dev_server": "<NW server URL>",
-      "sap_dev_user": "<NW user>",
-      "sap_dev_pwd": "<NW password>"
-    }
-  },
-```
-
 ### Script commands
 
 - With real data  
