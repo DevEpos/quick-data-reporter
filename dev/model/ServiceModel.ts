@@ -1,6 +1,7 @@
-import ODataType from "sap/ui/model/odata/type/ODataType";
 import I18nUtil from "../helper/I18nUtil";
 import TypeFactory from "./TypeFactory";
+
+import ODataType from "sap/ui/model/odata/type/ODataType";
 
 export enum EntityType {
     All = "all",
