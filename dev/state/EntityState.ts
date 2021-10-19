@@ -76,12 +76,12 @@ export default class EntityState extends BaseState<Entity> {
                 offset: startIndex
             },
             parameters: this.data.getParameters(),
-            filters: this.data.getFilledFilters(),
-            sortFields: this.data.sortCond,
-            outputFields: this.data.getOutputFields(),
-            aggregations: {
-                aggregationExpressions: this.data.aggregationCond
-            }
+            filters: this.data.getFilledFilters()
+            // sortFields: this.data.sortCond,
+            // outputFields: this.data.getOutputFields(),
+            // aggregations: {
+            //     aggregationExpressions: this.data.aggregationCond
+            // }
         } as QueryRequest;
         return this._entityService.getEntityData(this.data.type, this.data.name, queryRequest);
     }
