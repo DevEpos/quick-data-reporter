@@ -22,6 +22,8 @@ import List from "sap/m/List";
 import { ListMode, PlacementType } from "sap/m/library";
 import ResponsivePopover from "sap/m/ResponsivePopover";
 import StandardListItem from "sap/m/StandardListItem";
+import CustomData from "sap/ui/core/CustomData";
+import Control from "sap/ui/core/Control";
 
 interface TableColumnConfig {
     label: string;
@@ -289,10 +291,9 @@ export default class ValueHelpDialog extends BaseObject {
         if (!childVh) {
             return;
         }
-        const vhDialog = this._dialog as any as ValueHelpDialogImpl;
-        vhDialog.oSelectionTitle.setText(childVh.description);
-        vhDialog.oSelectionTitle.setTooltip(childVh.description);
-        vhDialog.resetTableState();
+        this._dialog.oSelectionTitle.setText(childVh.description);
+        this._dialog.oSelectionTitle.setTooltip(childVh.description);
+        this._dialog.resetTableState();
         this._dialog.setBusy(true);
         // if full metadata of vh is not yet loaded do so now
         if (!childVh.fields?.length && this._valueHelpMetadataLoader) {
@@ -459,7 +460,7 @@ export default class ValueHelpDialog extends BaseObject {
                 visibleInFilterBar: true,
                 name: fieldConfig.name,
                 label: fieldConfig.description,
-                control: new Input(fieldConfig.name)
+                control: new Input({ customData: new CustomData({ key: "fieldName", value: fieldConfig.name }) })
             })
         );
     }
@@ -471,38 +472,34 @@ export default class ValueHelpDialog extends BaseObject {
         this._filterBar = new FilterBar({
             advancedMode: true,
             showClearOnFB: false,
-            basicSearch: new SearchField({
-                showSearchButton: true,
-                placeholder: "{i18n>vhDialog_searchField_placeholder}",
-                search: (event: Event) => {
-                    const filters = [];
-                    if (event.getParameter("query") && event.getParameter("query").length > 0) {
-                        filters.push({
-                            columnKey: this._searchFocusField,
-                            operation: FilterOperator.Contains,
-                            value1: event.getParameter("query")
-                        });
-                    }
-                    this._loadData({ filters });
-                }
-            }),
+            basicSearch: this._basicSearchEnabled
+                ? new SearchField({
+                      showSearchButton: true,
+                      placeholder: "{i18n>vhDialog_searchField_placeholder}",
+                      search: (event: Event) => {
+                          const filters = [];
+                          if (event.getParameter("query") && event.getParameter("query").length > 0) {
+                              filters.push({
+                                  columnKey: this._searchFocusField,
+                                  operation: FilterOperator.Contains,
+                                  value1: event.getParameter("query")
+                              });
+                          }
+                          this._loadData({ filters });
+                      }
+                  })
+                : null,
             filterGroupItems: this._filterItems,
             search: (event: Event) => {
                 const filters: FilterCond[] = [];
-                for (const selection of event.getParameter("selectionSet")) {
-                    if (selection.getValue()) {
-                        const splitTab = selection.getId().split("_");
-                        if (splitTab.length === 2) {
+                for (const selection of event.getParameter("selectionSet") as Control[]) {
+                    if (selection instanceof Input) {
+                        const value = selection.getValue();
+                        if (value) {
                             filters.push({
-                                keyField: splitTab[0],
+                                keyField: selection.data("fieldName"),
                                 operation: FilterOperator.Contains,
-                                value1: selection.getValue()
-                            });
-                        } else {
-                            filters.push({
-                                keyField: selection.getId(),
-                                operation: FilterOperator.Contains,
-                                value1: selection.getValue()
+                                value1: value
                             });
                         }
                     }
