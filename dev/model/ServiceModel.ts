@@ -57,6 +57,12 @@ export enum ValueHelpType {
      */
     CdsAnnotation = "CdsAnnotation"
 }
+
+export interface SearchResult<T> {
+    results: T[];
+    count?: number;
+}
+
 export interface FieldFilter {
     fieldName?: string;
     value?: string;
@@ -132,6 +138,15 @@ export interface EntityMetadata {
     entity: EntityInfo;
     parameters?: FieldMetadata[];
     fields?: FieldMetadata[];
+}
+
+/**
+ * Declares properties that are needed for paging
+ */
+export interface PagingParams {
+    $top: number;
+    $count?: boolean;
+    $skip?: number;
 }
 
 export class FieldMetadata {

@@ -1,0 +1,17 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <ColumnListItem type="Active"
+        press="_onEntityNavPress">
+        <cells>
+            <core:Icon src="{path: 'type', formatter: '.entityTypeIconFormatter'}"
+                tooltip="{path: 'type', formatter: '.entityTypeTooltipFormatter'}" />
+            <core:Icon src="{= ${isFavorite} ? 'sap-icon://favorite' : 'sap-icon://unfavorite'}"
+                tooltip="{= ${isFavorite} ? ${i18n>dbEntities_table_act_unmarkAsFavorite} : ${i18n>dbEntities_table_act_markAsFavorite}}"
+                class="sapUICompVarMngmtFavColor"
+                press="_onToggleFavorite"/>
+            <ObjectIdentifier title="{name}"
+                text="{description}"/>
+            <Text text="{packageName}" />
+        </cells>
+    </ColumnListItem>
+</core:FragmentDefinition>

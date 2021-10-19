@@ -10,19 +10,20 @@ import {
     QueryRequest as QueryRequestData,
     EntitySearchScope,
     FieldType,
-    ValueHelpType
+    ValueHelpType,
+    PagingParams,
+    SearchResult
 } from "../model/ServiceModel";
 
 const BASE_SRV_URL = "/sap/zqdrtrest/entities";
 const SUB_ENTITY_SRV_URL = `${BASE_SRV_URL}/{type}/{name}`;
 
-type EntitiesSearchReqParams = {
-    $top: number;
+interface EntitiesSearchReqParams extends PagingParams {
     name?: string;
     description?: string;
     entityType?: EntityType;
     scope?: EntitySearchScope;
-};
+}
 
 /**
  * Service to get meta data information about database entities
@@ -137,11 +138,18 @@ export default class EntityService {
         nameFilter: string,
         descriptionFilter?: string,
         entityType?: EntityType,
-        scope?: EntitySearchScope
-    ): Promise<DbEntity[]> {
+        scope?: EntitySearchScope,
+        paging?: PagingParams
+    ): Promise<SearchResult<DbEntity>> {
         const reqParams = {
-            $top: 200
+            $top: paging?.$top || 200
         } as EntitiesSearchReqParams;
+        if (paging?.$count) {
+            reqParams.$count = true;
+        }
+        if (paging?.$skip) {
+            reqParams.$skip = paging.$skip;
+        }
         if (nameFilter) {
             reqParams.name = nameFilter;
         }

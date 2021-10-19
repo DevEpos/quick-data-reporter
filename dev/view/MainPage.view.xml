@@ -93,11 +93,19 @@
         <f:content>
             <Table id="foundEntitiesTable"
                 width="100%"
-                items="{/foundEntities}"
+                growing="true"
+                growingThreshold="25"
+                updateFinished="_onTableUpdateFinished"
+                growingScrollToLoad="true"
                 sticky="ColumnHeaders,HeaderToolbar">
                 <headerToolbar>
                     <Toolbar >
-                        <Title text="{i18n>dbEntities_table_title} ({/foundEntities/length})" />
+                        <Title text="{
+                            parts: [
+                                {path: 'i18n>dbEntities_table_title'}, 
+                                {path: 'ui>/entitiesLength', type: 'sap.ui.model.odata.type.Int32'}],
+                            formatter: '.formatMessage'
+                        }" />
                         <ToolbarSpacer />
                     </Toolbar>
                 </headerToolbar>
@@ -113,28 +121,9 @@
                         <Text text="{i18n>dbEntities_table_col_name}" />
                     </Column>
                     <Column>
-                        <Text text="{i18n>dbEntities_table_col_description}" />
-                    </Column>
-                    <Column>
                         <Text text="{i18n>dbEntities_table_col_package}" />
                     </Column>
                 </columns>
-                <items>
-                    <ColumnListItem type="Active"
-                        press="_onEntityNavPress">
-                        <cells>
-                            <c:Icon src="{path: 'type', formatter: '.entityTypeIconFormatter'}"
-                                tooltip="{path: 'type', formatter: '.entityTypeTooltipFormatter'}" />
-                            <c:Icon src="{= ${isFavorite} ? 'sap-icon://favorite' : 'sap-icon://unfavorite'}"
-                                tooltip="{= ${isFavorite} ? ${i18n>dbEntities_table_act_unmarkAsFavorite} : ${i18n>dbEntities_table_act_markAsFavorite}}"
-                                class="sapUICompVarMngmtFavColor"
-                                press="_onToggleFavorite"/>
-                            <Text text="{name}" />
-                            <Text text="{description}" />
-                            <Text text="{packageName}" />
-                        </cells>
-                    </ColumnListItem>
-                </items>
             </Table>
         </f:content>
     </f:DynamicPage>
