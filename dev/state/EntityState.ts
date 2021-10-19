@@ -1,5 +1,4 @@
 import Log from "sap/base/Log";
-import MessageBox from "sap/m/MessageBox";
 
 import ValueHelpUtil from "../helper/valuehelp/ValueHelpUtil";
 import { DataResult } from "../model/AjaxJSONModel";
@@ -8,7 +7,6 @@ import { DEFAULT_VISIBLE_COL_COUNT } from "../model/globalConsts";
 import {
     EntityType,
     EntityMetadata,
-    DataRow,
     ColumnConfig,
     ValueHelpMetadata,
     ValueHelpType,
