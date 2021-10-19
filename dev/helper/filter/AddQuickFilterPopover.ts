@@ -89,7 +89,7 @@ export default class AddQuickFiltersPopover {
         }
         const query = evt.getParameter("newValue");
         this._searchTimer = setTimeout(() => {
-            const fieldsBinding = this._fieldList.getBinding("items") as ListBinding;
+            const fieldsBinding = this._fieldList.getBinding("items") as ListBinding<any>;
             if (query) {
                 fieldsBinding.filter(new Filter("label", FilterOperator.Contains, query));
             } else {
