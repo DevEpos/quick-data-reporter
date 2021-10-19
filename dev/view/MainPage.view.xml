@@ -95,7 +95,6 @@
                 width="100%"
                 growing="true"
                 growingThreshold="25"
-                updateFinished="_onTableUpdateFinished"
                 growingScrollToLoad="true"
                 sticky="ColumnHeaders,HeaderToolbar">
                 <headerToolbar>
@@ -103,7 +102,7 @@
                         <Title text="{
                             parts: [
                                 {path: 'i18n>dbEntities_table_title'}, 
-                                {path: 'ui>/entitiesLength', type: 'sap.ui.model.odata.type.Int32'}],
+                                {path: '/foundEntities/$count', type: 'sap.ui.model.odata.type.Int32'}],
                             formatter: '.formatMessage'
                         }" />
                         <ToolbarSpacer />

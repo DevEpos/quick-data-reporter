@@ -21,7 +21,6 @@ const FOUND_ENTITIES_PATH = "/foundEntities";
 
 type ViewModelType = {
     nameFilter: string;
-    entitiesLength: number;
     descriptionFilter: string;
     selectedEntityType: EntityType;
     selectedSearchScope: EntitySearchScope;
@@ -49,7 +48,6 @@ export default class MainPageController extends BaseController {
         this._viewModelData = {
             nameFilter: "",
             descriptionFilter: "",
-            entitiesLength: 0,
             selectedEntityType: EntityType.All,
             selectedSearchScope: EntitySearchScope.All
         };
@@ -130,18 +128,6 @@ export default class MainPageController extends BaseController {
             this._dataModel.refreshListPath(FOUND_ENTITIES_PATH);
         }
     }
-
-    _onTableUpdateFinished(evt: Event): void {
-        const table = evt.getSource() as Table;
-        if (table) {
-            const length = table.getBinding("items")?.getLength();
-            if (length && length !== this._viewModelData.entitiesLength) {
-                this._viewModelData.entitiesLength = length;
-                this._viewModel.updateBindings(false);
-            }
-        }
-    }
-
     private _navToEntity(entity: DbEntity) {
         if (entity) {
             this.router.navTo("entity", {

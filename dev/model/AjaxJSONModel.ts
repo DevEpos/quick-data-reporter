@@ -60,6 +60,17 @@ export default class AjaxJSONModel extends JSONModel {
         };
     }
 
+    getProperty(path: string, context?: Context): any {
+        const resolvedPath = this.resolve(path, context);
+        if (path?.endsWith("$count")) {
+            const parentObjPath = resolvedPath.substring(0, resolvedPath.indexOf("$count"));
+            const parentObj = this.getObject(parentObjPath);
+            return parentObj?.$count ?? 0;
+        } else {
+            return super.getProperty(path, context);
+        }
+    }
+
     /**
      * Resets the data at the given path and refreshes
      * all the binding
