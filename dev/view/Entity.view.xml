@@ -39,13 +39,18 @@
                 <app:content>
                     <Panel height="100%">
                         <table:Table id="queryResultTable"
-                            rows="{/rows}"
                             columnMove="onColumnMove"
+                            enableBusyIndicator="true"
                             beforeOpenContextMenu="onCellContextMenu"
                             visibleRowCountMode="Auto">
                             <table:extension>
                                 <OverflowToolbar class="sapMTBHeader-CTX">
-                                    <Title text="{i18n>entity_table_title} ({/rows/length})"
+                                    <Title text="{
+                                            parts: [
+                                                {path: 'i18n>entity_table_title'}, 
+                                                {path: '/rows/$count', type: 'sap.ui.model.odata.type.Int32'}],
+                                            formatter: '.formatMessage'
+                                        }"
                                         titleStyle="H4"/>
                                     <ToolbarSeparator />
                                     <vm:VariantManagement id="variantManagement"

@@ -19,6 +19,7 @@ import Menu from "sap/m/Menu";
 import MenuItem from "sap/m/MenuItem";
 import CustomData from "sap/ui/core/CustomData";
 import MessageBox from "sap/m/MessageBox";
+import formatMessage from "sap/base/strings/formatMessage";
 
 /**
  * Controller for a single database entity
@@ -28,6 +29,7 @@ import MessageBox from "sap/m/MessageBox";
 export default class EntityController extends BaseController {
     entityTypeIconFormatter = entityTypeIconFormatter;
     entityTypeTooltipFormatter = entityTypeTooltipFormatter;
+    formatMessage = formatMessage;
     private _uiModel: JSONModel;
     private _entityTableSettings: EntityTableSettings;
     private _queryResultTable: Table;
@@ -43,6 +45,11 @@ export default class EntityController extends BaseController {
         this._entityState = StateRegistry.getEntityState();
         this._entityTableSettings = new EntityTableSettings(this.getView());
         this._queryResultTable = this.getView().byId("queryResultTable") as Table;
+        // call private method to start data request only after a given timeout. This prevents
+        //  to many calls to the server
+        if (this._queryResultTable._setLargeDataScrolling) {
+            this._queryResultTable._setLargeDataScrolling(true);
+        }
         this.getView().setModel(this._uiModel, "ui");
         this.getView().setModel(this._entityState.getModel());
         this.router.getRoute("entity").attachPatternMatched(this._onEntityMatched, this);
@@ -60,6 +67,8 @@ export default class EntityController extends BaseController {
     private async _onEntityMatched(event: Event) {
         const args = event.getParameter("arguments");
         this.getView().setBusy(true);
+        this._queryResultTable.unbindRows();
+        this._queryResultTable.setFirstVisibleRow(0);
         this._entityState.reset();
         const entityInfo = {
             type: decodeURIComponent(args.type).toUpperCase(),
@@ -93,10 +102,13 @@ export default class EntityController extends BaseController {
     /**
      * Event handler to trigger data update
      */
-    async onUpdateData(): Promise<void> {
-        this._queryResultTable.setBusy(true);
-        await this._entityState.loadData();
-        this._queryResultTable.setBusy(false);
+    onUpdateData(): void {
+        const rowsBinding = this._queryResultTable.getBinding("rows");
+        if (rowsBinding) {
+            this._entityState.getModel().refreshListPath("/rows", true);
+        } else {
+            this._queryResultTable.bindRows({ path: "/rows" });
+        }
     }
     onCellContextMenu(event: Event): void {
         const contextMenu = event.getParameter("contextMenu") as Menu;

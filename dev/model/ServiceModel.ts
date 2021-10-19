@@ -263,16 +263,6 @@ export class FieldMetadata {
 export type DataRow = Record<string, unknown>;
 
 /**
- * Result from data preview service
- */
-export interface QueryResult {
-    /**
-     * The actual retrieved data rows
-     */
-    rows: DataRow[];
-}
-
-/**
  * Information about field in a Value Help dialog
  */
 export class ValueHelpField extends FieldMetadata {

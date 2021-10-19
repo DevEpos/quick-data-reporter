@@ -1,6 +1,5 @@
 import ajaxUtil from "./ajaxUtil";
 import {
-    QueryResult,
     DbEntity,
     EntityMetadata,
     EntityVariant,
@@ -12,7 +11,8 @@ import {
     FieldType,
     ValueHelpType,
     PagingParams,
-    SearchResult
+    SearchResult,
+    DataRow
 } from "../model/ServiceModel";
 
 const BASE_SRV_URL = "/sap/zqdrtrest/entities";
@@ -67,7 +67,7 @@ export default class EntityService {
      * @param queryRequestData the data to be passed in the data request
      * @returns the object from the response if response was ok
      */
-    async getEntityData(type: string, entity: string, queryRequest?: QueryRequestData): Promise<QueryResult> {
+    async getEntityData(type: string, entity: string, queryRequest?: QueryRequestData): Promise<SearchResult<DataRow>> {
         const csrfToken = await ajaxUtil.fetchCSRF();
         const response = await ajaxUtil.send(
             `${SUB_ENTITY_SRV_URL.replace("{type}", type).replace("{name}", encodeURIComponent(entity))}/queryResult`,

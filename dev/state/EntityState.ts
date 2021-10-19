@@ -2,6 +2,7 @@ import Log from "sap/base/Log";
 import MessageBox from "sap/m/MessageBox";
 
 import ValueHelpUtil from "../helper/valuehelp/ValueHelpUtil";
+import { DataResult } from "../model/AjaxJSONModel";
 import Entity, { ConfigurableEntity, TableFilters } from "../model/Entity";
 import { DEFAULT_VISIBLE_COL_COUNT } from "../model/globalConsts";
 import {
@@ -29,6 +30,9 @@ export default class EntityState extends BaseState<Entity> {
     constructor() {
         super(new Entity());
         this._entityService = new EntityService();
+        this.getModel().setDataProvider("/rows", {
+            getData: this._loadData.bind(this)
+        });
     }
     exists(): boolean {
         return this.data.metadata?.fields?.length > 0;
@@ -55,10 +59,6 @@ export default class EntityState extends BaseState<Entity> {
         this.data.metadata = metadata;
         this.updateModel();
     }
-    setRows(rows: DataRow[]): void {
-        this.data.rows = rows;
-        this.updateModel();
-    }
     setFilters(filters: TableFilters): void {
         this.data.filters = filters;
         this.updateModel();
@@ -67,30 +67,25 @@ export default class EntityState extends BaseState<Entity> {
         this.data.parameters = parameters;
         this.updateModel();
     }
-    async loadData(): Promise<void> {
-        try {
-            const queryRequest = {
-                settings: {
-                    maxRows: this.data.maxRows
-                },
-                parameters: this.data.getParameters(),
-                filters: this.data.getFilledFilters()
-            } as QueryRequest;
-            const selectionData = await this._entityService.getEntityData(this.data.type, this.data.name, queryRequest);
-            if (selectionData) {
-                this.setRows(selectionData?.rows);
+    /**
+     * DataProvider for fetching query results
+     */
+    private async _loadData(startIndex: number, length: number, determineLength?: boolean): Promise<DataResult> {
+        const queryRequest = {
+            settings: {
+                maxRows: length,
+                determineMaxRows: determineLength,
+                offset: startIndex
+            },
+            parameters: this.data.getParameters(),
+            filters: this.data.getFilledFilters(),
+            sortFields: this.data.sortCond,
+            outputFields: this.data.getOutputFields(),
+            aggregations: {
+                aggregationExpressions: this.data.aggregationCond
             }
-        } catch (reqError) {
-            const errorMessage = (reqError as any).error?.message;
-            Log.error(
-                `Data for entity with type: ${this.data.type}, name: ${this.data.name} could not be loaded`,
-                errorMessage
-            );
-            // temporary solution to display the error to the user
-            if (errorMessage) {
-                MessageBox.error(errorMessage);
-            }
-        }
+        } as QueryRequest;
+        return this._entityService.getEntityData(this.data.type, this.data.name, queryRequest);
     }
     async loadVariants(): Promise<void> {
         try {

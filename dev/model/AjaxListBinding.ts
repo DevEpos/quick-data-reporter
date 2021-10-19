@@ -5,8 +5,6 @@ import Filter from "sap/ui/model/Filter";
 import ListBinding from "sap/ui/model/ListBinding";
 import Sorter from "sap/ui/model/Sorter";
 import ChangeReason from "sap/ui/model/ChangeReason";
-import deepEqual from "sap/base/util/deepEqual";
-import extend from "sap/base/util/extend";
 import Log from "sap/base/Log";
 import isEmptyObject from "sap/base/util/isEmptyObject";
 
@@ -25,9 +23,9 @@ export default class AjaxListBinding extends ListBinding<AjaxJSONModel> {
         publicMethods: ["getLength"]
     };
     private _length: number;
-    private _list: {} | [];
     private _isLengthFinal: boolean;
     private _threshold: number;
+    private _isRefresh = false;
     /**
      * Simple indexed based list of all loaded entries.
      */
@@ -35,15 +33,11 @@ export default class AjaxListBinding extends ListBinding<AjaxJSONModel> {
     private _lastLength: number;
     private _lastStartIndex: number;
     private _lastThreshold: number;
-    private _isInitial: boolean;
     private _lastEndIndex: number;
     private _lastContexts: Context[];
     private _lastContextDataSet: object[];
-    private _changeReason: string;
-    private _isDataAvailable: boolean;
-    private _isLengthRequested: boolean;
-    private _isIgnoreSuspend: boolean;
-    private _isRequestPending: boolean;
+    private _isIgnoreSuspend = false;
+    private _isRequestPending = false;
     /**
      * Creates new AjaxListBinding. Should only be called by the corresponding model {@see com.devepos.qdrt.model.AjaxJSONModel}
      *
@@ -70,7 +64,8 @@ export default class AjaxListBinding extends ListBinding<AjaxJSONModel> {
 
     initialize(): this {
         if (!this.bSuspended) {
-            if ((Array.isArray(this._list) && this._list.length) || !isEmptyObject(this._list)) {
+            const object = this.oModel.getObject(this.sPath, this.oContext);
+            if ((Array.isArray(object) && object.length) || !isEmptyObject(object)) {
                 this._fireChange({ reason: ChangeReason.Change });
             } else {
                 this._fireRefresh({ reason: ChangeReason.Refresh });
@@ -100,9 +95,6 @@ export default class AjaxListBinding extends ListBinding<AjaxJSONModel> {
      *   The array of contexts for each row of the bound list
      */
     getContexts(startIndex: number, length: number, threshold: number): Context[] {
-        // TODO: check if binding is initialized?? (see ODataListBinding#getContexts)
-        // TODO: determine length via separate service call (see ODataListBinding#getContexts, ODataListBinding#_getLength)
-        Log.info(`Retrieving contexts at '${this.sPath}', startIndex: ${startIndex}, length: ${length}'`);
         // store new parameters for next call
         this._lastLength = length;
         this._lastStartIndex = startIndex;
@@ -137,14 +129,18 @@ export default class AjaxListBinding extends ListBinding<AjaxJSONModel> {
             (contexts as any).dataRequested = true;
         }
 
-        const contextDataSet: object[] = [];
-        // store current context data and contexts
-        for (const context of contexts) {
-            contextDataSet.push(this.getContextData(context));
+        if (this._isRefresh) {
+            this._isRefresh = false;
+        } else {
+            const contextDataSet: object[] = [];
+            // store current context data and contexts
+            for (const context of contexts) {
+                contextDataSet.push(this.getContextData(context));
+            }
+            this._lastContextDataSet = contextDataSet.slice(0);
+            this._lastContexts = contexts.slice(0);
+            this._lastEndIndex = startIndex + length;
         }
-        this._lastContextDataSet = contextDataSet.slice(0);
-        this._lastContexts = contexts.slice(0);
-        this._lastEndIndex = startIndex + length;
 
         return contexts;
     }
@@ -156,6 +152,13 @@ export default class AjaxListBinding extends ListBinding<AjaxJSONModel> {
     refresh(): void {
         this._resetData();
         this._fireRefresh({ reason: ChangeReason.Sort });
+    }
+
+    _fireRefresh(mParameters: object): void {
+        if (this.oModel.resolve(this.sPath, this.oContext)) {
+            this._isRefresh = true;
+            this.fireEvent("refresh", mParameters);
+        }
     }
 
     private _determineMissingSegment(
@@ -253,11 +256,11 @@ export default class AjaxListBinding extends ListBinding<AjaxJSONModel> {
 
                 this.fireDataReceived({ data });
             });
-            this._isRequestPending = false;
         } catch (error) {
             Log.error(error?.toString());
             this.fireDataReceived(null);
         }
+        this._isRequestPending = false;
     }
 
     /**
@@ -268,9 +271,21 @@ export default class AjaxListBinding extends ListBinding<AjaxJSONModel> {
         if (this.bSuspended && !this._isIgnoreSuspend && !forceUpdate) {
             return;
         }
-        const list = this.oModel.getObject(this.sPath, this.oContext) || [];
-        if (!deepEqual(this._list, list) || forceUpdate) {
-            this.update(); // Taken from JSONListBinding
+
+        const contexts = this._getContexts(this._lastStartIndex, this._lastLength);
+        let changedDetected = false;
+        if (this._lastContexts?.length !== contexts?.length) {
+            changedDetected = true;
+        } else {
+            for (let i = 0; i < this._lastContextDataSet.length; i++) {
+                if (this._lastContextDataSet[i] !== this.getContextData(contexts[i])) {
+                    changedDetected = true;
+                    break;
+                }
+            }
+        }
+
+        if (forceUpdate || changedDetected) {
             this._fireChange({ reason: ChangeReason.Change });
         }
     }
@@ -292,18 +307,6 @@ export default class AjaxListBinding extends ListBinding<AjaxJSONModel> {
     sort(): this {
         // sorting is implemented in the Ajax call
         return this;
-    }
-    private update(): void {
-        const list = this.oModel.getObject(this.sPath, this.oContext);
-        if (list) {
-            if (Array.isArray(list)) {
-                this._list = list.slice(0);
-            } else {
-                this._list = extend({}, list);
-            }
-        } else {
-            this._list = [];
-        }
     }
 
     private _getContexts(startIndex: number, length: number): Context[] {
@@ -337,11 +340,7 @@ export default class AjaxListBinding extends ListBinding<AjaxJSONModel> {
 
     private _resetData() {
         this._keys = [];
-        this._list = [];
         this._length = 0;
         this._isLengthFinal = false;
-        this._changeReason = undefined;
-        this._isDataAvailable = false;
-        this._isLengthRequested = false;
     }
 }

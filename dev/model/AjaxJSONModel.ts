@@ -8,6 +8,7 @@ import JSONModel from "sap/ui/model/json/JSONModel";
 import ListBinding from "sap/ui/model/ListBinding";
 import Model from "sap/ui/model/Model";
 import Sorter from "sap/ui/model/Sorter";
+import MessageBox from "sap/m/MessageBox";
 
 export interface DataResult {
     results: object | [];
@@ -75,8 +76,9 @@ export default class AjaxJSONModel extends JSONModel {
      * Resets the data at the given path and refreshes
      * all the binding
      * @param path a resolved path
+     * @param forceRefresh if <code>true</code> the binding refresh will be forced
      */
-    refreshListPath(path: string): void {
+    refreshListPath(path: string, forceRefresh?: boolean): void {
         if (!path) {
             return;
         }
@@ -101,7 +103,7 @@ export default class AjaxJSONModel extends JSONModel {
                 bindingPath = this.resolve(binding.getPath(), binding.getContext());
             }
             if (bindingPath === path) {
-                binding.refresh(false);
+                binding.refresh(forceRefresh);
             }
         }
     }
@@ -133,9 +135,14 @@ export default class AjaxJSONModel extends JSONModel {
                 successHandler(result);
             }
             this.checkUpdate(false, false);
-        } catch (error) {
-            console.log(error);
-            throw error;
+        } catch (reqError) {
+            const errorMessage = (reqError as any).error?.message;
+            Log.error(`Error occurred during data fetch at path ${path}`, errorMessage);
+            // temporary solution to display the error to the user
+            if (errorMessage) {
+                MessageBox.error(errorMessage);
+            }
+            throw reqError;
         }
     }
 
@@ -172,6 +179,10 @@ export default class AjaxJSONModel extends JSONModel {
         if (!list) {
             Log.error(`No array defined at path '${path}'`);
             return;
+        }
+
+        if (data.count) {
+            (list as any).$count = data.count;
         }
 
         for (let i = 0; i < data.results.length; i++) {

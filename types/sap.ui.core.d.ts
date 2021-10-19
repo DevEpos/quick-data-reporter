@@ -8,6 +8,7 @@ import Binding from "sap/ui/model/Binding";
 declare module "sap/ui/model/Model" {
     export default interface Model {
         iSizeLimit: number;
+        mContexts: Record<string, Context>;
         getContext(path: string): Context;
         getBindings(): Binding[];
     }
@@ -19,15 +20,26 @@ declare module "sap/ui/model/Binding" {
         sPath: string;
         oContext: Context;
         bSuspended: boolean;
+        /**
+         * @private
+         */
         _fireChange(parameters: object): void;
+        /**
+         * @private
+         */
         _fireRefresh(parameters: object): void;
+        /**
+         * @private
+         */
         getContext(): Context;
     }
 }
 
 declare module "sap/ui/model/ListBinding" {
-    import Binding from "sap/ui/model/Binding";
     export default interface ListBinding<T extends Model> extends Binding<T> {
+        /**
+         * @private
+         */
         getContextData(context: Context): any;
     }
 }
