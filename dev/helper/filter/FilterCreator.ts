@@ -1,94 +1,9 @@
 import { DisplayFormat, FieldMetadata, FilterCond, FilterOperator } from "../../model/ServiceModel";
+import FilterOperatorConfigurations from "./FilterOperatorConfigurations";
 
 import Token from "sap/m/Token";
 import P13nConditionPanel from "sap/m/P13nConditionPanel";
 import Log from "sap/base/Log";
-
-type FilterCondConfig = { re: RegExp; template: string };
-
-const conditionMap: { [operator: string]: FilterCondConfig } = {
-    [FilterOperator.EQ]: {
-        re: /^=(.+)$/,
-        template: "=$0"
-    },
-    [FilterOperator.NE]: {
-        re: /^!\(=(.+)\)$/,
-        template: "!(=$0)"
-    },
-    [FilterOperator.GE]: {
-        re: /^>=(.+)$/,
-        template: ">=$0"
-    },
-    [FilterOperator.GT]: {
-        re: /^>(.+)$/,
-        template: ">$0"
-    },
-    [FilterOperator.LE]: {
-        re: /^<=(.+)$/,
-        template: "<=$0"
-    },
-    // needs to be earlier than LT, otherwise <empty> will be matched by LT
-    [FilterOperator.Empty]: {
-        re: /^<empty>$/i,
-        template: "<empty>"
-    },
-    [FilterOperator.LT]: {
-        re: /^<(.+)$/,
-        template: "<$0"
-    },
-    [FilterOperator.BT]: {
-        re: /^(.+)\.{3}(.+)$/,
-        template: "$0..$1"
-    },
-    [FilterOperator.Contains]: {
-        re: /^\*(.+)\*$/,
-        template: "*$0*"
-    },
-    [FilterOperator.StartsWith]: {
-        re: /^([^\\*].*)\*$/,
-        template: "*$0"
-    },
-    [FilterOperator.EndsWith]: {
-        re: /^\*(.*[^\\*])$/,
-        template: "$0*"
-    },
-    [FilterOperator.NotEmpty]: {
-        re: /^!\(<empty>\)$/i,
-        template: "!(<empty>)"
-    },
-    // has to be the last entry, because its regex is the most wide
-    [FilterOperator.Auto]: {
-        re: /^([^!\\(\\)\\*<>].*[^*]?)$/,
-        template: "$0"
-    }
-};
-
-/**
- * Map of possible operators by data type
- */
-const typeFilterOperationMap: Record<string, string[]> = {
-    Date: [
-        FilterOperator.EQ,
-        FilterOperator.NE,
-        FilterOperator.GE,
-        FilterOperator.GT,
-        FilterOperator.LE,
-        FilterOperator.Empty,
-        FilterOperator.LT,
-        FilterOperator.BT,
-        FilterOperator.NotEmpty,
-        FilterOperator.Auto
-    ],
-    Time: [
-        FilterOperator.EQ,
-        FilterOperator.GE,
-        FilterOperator.GT,
-        FilterOperator.LE,
-        FilterOperator.LT,
-        FilterOperator.BT,
-        FilterOperator.Auto
-    ]
-};
 
 /**
  * Creator for filter conditions / tokens
@@ -122,7 +37,6 @@ export default class FilterCreator {
             keyField: this._fieldName,
             exclude: false
         } as FilterCond;
-        let filterCondConfig: FilterCondConfig;
         let filterOpMatch: RegExpMatchArray;
         let value1: string;
         let value2: string;
@@ -131,14 +45,14 @@ export default class FilterCreator {
             return null;
         }
 
-        const validFilterOperations = typeFilterOperationMap[this._fieldMetadata.type] || Object.keys(conditionMap);
+        const validFilterConditions = FilterOperatorConfigurations.getOperatorsForType(this._fieldMetadata.type);
+        const isExcludingPattern = this._value.startsWith("!(");
 
-        for (const filterOperation of validFilterOperations) {
-            filterCondConfig = conditionMap[filterOperation];
-            filterOpMatch = this._value.match(filterCondConfig.re);
-
+        for (const filterOperation of validFilterConditions) {
+            filterOpMatch = filterOperation.getMatches(this._value);
             if (filterOpMatch) {
-                filterCond.operation = filterOperation;
+                filterCond.operation = filterOperation.operatorKey;
+                filterCond.exclude = isExcludingPattern;
                 this._adjustOperation(filterCond);
 
                 if (filterOpMatch.length > 1) {
@@ -149,11 +63,9 @@ export default class FilterCreator {
                     }
                 }
                 break;
-            } else {
-                filterCondConfig = null;
             }
         }
-        if (!filterCondConfig) {
+        if (!filterCond.operation) {
             Log.error(`No appropriate filter operator for value "${this._value}" found`);
             return null;
         }

@@ -3,6 +3,7 @@ import ValueHelpModel from "./ValueHelpModel";
 import { SimpleBindingParams } from "../../model/types";
 import FormatUtil from "../FormatUtil";
 import I18nUtil from "../I18nUtil";
+import FilterOperatorConfigurations from "../filter/FilterOperatorConfigurations";
 
 import BaseObject from "sap/ui/base/Object";
 import ValueHelpDialogSAP from "sap/ui/comp/valuehelpdialog/ValueHelpDialog";
@@ -17,13 +18,14 @@ import Table from "sap/ui/table/Table";
 import Token from "sap/m/Token";
 import DateType from "sap/ui/model/type/Date";
 import Log from "sap/base/Log";
-import { smartfilterbar } from "sap/ui/comp/library";
+import { smartfilterbar, valuehelpdialog } from "sap/ui/comp/library";
 import List from "sap/m/List";
 import { ListMode, PlacementType } from "sap/m/library";
 import ResponsivePopover from "sap/m/ResponsivePopover";
 import StandardListItem from "sap/m/StandardListItem";
 import CustomData from "sap/ui/core/CustomData";
 import Control from "sap/ui/core/Control";
+import TypeUtil from "../../model/TypeUtil";
 
 interface TableColumnConfig {
     label: string;
@@ -196,7 +198,7 @@ export default class ValueHelpDialog extends BaseObject {
         const rangeKeyField = {
             key: this._keyFieldConfig.name,
             label: this._keyFieldConfig.description,
-            type: this._keyFieldConfig.type?.toLowerCase(),
+            type: TypeUtil.generalizeType(this._keyFieldConfig.type)?.toLowerCase(),
             formatSettings: {
                 maxLength: this._keyFieldConfig.maxLength
             },
@@ -396,13 +398,27 @@ export default class ValueHelpDialog extends BaseObject {
             }
         });
 
+        // enable enhanced exclude operations handling - the solution probably works
+        // Option 1) Use the way which is used by Fiori Elements framework
+        // if (this._dialog.getMetadata().hasProperty("_enhancedExcludeOperations")) {
+        //     this._dialog.setProperty("_enhancedExcludeOperations", true);
+        // }
+
+        // Option 2) custom setting of exclude operations
+        this._dialog.setExcludeRangeOperations(
+            FilterOperatorConfigurations.getOperatorsForType(this._keyFieldConfig.type, true).getOperators(
+                !(this._dialog as any)?._oOperationsHelper
+            ) as valuehelpdialog.ValueHelpRangeOperation[],
+            TypeUtil.generalizeType(this._keyFieldConfig.type)?.toLowerCase()
+        );
+
         /* implement fix for token creation.
          * This is needed if the key column has values which are invalid URI components i.e. values which would
          *  throw an error if <code>decodeURIComponent</code> would be called for them
          */
-        const _addRemoveTokenByKey = (this._dialog as any)._addRemoveTokenByKey;
+        const _addRemoveTokenByKey = this._dialog._addRemoveTokenByKey;
         if (_addRemoveTokenByKey) {
-            (this._dialog as any)._addRemoveTokenByKey = (key: string, row: any, add: boolean) => {
+            this._dialog._addRemoveTokenByKey = (key: string, row: any, add: boolean) => {
                 _addRemoveTokenByKey.call(this._dialog, encodeURIComponent(key), row, add);
             };
         }

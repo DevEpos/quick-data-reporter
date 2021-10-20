@@ -9,6 +9,15 @@ declare module "sap/ui/comp/valuehelpdialog/ValueHelpDialog" {
         oSelectionTitle: Text;
         oSelectionButton: Button;
         resetTableState();
+        /**
+         * Adds or removes a token
+         * @private
+         */
+        _addRemoveTokenByKey(key: string, row: any, add: boolean): void;
+        /**
+         * Rotates the icon for the collective value help popover
+         * @private
+         */
         _rotateSelectionButtonIcon(flag: boolean);
     }
 }

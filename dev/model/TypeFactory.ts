@@ -34,8 +34,6 @@ const typeMap: Record<string, typeof ODataType> = {
     Time: TimeOfDay
 };
 
-const numericTypes = ["Byte", "Single", "Double", "Int16", "Int32", "Int64", "SByte"];
-
 /**
  * Factory for creating type instances
  */
@@ -55,14 +53,5 @@ export default class TypeFactory {
             type = new typeConstructor(formatOptions, constraints);
         }
         return type;
-    }
-
-    /**
-     * Returns <code>true</code> if the given type is a numeric type
-     * @param typeName the name of a type
-     * @returns <code>true</code> if the given type is a numeric type
-     */
-    static isNumeric(typeName: string): boolean {
-        return numericTypes.includes(typeName);
     }
 }
