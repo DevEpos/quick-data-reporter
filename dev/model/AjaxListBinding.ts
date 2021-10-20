@@ -244,9 +244,10 @@ export default class AjaxListBinding extends ListBinding<AjaxJSONModel> {
             this.fireDataRequested(null);
             this._isRequestPending = true;
             await this.oModel.requestData(path, startIndex, length, !this._isLengthFinal, data => {
-                if (!this._isLengthFinal && data?.count) {
+                if (!this._isLengthFinal) {
                     this._isLengthFinal = true;
-                    this._length = data.count;
+                    // count can not be determined separately at the moment
+                    this._length = data.count || 0;
                 }
                 if (data?.results && Array.isArray(data.results)) {
                     for (let i = 0; i < data.results.length; i++) {
