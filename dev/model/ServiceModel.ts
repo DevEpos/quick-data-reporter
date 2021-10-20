@@ -85,7 +85,7 @@ export interface FilterCond {
 
 export interface SortCond {
     fieldName: string;
-    sortDirection?: string;
+    sortDirection?: "Ascending" | "Descending";
 }
 
 export interface AggregationCond {
@@ -97,7 +97,7 @@ export interface AggregationCond {
 export interface ColumnConfig {
     fieldName: string;
     index?: number;
-    visible: boolean;
+    visible?: boolean;
 }
 
 export interface DbEntity {
@@ -378,6 +378,7 @@ export interface AggregationConfig {
 export interface QueryRequest {
     settings?: QuerySettings;
     outputFields?: ColumnConfig[];
+    sortFields?: SortCond[];
     filters?: FieldFilter[];
     parameters?: FieldFilter[];
     aggregations?: AggregationConfig;

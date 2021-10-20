@@ -2,7 +2,7 @@ import models from "../model/models";
 import { ReadOnlyStateData } from "../state/BaseState";
 import { AggregationCond, ColumnConfig, FieldMetadata, SortCond } from "../model/ServiceModel";
 import Entity, { ConfigurableEntity } from "../model/Entity";
-import { DEFAULT_VISIBLE_COL_COUNT } from "../model/globalConsts";
+import { SpecialFieldNames, DEFAULT_VISIBLE_COL_COUNT } from "../model/globalConsts";
 
 import JSONModel from "sap/ui/model/json/JSONModel";
 import Fragment from "sap/ui/core/Fragment";
@@ -13,6 +13,7 @@ import Event from "sap/ui/base/Event";
 import P13nConditionPanel from "sap/m/P13nConditionPanel";
 import { P13nConditionOperation } from "sap/m/library";
 import deepClone from "sap/base/util/deepClone";
+import deepEqual from "sap/base/util/deepEqual";
 
 type SettingsModelData = {
     columnMetadata: FieldMetadata[];
@@ -21,6 +22,13 @@ type SettingsModelData = {
     sortCond: SortCond[];
     aggregationCond: AggregationCond[];
 };
+
+type DialogResult = {
+    entityConfig: ConfigurableEntity;
+    sortingChanged: boolean;
+    columnsChanged: boolean;
+    aggregationChanged: boolean;
+};
 /**
  * Table settings for a database entity
  *
@@ -28,8 +36,8 @@ type SettingsModelData = {
  */
 export default class EntityTableSettings {
     private _view: View;
-    private _dialogPromise: { resolve: (result: ConfigurableEntity) => void };
-    private _okPayload: ConfigurableEntity;
+    private _dialogPromise: { resolve: (result: DialogResult) => void };
+    private _okPayload: DialogResult;
     private _model: JSONModel;
     private _settingsDialog: P13nDialog;
     private _groupCondPanel: P13nConditionPanel;
@@ -58,7 +66,7 @@ export default class EntityTableSettings {
      * Shows the settings
      * @param state the current entity state for the settings dialog
      */
-    async showSettingsDialog(state: ReadOnlyStateData<Entity>): Promise<ConfigurableEntity> {
+    async showSettingsDialog(state: ReadOnlyStateData<Entity>): Promise<DialogResult> {
         this._updateInternalModel(state);
         if (!this._settingsDialog) {
             this._settingsDialog = await Fragment.load({
@@ -118,7 +126,13 @@ export default class EntityTableSettings {
         });
     }
     onOK(): void {
-        this._okPayload = this._model.getData();
+        const newSettings = this._model.getData();
+        this._okPayload = {
+            entityConfig: newSettings,
+            columnsChanged: !deepEqual(newSettings.columnsItems, this._modelCurrentState.columnsItems),
+            sortingChanged: !deepEqual(newSettings.sortCond, this._modelCurrentState.sortCond),
+            aggregationChanged: !deepEqual(newSettings.aggregationCond, this._modelCurrentState.aggregationCond)
+        };
         this._settingsDialog.close();
     }
     onChangeColumnsItems(event: Event): void {
@@ -190,6 +204,21 @@ export default class EntityTableSettings {
             modelData.allColumnMetadata = modelData.columnMetadata.filter(colMeta =>
                 groupFieldKeys.includes(colMeta.name)
             );
+            // if (modelData.allColumnMetadata.findIndex(meta => meta.name === SpecialFieldNames.groupCountCol) === -1) {
+            //     modelData.allColumnMetadata.push(
+            //         Object.assign(new FieldMetadata(), {
+            //             name: SpecialFieldNames.groupCountCol,
+            //             description: "Aggr. Count",
+            //             fieldText: "Aggregation Count",
+            //             type: "Int32"
+            //         } as FieldMetadata)
+            //     );
+            //     modelData.columnsItems.push({
+            //         fieldName: SpecialFieldNames.groupCountCol,
+            //         visible: true,
+            //         index: modelData.columnsItems.length
+            //     });
+            // }
         } else {
             // remove all dependent information on group items
             modelData.columnsItems.length = 0;

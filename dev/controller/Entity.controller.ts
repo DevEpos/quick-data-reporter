@@ -1,12 +1,13 @@
 import BaseController from "./BaseController";
 import models from "../model/models";
-import { EntityType } from "../model/ServiceModel";
+import { EntityType, SortCond } from "../model/ServiceModel";
 import EntityTableSettings from "../helper/EntityTableSettings";
 import { FieldMetadata } from "../model/ServiceModel";
 import EntityState from "../state/EntityState";
 import StateRegistry from "../state/StateRegistry";
 import FormatUtil from "../helper/FormatUtil";
 import { entityTypeIconFormatter, entityTypeTooltipFormatter } from "../model/formatter";
+import { SpecialFieldNames } from "../model/globalConsts";
 
 import Column from "sap/ui/table/Column";
 import Text from "sap/m/Text";
@@ -91,11 +92,12 @@ export default class EntityController extends BaseController {
      * Handles entity settings event
      */
     async onTableSettings(): Promise<void> {
-        const newSettings = await this._entityTableSettings.showSettingsDialog(this._entityState.getData());
-        if (newSettings) {
+        const updatedSettings = await this._entityTableSettings.showSettingsDialog(this._entityState.getData());
+        if (updatedSettings) {
             this.getView().setBusy(true);
-            this._entityState.setConfiguration(newSettings);
+            this._entityState.setConfiguration(updatedSettings.entityConfig);
             this._createColumns();
+            this.onUpdateData();
             this.getView().setBusy(false);
         }
     }
@@ -149,17 +151,26 @@ export default class EntityController extends BaseController {
     }
     private _createColumns(): void {
         this._queryResultTable.destroyColumns();
-        for (const columnMeta of this._entityState.getData().visibleFieldMetadata) {
-            this._queryResultTable.addColumn(this._createColumn(columnMeta));
+        const stateData = this._entityState.getData();
+        for (const columnMeta of stateData.visibleFieldMetadata) {
+            this._queryResultTable.addColumn(
+                this._createColumn(
+                    columnMeta,
+                    stateData.sortCond.find(cond => cond.fieldName === columnMeta.name)
+                )
+            );
+        }
+        if (stateData.aggregationCond?.length > 0) {
+            this._queryResultTable.addColumn(this._createGroupCountColumn());
         }
     }
     /**
-     * Creates columns
-     * @param id the id of the column
-     * @param context the context binding of the column
+     * Creates column
+     * @param fieldMetadataInfo metadata of field
+     * @param sortCond sort condition
      * @returns the created column
      */
-    private _createColumn(fieldMetadataInfo: FieldMetadata): Column {
+    private _createColumn(fieldMetadataInfo: FieldMetadata, sortCond?: SortCond): Column {
         let template: string | Control = fieldMetadataInfo.name;
         let hAlign = HorizontalAlign.Begin;
         switch (fieldMetadataInfo.type) {
@@ -231,10 +242,35 @@ export default class EntityController extends BaseController {
             width: FormatUtil.getWidth(fieldMetadataInfo, 15),
             template,
             sortProperty: fieldMetadataInfo.name,
-            showSortMenuEntry: true,
+            showSortMenuEntry: false,
+            sorted: !!sortCond,
+            sortOrder: sortCond ? sortCond.sortDirection : null,
             customData: new CustomData({
                 key: "columnKey",
                 value: fieldMetadataInfo.name
+            })
+        });
+    }
+    private _createGroupCountColumn() {
+        return new Column({
+            label: new Text({
+                text: "{i18n>entity_table_aggrCount_col_title}",
+                tooltip: "{i18n>entity_table_aggrCount_col_tooltip}",
+                wrapping: false
+            }),
+            hAlign: HorizontalAlign.End,
+            width: "15em",
+            template: new Text({
+                text: {
+                    path: SpecialFieldNames.groupCountCol,
+                    type: "sap.ui.model.odata.type.Int32"
+                }
+            }),
+            sortProperty: SpecialFieldNames.groupCountCol,
+            showSortMenuEntry: false,
+            customData: new CustomData({
+                key: "columnKey",
+                value: SpecialFieldNames.groupCountCol
             })
         });
     }

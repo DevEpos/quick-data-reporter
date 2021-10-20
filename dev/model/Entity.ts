@@ -116,6 +116,13 @@ export default class Entity implements ConfigurableEntity {
 
         return filters;
     }
+    getOutputFields(): ColumnConfig[] {
+        return this.columnsItems
+            .filter(col => col.visible)
+            .map(col => {
+                return { fieldName: col.fieldName };
+            });
+    }
     getParameters(): FieldFilter[] {
         const params = [] as FieldFilter[];
         for (const paramName of Object.keys(this.parameters)) {
