@@ -167,7 +167,7 @@ export default class EntityController extends BaseController {
                 template = new Text({
                     text: {
                         path: template,
-                        type: "sap.ui.model.type.Date",
+                        type: "sap.ui.model.odata.type.Date",
                         formatOptions: {
                             style: "medium",
                             source: {
