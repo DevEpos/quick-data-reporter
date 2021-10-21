@@ -81,7 +81,11 @@ export default class Entity implements ConfigurableEntity {
         for (const filterName of Object.keys(this.filters)) {
             const filter = this.filters[filterName];
             if (filter.value || filter?.items?.length > 0 || filter?.ranges?.length > 0) {
-                const reducedFilter = { fieldName: filterName } as FieldFilter;
+                /*
+                 * in case of field name with a namespace the filtername must be decoded before it is
+                 * sent to the backend
+                 */
+                const reducedFilter = { fieldName: decodeURIComponent(filterName) } as FieldFilter;
                 if (filter.value) {
                     reducedFilter.value = encodeURIComponent(filter.value);
                 }

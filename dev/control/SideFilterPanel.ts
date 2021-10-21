@@ -252,7 +252,12 @@ export default class SideFilterPanel extends Panel {
         if (selectedFilters?.length > 0) {
             let newQuickFilterFocused = false;
             for (const selectedFilter of selectedFilters) {
-                visibleFilters[selectedFilter.name] = {};
+                /* create empty object in the filters object to hold all the
+                 * items, ranges for the filter.
+                 * The call to encodeURIComponent is a safety measure for field with namespaces e.g. /dmo/test, otherwise
+                 * the binding paths won't work
+                 */
+                visibleFilters[encodeURIComponent(selectedFilter.name)] = {};
                 const newQuickFilter = this._createQuickFilter(selectedFilter);
                 if (!newQuickFilterFocused) {
                     newQuickFilterFocused = true;
@@ -286,7 +291,7 @@ export default class SideFilterPanel extends Panel {
             deletable: filterCategory === FilterCategory.Filters,
             singleValueOnly: filterCategory === FilterCategory.Parameters,
             referenceFieldMetadata: filter.fieldMetadata,
-            filterData: `{${this.getBinding("visibleFilters").getPath()}/${filter.name}}`,
+            filterData: `{${this.getBinding("visibleFilters").getPath()}/${encodeURIComponent(filter.name)}}`,
             remove: (event: Event) => {
                 delete this.getVisibleFilters()[(event.getSource() as QuickFilter).getColumnName()];
             },
