@@ -213,13 +213,4 @@ export default class FilterOperatorConfigurations implements Iterable<FilterOper
             }
         };
     }
-    /**
-     * Returns an array of valid operators
-     * @returns array of operators
-     */
-    getOperators(negateOperators?: boolean): string[] {
-        const prefix = negateOperators ? "Not" : "";
-
-        return this._operatorKeys.map(operator => `${prefix}${operator}`);
-    }
 }
