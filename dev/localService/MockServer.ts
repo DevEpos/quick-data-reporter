@@ -1,5 +1,5 @@
 import ajaxUtil from "../service/ajaxUtil";
-import { ValueHelpRequest } from "../model/ServiceModel";
+import { ValueHelpRequest } from "../model/types";
 
 import _MockServer from "sap/ui/core/util/MockServer";
 import Log from "sap/base/Log";

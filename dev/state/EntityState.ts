@@ -13,7 +13,7 @@ import {
     FieldMetadata,
     QueryRequest,
     FieldType
-} from "../model/ServiceModel";
+} from "../model/types";
 import EntityService from "../service/EntityService";
 import BaseState from "./BaseState";
 

@@ -1,11 +1,4 @@
-import {
-    DisplayFormat,
-    FieldFilter,
-    FieldMetadata,
-    FilterCond,
-    FilterItem,
-    ValueHelpType
-} from "../model/ServiceModel";
+import { DisplayFormat, FieldFilter, FieldMetadata, FilterCond, FilterItem, ValueHelpType } from "../model/types";
 import FilterCreator from "../helper/filter/FilterCreator";
 import I18nUtil from "../helper/I18nUtil";
 

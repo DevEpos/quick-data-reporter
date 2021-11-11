@@ -1,4 +1,4 @@
-import { FieldMetadata, ValueHelpField, ValueHelpMetadata, ValueHelpType } from "../../model/ServiceModel";
+import { FieldMetadata, ValueHelpField, ValueHelpMetadata, ValueHelpType } from "../../model/types";
 import I18nUtil from "../I18nUtil";
 
 /**

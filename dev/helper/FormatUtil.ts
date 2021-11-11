@@ -1,4 +1,4 @@
-import { FieldMetadata } from "../model/ServiceModel";
+import { FieldMetadata } from "../model/types";
 
 /**
  * Utility concerning formatting like e.g. getting the width for a

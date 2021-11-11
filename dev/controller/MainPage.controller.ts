@@ -1,7 +1,7 @@
 import models from "../model/models";
 import BaseController from "./BaseController";
 import EntityService from "../service/EntityService";
-import { DbEntity, EntitySearchScope, EntityType, PagingParams } from "../model/ServiceModel";
+import { DbEntity, EntitySearchScope, EntityType, PagingParams } from "../model/types";
 import SmartVariantManagementConnector from "../helper/variants/SmartVariantManagementConnector";
 import { entityTypeIconFormatter, entityTypeTooltipFormatter } from "../model/formatter";
 import AjaxJSONModel from "../model/AjaxJSONModel";

@@ -9,7 +9,7 @@ import {
     EntityVariant,
     FieldFilter,
     FilterCond
-} from "./ServiceModel";
+} from "./types";
 
 /**
  * Describes an entity which is configurable

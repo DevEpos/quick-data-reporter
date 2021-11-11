@@ -1,6 +1,6 @@
 import models from "../model/models";
 import { ReadOnlyStateData } from "../state/BaseState";
-import { AggregationCond, ColumnConfig, FieldMetadata, SortCond } from "../model/ServiceModel";
+import { AggregationCond, ColumnConfig, FieldMetadata, SortCond } from "../model/types";
 import Entity, { ConfigurableEntity } from "../model/Entity";
 import { SpecialFieldNames, DEFAULT_VISIBLE_COL_COUNT } from "../model/globalConsts";
 

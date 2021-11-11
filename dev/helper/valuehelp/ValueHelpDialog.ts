@@ -1,5 +1,4 @@
-import { FilterCond, ValueHelpField, ValueHelpMetadata, ValueHelpType } from "../../model/ServiceModel";
-import { SimpleBindingParams } from "../../model/types";
+import { FilterCond, ValueHelpField, ValueHelpMetadata, ValueHelpType, SimpleBindingParams } from "../../model/types";
 import TypeUtil from "../../model/TypeUtil";
 import ValueHelpModel from "./ValueHelpModel";
 import FormatUtil from "../FormatUtil";

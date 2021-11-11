@@ -1,8 +1,8 @@
 import BaseController from "./BaseController";
 import models from "../model/models";
-import { EntityType, SortCond } from "../model/ServiceModel";
+import { EntityType, SortCond } from "../model/types";
 import EntityTableSettings from "../helper/EntityTableSettings";
-import { FieldMetadata } from "../model/ServiceModel";
+import { FieldMetadata } from "../model/types";
 import EntityState from "../state/EntityState";
 import StateRegistry from "../state/StateRegistry";
 import FormatUtil from "../helper/FormatUtil";

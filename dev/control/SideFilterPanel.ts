@@ -2,7 +2,7 @@ import QuickFilter from "./QuickFilter";
 import StateRegistry from "../state/StateRegistry";
 import AddQuickFiltersPopover, { SelectedField } from "../helper/filter/AddQuickFilterPopover";
 import ValueHelpFactory from "../helper/valuehelp/ValueHelpFactory";
-import { FieldMetadata, ValueHelpType } from "../model/ServiceModel";
+import { FieldMetadata, ValueHelpType } from "../model/types";
 import { TableFilters } from "../model/Entity";
 import models from "../model/models";
 import ValueHelpService from "../service/ValueHelpService";

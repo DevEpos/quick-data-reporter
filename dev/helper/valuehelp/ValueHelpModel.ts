@@ -1,5 +1,5 @@
 import ValueHelpService from "../../service/ValueHelpService";
-import { ValueHelpMetadata } from "../../model/ServiceModel";
+import { ValueHelpMetadata } from "../../model/types";
 import models from "../../model/models";
 import { SimpleBindingParams } from "../../model/types";
 

@@ -1,4 +1,4 @@
-import { EntityType } from "./ServiceModel";
+import { EntityType } from "./types";
 import I18nUtil from "../helper/I18nUtil";
 
 /**

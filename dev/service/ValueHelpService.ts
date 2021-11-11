@@ -1,4 +1,4 @@
-import { DataRow, SearchResult, ValueHelpMetadata, ValueHelpRequest, ValueHelpType } from "../model/ServiceModel";
+import { DataRow, SearchResult, ValueHelpMetadata, ValueHelpRequest, ValueHelpType } from "../model/types";
 import ajaxUtil from "./ajaxUtil";
 
 const BASE_URL = `/sap/zqdrtrest/valueHelpData`;

@@ -1,4 +1,4 @@
-import { FilterCond, ValueHelpMetadata, ValueHelpType } from "../../model/ServiceModel";
+import { FilterCond, ValueHelpMetadata, ValueHelpType } from "../../model/types";
 import ValueHelpDialog from "./ValueHelpDialog";
 
 import Input from "sap/m/Input";

@@ -1,4 +1,4 @@
-import { FilterOperator } from "../../model/ServiceModel";
+import { FilterOperator } from "../../model/types";
 import TypeUtil from "../../model/TypeUtil";
 
 export type FilterOperatorRegExp = { re: RegExp; template: string };

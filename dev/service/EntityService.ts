@@ -13,7 +13,7 @@ import {
     PagingParams,
     SearchResult,
     DataRow
-} from "../model/ServiceModel";
+} from "../model/types";
 
 const BASE_SRV_URL = "/sap/zqdrtrest/entities";
 const SUB_ENTITY_SRV_URL = `${BASE_SRV_URL}/{type}/{name}`;

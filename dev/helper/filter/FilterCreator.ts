@@ -1,4 +1,4 @@
-import { DisplayFormat, FieldMetadata, FilterCond, FilterOperator } from "../../model/ServiceModel";
+import { DisplayFormat, FieldMetadata, FilterCond, FilterOperator } from "../../model/types";
 import FilterOperatorConfigurations from "./FilterOperatorConfigurations";
 
 import Token from "sap/m/Token";
