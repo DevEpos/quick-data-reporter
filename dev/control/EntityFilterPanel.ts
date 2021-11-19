@@ -1,5 +1,4 @@
 import ResizeAdapter from "../helper/ResizeAdapter";
-import SideFilterPanel from "./SideFilterPanel";
 
 import Control from "sap/ui/core/Control";
 import RenderManager from "sap/ui/core/RenderManager";
@@ -55,10 +54,11 @@ export default class EntityFilterPanel extends Control {
     };
     private _resizeAdapter: ResizeAdapter;
 
-    //#region generated methods by metadata
-    getFilterPanel?(): SideFilterPanel;
-    getParameterPanel?(): SideFilterPanel;
-    //#endregion
+    constructor(idOrSettings?: string | $EntityFilterPanelSettings);
+    constructor(id?: string, settings?: $EntityFilterPanelSettings);
+    constructor(id?: string, settings?: $EntityFilterPanelSettings) {
+        super(id, settings);
+    }
 
     onBeforeRendering(): void {
         if (!this._resizeAdapter && this.getParameterPanel()) {

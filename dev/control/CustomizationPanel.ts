@@ -2,7 +2,6 @@ import FlexBox from "sap/m/FlexBox";
 import { FlexAlignItems, FlexJustifyContent } from "sap/m/library";
 import Control from "sap/ui/core/Control";
 import Icon from "sap/ui/core/Icon";
-import { URI } from "sap/ui/core/library";
 import Title from "sap/m/Title";
 import RenderManager from "sap/ui/core/RenderManager";
 
@@ -63,11 +62,11 @@ export default class CustomizationPanel extends Control {
     private _titleControl: Title;
     private _headerBox: FlexBox;
 
-    //#region methods generated through metadata
-    getContent?(): Control[];
-    getIcon?(): URI;
-    getTitle?(): string;
-    //#endregion
+    constructor(idOrSettings?: string | $CustomizationPanelSetting);
+    constructor(id?: string, settings?: $CustomizationPanelSetting);
+    constructor(id?: string, settings?: $CustomizationPanelSetting) {
+        super(id, settings);
+    }
 
     getHeader(): FlexBox {
         if (this._headerBox) {
@@ -102,7 +101,6 @@ export default class CustomizationPanel extends Control {
                 src: this.getIcon()
             });
         }
-
         return this._icon;
     }
 
