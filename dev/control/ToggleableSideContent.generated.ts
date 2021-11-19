@@ -16,6 +16,8 @@ declare module "./ToggleableSideContent" {
         setSideContentVisible(sideContentVisible: boolean): this;
         getSideContentWidth(): CSSSize;
         setSideContentWidth(sideContentWidth: CSSSize): this;
+        getSideContentPosition(): SideContentPosition;
+        setSideContentPosition(sideContentPosition: SideContentPosition): this;
         getContent(): Control;
         setContent(content: Control): this;
         getSideContent(): Control[];
