@@ -57,4 +57,4 @@ npm run deploy
 
 If the app is running in production mode the following [abapGit](https://github.com/abapGit/abapGit) Repositories are required to be installed on the ABAP system
 
-- [abap-qdrt](https://github.com/stockbal/abap-qdrt)
+- [abap-qdrt](https://github.com/DevEpos/abap-qdrt)
